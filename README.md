@@ -52,26 +52,19 @@ demo("mandelbrot", package = "future", ask = FALSE)
 [future.callr]: https://github.com/HenrikBengtsson/callr
 
 ## Installation
-R package future.callr is only available via [GitHub](https://github.com/HenrikBengtsson/future.processx) and can be installed in R as:
+R package future.callr is only available via [GitHub](https://github.com/HenrikBengtsson/future.callr) and can be installed in R as:
 ```r
-source('http://callr.org/install#HenrikBengtsson/future.processx')
+source('http://callr.org/install#HenrikBengtsson/future.callr')
 ```
 
-### Pre-release version
-
-To install the pre-release version that is available in Git branch `develop` on GitHub, use:
-```r
-source('http://callr.org/install#HenrikBengtsson/future.processx@develop')
-```
-This will install the package from source.  
 
 
 
 ## Contributions
 
-This Git repository uses the [Git Flow](http://nvie.com/posts/a-successful-git-branching-model/) branching model (the [`git flow`](https://github.com/petervanderdoes/gitflow-avh) extension is useful for this).  The [`develop`](https://github.com/HenrikBengtsson/future.processx/tree/develop) branch contains the latest contributions and other code that will appear in the next release, and the [`master`](https://github.com/HenrikBengtsson/future.processx) branch contains the code of the latest release.
+This Git repository uses the [Git Flow](http://nvie.com/posts/a-successful-git-branching-model/) branching model (the [`git flow`](https://github.com/petervanderdoes/gitflow-avh) extension is useful for this).  The [`develop`](https://github.com/HenrikBengtsson/future.callr/tree/develop) branch contains the latest contributions and other code that will appear in the next release, and the [`master`](https://github.com/HenrikBengtsson/future.callr) branch contains the code of the latest release.
 
-Contributing to this package is easy.  Just send a [pull request](https://help.github.com/articles/using-pull-requests/).  When you send your PR, make sure `develop` is the destination branch on the [future.callr repository](https://github.com/HenrikBengtsson/future.processx).  Your PR should pass `R CMD check --as-cran`, which will also be checked by <a href="https://travis-ci.org/HenrikBengtsson/future.processx">Travis CI</a> and <a href="https://ci.appveyor.com/project/HenrikBengtsson/future-processx">AppVeyor CI</a> when the PR is submitted.
+Contributing to this package is easy.  Just send a [pull request](https://help.github.com/articles/using-pull-requests/).  When you send your PR, make sure `develop` is the destination branch on the [future.callr repository](https://github.com/HenrikBengtsson/future.callr).  Your PR should pass `R CMD check --as-cran`, which will also be checked by <a href="https://travis-ci.org/HenrikBengtsson/future.callr">Travis CI</a> and <a href="https://ci.appveyor.com/project/HenrikBengtsson/future-callr">AppVeyor CI</a> when the PR is submitted.
 
 
 ## Software status
@@ -79,5 +72,5 @@ Contributing to this package is easy.  Just send a [pull request](https://help.g
 | Resource:     | GitHub        | Travis CI       | Appveyor         |
 | ------------- | ------------------- | --------------- | ---------------- |
 | _Platforms:_  | _Multiple_          | _Linux & macOS_ | _Windows_        |
-| R CMD check   |  | <a href="https://travis-ci.org/HenrikBengtsson/future.processx"><img src="https://travis-ci.org/HenrikBengtsson/future.processx.svg" alt="Build status"></a>   | <a href="https://ci.appveyor.com/project/HenrikBengtsson/future-processx"><img src="https://ci.appveyor.com/api/projects/status/github/HenrikBengtsson/future.processx?svg=true" alt="Build status"></a> |
-| Test coverage |                     | <a href="https://codecov.io/gh/HenrikBengtsson/future.processx"><img src="https://codecov.io/gh/HenrikBengtsson/future.processx/branch/develop/graph/badge.svg" alt="Coverage Status"/></a>     |                  |
+| R CMD check   |  | <a href="https://travis-ci.org/HenrikBengtsson/future.callr"><img src="https://travis-ci.org/HenrikBengtsson/future.callr.svg" alt="Build status"></a>   | <a href="https://ci.appveyor.com/project/HenrikBengtsson/future-callr"><img src="https://ci.appveyor.com/api/projects/status/github/HenrikBengtsson/future.callr?svg=true" alt="Build status"></a> |
+| Test coverage |                     | <a href="https://codecov.io/gh/HenrikBengtsson/future.callr"><img src="https://codecov.io/gh/HenrikBengtsson/future.callr/branch/develop/graph/badge.svg" alt="Coverage Status"/></a>     |                  |
