@@ -1,25 +1,25 @@
-#' processx futures
+#' callr futures
 #'
-#' A processx future is an asynchronous multiprocess
+#' A callr future is an asynchronous multiprocess
 #' future that will be evaluated in a background R session.
 #'
-#' @inheritParams ProcessxFuture
+#' @inheritParams CallrFuture
 #' 
 #' @param workers The number of processes to be available for concurrent
-#' processx futures.
+#' callr futures.
 #' 
-#' @param \ldots Additional arguments passed to `ProcessxFuture()`.
+#' @param \ldots Additional arguments passed to `CallrFuture()`.
 #'
-#' @return An object of class [ProcessxFuture].
+#' @return An object of class [CallrFuture].
 #'
 #' @details
-#' processx futures rely on the \pkg{processx} package, which is supported
+#' callr futures rely on the \pkg{callr} package, which is supported
 #' on all operating systems.
 #'
 #' @importFrom future availableCores
 #' @export
 #' @keywords internal
-processx <- function(expr, envir = parent.frame(), substitute = TRUE,
+callr <- function(expr, envir = parent.frame(), substitute = TRUE,
                      globals = TRUE, label = NULL,
                      workers = availableCores(), ...) {
   if (substitute) expr <- substitute(expr)
@@ -31,7 +31,7 @@ processx <- function(expr, envir = parent.frame(), substitute = TRUE,
   oopts <- options(mc.cores = workers)
   on.exit(options(oopts))
 
-  future <- ProcessxFuture(expr = expr, envir = envir, substitute = FALSE,
+  future <- CallrFuture(expr = expr, envir = envir, substitute = FALSE,
                            globals = globals,
                            label = label,
                            ...)
@@ -40,4 +40,4 @@ processx <- function(expr, envir = parent.frame(), substitute = TRUE,
 
   future
 }
-class(processx) <- c("processx", "multiprocess", "future", "function")
+class(callr) <- c("callr", "multiprocess", "future", "function")

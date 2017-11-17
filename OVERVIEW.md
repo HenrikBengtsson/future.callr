@@ -1,6 +1,6 @@
 <%
 ## Reuse the future vignette
-md <- R.rsp::rstring(file="vignettes/future.processx.md.rsp", postprocess=FALSE)
+md <- R.rsp::rstring(file="vignettes/future.callr.md.rsp", postprocess=FALSE)
 
 ## Drop the header
 md <- unlist(strsplit(md, split="\n", fixed=TRUE))

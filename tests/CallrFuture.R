@@ -1,20 +1,20 @@
 source("incl/start.R")
 
-message("*** ProcessxFuture() ...")
+message("*** CallrFuture() ...")
 
-message("*** ProcessxFuture() - cleanup ...")
+message("*** CallrFuture() - cleanup ...")
 
-f <- processx({ 1L })
+f <- callr({ 1L })
 print(f)
 res <- await(f)
 print(res)
 stopifnot(res == 1L)
 
-message("*** ProcessxFuture() - cleanup ... DONE")
+message("*** CallrFuture() - cleanup ... DONE")
 
-message("*** ProcessxFuture() - exceptions ...")
+message("*** CallrFuture() - exceptions ...")
 
-## f <- ProcessxFuture({ 42L })
+## f <- CallrFuture({ 42L })
 ## print(f)
 ## res <- tryCatch({
 ##   loggedError(f)
@@ -22,7 +22,7 @@ message("*** ProcessxFuture() - exceptions ...")
 ## print(res)
 ## stopifnot(inherits(res, "error"))
 
-## f <- ProcessxFuture({ 42L })
+## f <- CallrFuture({ 42L })
 ## print(f)
 ## res <- tryCatch({
 ##   loggedOutput(f)
@@ -30,25 +30,25 @@ message("*** ProcessxFuture() - exceptions ...")
 ## print(res)
 ## stopifnot(inherits(res, "error"))
 
-res <- try(f <- ProcessxFuture(42L, workers = integer(0)), silent = TRUE)
+res <- try(f <- CallrFuture(42L, workers = integer(0)), silent = TRUE)
 print(res)
 stopifnot(inherits(res, "try-error"))
 
-res <- try(f <- ProcessxFuture(42L, workers = 0L), silent = TRUE)
+res <- try(f <- CallrFuture(42L, workers = 0L), silent = TRUE)
 print(res)
 stopifnot(inherits(res, "try-error"))
 
-res <- try(f <- ProcessxFuture(42L, workers = TRUE), silent = TRUE)
+res <- try(f <- CallrFuture(42L, workers = TRUE), silent = TRUE)
 print(res)
 stopifnot(inherits(res, "try-error"))
 
-message("*** ProcessxFuture() - exceptions ... DONE")
+message("*** CallrFuture() - exceptions ... DONE")
 
 
-message("*** ProcessxFuture() - timeout ...")
+message("*** CallrFuture() - timeout ...")
 
 if (fullTest) {
-  plan(processx)
+  plan(callr)
 
   options(future.wait.timeout = 0.15, future.wait.interval = 0.1)
 
@@ -64,9 +64,9 @@ if (fullTest) {
   stopifnot(inherits(res, "error"))
 }
 
-message("*** ProcessxFuture() - timeout ... DONE")
+message("*** CallrFuture() - timeout ... DONE")
 
 
-message("*** ProcessxFuture() ... DONE")
+message("*** CallrFuture() ... DONE")
 
 source("incl/end.R")

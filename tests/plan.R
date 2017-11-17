@@ -2,21 +2,21 @@ source("incl/start,load-only.R")
 
 message("*** plan() ...")
 
-message("*** future::plan(future.processx::processx)")
-oplan <- future::plan(future.processx::processx)
+message("*** future::plan(future.callr::callr)")
+oplan <- future::plan(future.callr::callr)
 print(future::plan())
 future::plan(oplan)
 print(future::plan())
 
 
-library("future.processx")
-plan(processx)
+library("future.callr")
+plan(callr)
 
-for (type in c("processx")) {
+for (type in c("callr")) {
   mprintf("*** plan('%s') ...", type)
 
   plan(type)
-  stopifnot(inherits(plan(), "processx"))
+  stopifnot(inherits(plan(), "callr"))
 
   a <- 0
   f <- future({
@@ -38,7 +38,7 @@ message("*** Assert that default backend can be overridden ...")
 mpid <- Sys.getpid()
 print(mpid)
 
-plan(processx)
+plan(callr)
 pid %<-% { Sys.getpid() }
 print(pid)
 stopifnot(pid != mpid)

@@ -106,8 +106,8 @@ import_future <- function(name, default = NULL) {
   import_from(name, default = default, package = "future")
 }
 
-import_processx <- function(name, default = NULL) {
-  import_from(name, default = default, package = "processx")
+import_callr <- function(name, default = NULL) {
+  import_from(name, default = default, package = "callr")
 }
 
 ## Evaluates an expression in global environment.

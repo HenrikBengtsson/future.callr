@@ -1,4 +1,4 @@
-Package: future.processx
+Package: future.callr
 Version: 0.0.0-9000
 Depends:
     R (>= 3.2.0),
@@ -12,13 +12,13 @@ Suggests:
 VignetteBuilder:
     R.rsp
 Remotes: r-lib/callr
-Title: A Future API for Parallel Processing using 'processx'
+Title: A Future API for Parallel Processing using 'callr'
 Authors@R: c(person("Henrik", "Bengtsson", role=c("aut", "cre", "cph"),
                                           email = "henrikb@braju.com"))
-Description: Implementation of the Future API on top of the 'processx' package.
+Description: Implementation of the Future API on top of the 'callr' package.
 License: LGPL (>= 2.1)
 LazyLoad: TRUE
-URL: https://github.com/HenrikBengtsson/future.processx
-BugReports: https://github.com/HenrikBengtsson/future.processx/issues
+URL: https://github.com/HenrikBengtsson/future.callr
+BugReports: https://github.com/HenrikBengtsson/future.callr/issues
 RoxygenNote: 6.0.1
 Roxygen: list(markdown = TRUE)

@@ -3,7 +3,7 @@ source("incl/start.R")
 library("datasets") ## cars data set
 library("stats")    ## lm(), poly(), xtabs()
 
-plan(processx)
+plan(callr)
 
 message("*** Globals - formulas ...")
 
