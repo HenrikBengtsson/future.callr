@@ -331,8 +331,10 @@ await.CallrFuture <- function(future,
   ## Poll process
   ii <- 1L
   while (process$is_alive()) {
-    mdebug("- iteration %d: callr::wait(timeout = %g)", ii, timeout)
-    res <- process$wait(timeout = sleep_fcn(ii))
+    timeout_ii <- sleep_fcn(ii)
+    if (ii %% 100 == 0)
+      mdebug("- iteration %d: callr::wait(timeout = %g)", ii, timeout_ii)
+    res <- process$wait(timeout = timeout_ii)
     ii <- ii + 1L
   }
   
