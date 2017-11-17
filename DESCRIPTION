@@ -4,7 +4,6 @@ Depends:
     R (>= 3.2.0),
     future (>= 1.6.2)
 Imports:
-    processx (>= 2.0.0.1),
     callr (>= 1.0.0.9000)
 Suggests:
     listenv,
