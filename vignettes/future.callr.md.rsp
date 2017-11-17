@@ -50,7 +50,7 @@ The future.callr package implements a future wrapper for callr.
 
 | Backend | Description                                                      | Alternative in future package
 |:--------|:-----------------------------------------------------------------|:------------------------------
-| `callr` | parallel evaluation in a separate R process (on current machine) | `plan(callr, workers = 4L)`
+| `callr` | parallel evaluation in a separate R process (on current machine) | `plan(multisession)`
 
 
 ## Demos
