@@ -16,7 +16,7 @@ latex: false
 
 env:
   global:
-    - _R_CHECK_FULL_=true  ## Package specific
+    - _R_CHECK_FULL_=false  ## Package specific
 
 matrix:
   include:
