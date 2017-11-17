@@ -1,0 +1,58 @@
+#----------------------------------------------------------------
+# Travis-CI configuration for R packages
+#
+# REFERENCES:
+# * Travis CI: https://docs.travis-ci.com/user/languages/r
+# * covr: https://github.com/jimhester/covr
+#
+# Validate your .travis.yml file at https://lint.travis-ci.org/
+#----------------------------------------------------------------
+language: r
+sudo: false
+cache: packages
+warnings_are_errors: false
+r_check_args: --as-cran
+latex: false
+
+env:
+  global:
+    - _R_CHECK_FULL_=true  ## Package specific
+
+matrix:
+  include:
+    - os: linux
+      r: oldrel
+    - os: linux
+      r: release
+    - os: linux
+      r: devel
+    - os: linux
+      r: devel
+    - os: osx
+      r: oldrel
+    - os: osx
+      r: release
+    - os: linux
+      r: release
+      r_github_packages:
+        - jimhester/covr
+      r_check_args: --no-codoc --no-examples --no-tests --ignore-vignettes
+      after_success:
+        - Rscript -e 'covr::codecov(quiet=FALSE)'
+      env: NB='w/ covr' ## Just a label
+    - os: linux
+      r: release
+      r_github_packages:
+        - jimhester/lintr
+      r_check_args: --no-codoc --no-examples --no-tests --ignore-vignettes
+      after_success:
+        - Rscript -e 'library(lintr); lint_package(linters = with_defaults(commented_code_linter = NULL, closed_curly_linter = closed_curly_linter(allow_single_line = TRUE), open_curly_linter = open_curly_linter(allow_single_line = TRUE)))'
+      env: NB='w/ lintr' ## Just a label
+
+before_install:
+  - Rscript -e 'c(physical = parallel::detectCores(logical = FALSE), logical = parallel::detectCores())'
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change

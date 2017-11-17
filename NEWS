@@ -1,0 +1,10 @@
+Package: future.processx
+========================
+
+Version: 0.0.0-9000 [2017-11-16]
+
+NEW FEATURES:
+
+ o Added processx futures.
+
+ 

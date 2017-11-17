@@ -1,0 +1,25 @@
+Package: future.processx
+Version: 0.0.0-9000
+Depends:
+    R (>= 3.2.0),
+    future (>= 1.6.2)
+Imports:
+    processx (>= 2.0.0.1),
+    callr (>= 1.0.0.9000)
+Suggests:
+    listenv,
+    markdown,
+    R.rsp
+VignetteBuilder:
+    R.rsp
+Remotes: r-lib/callr
+Title: A Future API for Parallel Processing using 'processx'
+Authors@R: c(person("Henrik", "Bengtsson", role=c("aut", "cre", "cph"),
+                                          email = "henrikb@braju.com"))
+Description: Implementation of the Future API on top of the 'processx' package.
+License: LGPL (>= 2.1)
+LazyLoad: TRUE
+URL: https://github.com/HenrikBengtsson/future.processx
+BugReports: https://github.com/HenrikBengtsson/future.processx/issues
+RoxygenNote: 6.0.1
+Roxygen: list(markdown = TRUE)
