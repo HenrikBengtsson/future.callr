@@ -10,13 +10,6 @@ is_false <- function(x) {
   identical(FALSE, x)
 }
 
-attached_packages <- function() {
-  pkgs <- search()
-  pkgs <- grep("^package:", pkgs, value = TRUE)
-  pkgs <- gsub("^package:", "", pkgs)
-  pkgs
-}
-
 ## Adopted R.utils 2.1.0 (2015-06-15)
 #' @importFrom utils capture.output
 capture_output <- function(expr, envir = parent.frame(), ...) {
@@ -106,21 +99,6 @@ import_future <- function(name, default = NULL) {
   import_from(name, default = default, package = "future")
 }
 
-import_callr <- function(name, default = NULL) {
-  import_from(name, default = default, package = "callr")
-}
-
-## Evaluates an expression in global environment.
-## Because geval() is exported, we want to keep its environment()
-## as small as possible, which is why we use local().  Without,
-## the environment would be that of the package itself and all of
-## the package would be exported.
-geval <- local(function(expr, substitute = FALSE, envir = .GlobalEnv, ...) {
-  if (substitute) expr <- substitute(expr)
-  eval(expr, envir = envir)
-})
-
-
 ## Tests if the current OS is of a certain type
 is_os <- function(name) {
   if (name == "windows") {
@@ -128,29 +106,4 @@ is_os <- function(name) {
   } else {
     grepl(paste0("^", name), R.version$os)
   }
-}
-
-
-## From R.utils 2.5.0
-tempvar <- function(prefix = "var", value = NA, envir = parent.frame()) {
-  max_tries <- 1e6
-  max_int <- .Machine$integer.max
-
-  ii <- 0L
-  while (ii < max_tries) {
-    # Generate random variable name
-    idx <- sample.int(max_int, size = 1L)
-    name <- sprintf("%s%d", prefix, idx)
-
-    # Available?
-    if (!exists(name, envir = envir, inherits = FALSE)) {
-      assign(name, value, envir = envir, inherits = FALSE)
-      return(name)
-    }
-
-    ii <- ii + 1L
-  }
-
-  # Failed to find a unique temporary variable name
-  stop(sprintf("Failed to generate a unique non-existing temporary variable with prefix '%s'", prefix)) #nolint
 }
