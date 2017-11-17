@@ -1,6 +1,6 @@
 source("incl/start.R")
 
-plan(processx)
+plan(callr)
 
 oopts <- c(oopts, options(
   future.globals.resolve = TRUE,

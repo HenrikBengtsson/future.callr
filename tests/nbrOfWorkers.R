@@ -3,7 +3,7 @@ source("incl/start.R")
 message("*** nbrOfWorkers() ...")
 
 ncores <- availableCores()
-n <- nbrOfWorkers(processx)
+n <- nbrOfWorkers(callr)
 message("Number of workers: ", n)
 stopifnot(n == ncores)
 

@@ -2,7 +2,7 @@ source("incl/start.R")
 
 message("*** Futures - labels ...")
 
-strategies <- c("processx")
+strategies <- c("callr")
 
 for (strategy in strategies) {
   mprintf("- plan('%s') ...", strategy)

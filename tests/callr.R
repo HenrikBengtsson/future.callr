@@ -1,7 +1,7 @@
 source("incl/start.R")
 library("listenv")
 
-message("*** processx() ...")
+message("*** callr() ...")
 
 for (cores in 1:min(2L, availableCores())) {
   ## FIXME:
@@ -11,23 +11,23 @@ for (cores in 1:min(2L, availableCores())) {
   options(mc.cores = cores - 1L)
 
   for (globals in c(FALSE, TRUE)) {
-    mprintf("*** processx(..., globals = %s) without globals",
+    mprintf("*** callr(..., globals = %s) without globals",
             globals)
 
-    f <- processx({
+    f <- callr({
       42L
     }, globals = globals)
-    stopifnot(inherits(f, "ProcessxFuture"))
+    stopifnot(inherits(f, "CallrFuture"))
 
     print(resolved(f))
     y <- value(f)
     print(y)
     stopifnot(y == 42L)
 
-    mprintf("*** processx(..., globals = %s) with globals", globals)
+    mprintf("*** callr(..., globals = %s) with globals", globals)
     ## A global variable
     a <- 0
-    f <- processx({
+    f <- callr({
       b <- 3
       c <- 2
       a * b * c
@@ -35,7 +35,7 @@ for (cores in 1:min(2L, availableCores())) {
     print(f)
 
 
-    ## A processx future is evaluated in a separated
+    ## A callr future is evaluated in a separated
     ## rocess.  Changing the value of a global
     ## variable should not affect the result of the
     ## future.
@@ -51,13 +51,13 @@ for (cores in 1:min(2L, availableCores())) {
     }
 
 
-    mprintf("*** processx(..., globals = %s) with globals and blocking", globals) #nolint
+    mprintf("*** callr(..., globals = %s) with globals and blocking", globals) #nolint
     x <- listenv()
     for (ii in 1:4) {
-      mprintf(" - Creating processx future #%d ...", ii)
-      x[[ii]] <- processx({ ii }, globals = globals)
+      mprintf(" - Creating callr future #%d ...", ii)
+      x[[ii]] <- callr({ ii }, globals = globals)
     }
-    mprintf(" - Resolving %d processx futures", length(x))
+    mprintf(" - Resolving %d callr futures", length(x))
     if (globals) {
       v <- sapply(x, FUN = value)
       stopifnot(all(v == 1:4))
@@ -66,8 +66,8 @@ for (cores in 1:min(2L, availableCores())) {
       stopifnot(all(sapply(v, FUN = inherits, "simpleError")))
     }
 
-    mprintf("*** processx(..., globals = %s) and errors", globals)
-    f <- processx({
+    mprintf("*** callr(..., globals = %s) and errors", globals)
+    f <- callr({
       stop("Whoops!")
       1
     }, globals = globals)
@@ -88,24 +88,24 @@ for (cores in 1:min(2L, availableCores())) {
   } # for (globals ...)
 
 
-  message("*** processx(..., workers = 1L) ...")
+  message("*** callr(..., workers = 1L) ...")
 
   a <- 2
   b <- 3
   y_truth <- a * b
 
-  f <- processx({ a * b }, workers = 1L)
+  f <- callr({ a * b }, workers = 1L)
   rm(list = c("a", "b"))
 
   v <- value(f)
   print(v)
   stopifnot(v == y_truth)
 
-  message("*** processx(..., workers = 1L) ... DONE")
+  message("*** callr(..., workers = 1L) ... DONE")
 
   mprintf("Testing with %d cores ... DONE", cores)
 } ## for (cores ...)
 
-message("*** processx() ... DONE")
+message("*** callr() ... DONE")
 
 source("incl/end.R")

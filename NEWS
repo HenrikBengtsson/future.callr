@@ -1,10 +1,8 @@
-Package: future.processx
-========================
+Package: future.callr
+=====================
 
-Version: 0.0.0-9000 [2017-11-16]
+Version: 0.1.0 [2017-11-16]
 
 NEW FEATURES:
 
- o Added processx futures.
-
- 
+ o Added callr futures. Use plan(callr) or plan(callr, workers = 4L).

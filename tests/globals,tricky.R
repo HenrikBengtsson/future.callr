@@ -1,7 +1,7 @@
 source("incl/start.R")
 library("listenv")
 
-plan(processx)
+plan(callr)
 
 message("*** Tricky use cases related to globals ...")
 

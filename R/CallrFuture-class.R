@@ -1,4 +1,4 @@
-#' A processx future is a future whose value will be resolved via processx
+#' A callr future is a future whose value will be resolved via callr
 #'
 #' @param expr The \R expression to be evaluated.
 #'
@@ -18,18 +18,18 @@
 #'
 #' @param label (optional) Label of the future.
 #'
-#' @param workers (optional) The maximum number of workers the processx
+#' @param workers (optional) The maximum number of workers the callr
 #' backend may use at any time.
 #'
 #' @param \ldots Additional arguments passed to
 #'               \code{\link[future]{MultiprocessFuture}()}.
 #'
-#' @return A ProcessxFuture object
+#' @return A CallrFuture object
 #'
 #' @export
 #' @importFrom future MultiprocessFuture getGlobalsAndPackages
 #' @keywords internal
-ProcessxFuture <- function(expr = NULL, envir = parent.frame(),
+CallrFuture <- function(expr = NULL, envir = parent.frame(),
                              substitute = TRUE,
                              globals = TRUE, packages = NULL,
                              label = NULL,
@@ -51,7 +51,7 @@ ProcessxFuture <- function(expr = NULL, envir = parent.frame(),
   ## Record globals
   gp <- getGlobalsAndPackages(expr, envir = envir, globals = globals)
 
-  ## Create ProcessxFuture object
+  ## Create CallrFuture object
   future <- MultiprocessFuture(expr = gp$expr, envir = envir,
                                substitute = FALSE, workers = workers,
                                label = label, ...)
@@ -60,34 +60,34 @@ ProcessxFuture <- function(expr = NULL, envir = parent.frame(),
   future$packages <- unique(c(packages, gp$packages))
   future$state <- "created"
 
-  future <- structure(future, class = c("ProcessxFuture", class(future)))
+  future <- structure(future, class = c("CallrFuture", class(future)))
 
   future
 }
 
 
-#' Prints a processx future
+#' Prints a callr future
 #'
-#' @param x An ProcessxFuture object
+#' @param x An CallrFuture object
 #' 
 #' @param \ldots Not used.
 #'
 #' @export
 #' @keywords internal
-print.ProcessxFuture <- function(x, ...) {
+print.CallrFuture <- function(x, ...) {
   NextMethod("print")
 
   ## Ask for status once
   status <- status(x)
-  printf("processx status: %s\n", paste(sQuote(status), collapse = ", "))
+  printf("callr status: %s\n", paste(sQuote(status), collapse = ", "))
   if ("error" %in% status) printf("Error: %s\n", loggedError(x))
 
   process <- x$process
   if (is_na(status)) {
-    printf("processx %s: Not found (happens when finished and deleted)\n",
+    printf("callr %s: Not found (happens when finished and deleted)\n",
            class(process)[1])
   } else {
-    printf("processx information: PID=%d, %s\n",
+    printf("callr information: PID=%d, %s\n",
            process$get_pid(), capture_output(print(process)))
   }
 
@@ -100,7 +100,7 @@ finished <- function(...) UseMethod("finished")
 loggedError <- function(...) UseMethod("loggedError")
 loggedOutput <- function(...) UseMethod("loggedOutput")
 
-#' Status of processx future
+#' Status of callr future
 #'
 #' @param future The future.
 #' 
@@ -118,7 +118,7 @@ loggedOutput <- function(...) UseMethod("loggedOutput")
 #' @export value
 #' @export loggedError
 #' @export loggedOutput
-status.ProcessxFuture <- function(future, ...) {
+status.CallrFuture <- function(future, ...) {
   process <- future$process
   if (!inherits(process, "r_process")) return(NA_character_)
   future$state <- if (process$is_alive()) "running" else "done"
@@ -128,7 +128,7 @@ status.ProcessxFuture <- function(future, ...) {
 
 #' @export
 #' @keywords internal
-finished.ProcessxFuture <- function(future, ...) {
+finished.CallrFuture <- function(future, ...) {
   status <- status(future)
   if (is_na(status)) return(NA)
   any(c("done", "error") %in% status)
@@ -137,7 +137,7 @@ finished.ProcessxFuture <- function(future, ...) {
 #' @importFrom future FutureError
 #' @export
 #' @keywords internal
-loggedError.ProcessxFuture <- function(future, ...) {
+loggedError.CallrFuture <- function(future, ...) {
   stat <- status(future)
   if (is_na(stat)) return(NULL)
 
@@ -157,7 +157,7 @@ loggedError.ProcessxFuture <- function(future, ...) {
 #' @importFrom future FutureError
 #' @export
 #' @keywords internal
-loggedOutput.ProcessxFuture <- function(future, ...) {
+loggedOutput.CallrFuture <- function(future, ...) {
   stat <- status(future)
   if (is_na(stat)) return(NULL)
 
@@ -179,12 +179,12 @@ loggedOutput.ProcessxFuture <- function(future, ...) {
 #' @importFrom future resolved
 #' @export
 #' @keywords internal
-resolved.ProcessxFuture <- function(x, ...) {
+resolved.CallrFuture <- function(x, ...) {
   ## Has internal future state already been switched to be resolved
   resolved <- NextMethod("resolved")
   if (resolved) return(TRUE)
 
-  ## If not, checks the processx registry status
+  ## If not, checks the callr registry status
   resolved <- finished(x)
   if (is.na(resolved)) return(FALSE)
 
@@ -194,7 +194,7 @@ resolved.ProcessxFuture <- function(x, ...) {
 #' @importFrom future value
 #' @export
 #' @keywords internal
-value.ProcessxFuture <- function(future, signal = TRUE,
+value.CallrFuture <- function(future, signal = TRUE,
                                    onMissing = c("default", "error"),
                                    default = NULL, cleanup = TRUE, ...) {
   ## Has the value already been collected?
@@ -232,7 +232,7 @@ run <- function(...) UseMethod("run")
 
 #' @importFrom future getExpression
 #' @importFrom callr r_bg
-run.ProcessxFuture <- function(future, ...) {
+run.CallrFuture <- function(future, ...) {
   if (future$state != "created") {
     label <- future$label
     if (is.null(label)) label <- "<none>"
@@ -246,7 +246,7 @@ run.ProcessxFuture <- function(future, ...) {
   assertOwner <- import_future("assertOwner")
   assertOwner(future)
 
-  ## Temporarily disable processx output?
+  ## Temporarily disable callr output?
   ## (i.e. messages and progress bars)
   debug <- getOption("future.debug", FALSE)
 
@@ -278,7 +278,7 @@ run.ProcessxFuture <- function(future, ...) {
 
 await <- function(...) UseMethod("await")
 
-#' Awaits the value of a processx future
+#' Awaits the value of a callr future
 #'
 #' @param future The future.
 #' 
@@ -304,7 +304,7 @@ await <- function(...) UseMethod("await")
 #' @importFrom utils tail
 #' @importFrom future FutureError
 #' @keywords internal
-await.ProcessxFuture <- function(future, 
+await.CallrFuture <- function(future, 
                                  timeout = getOption("future.wait.timeout",
                                                      30 * 24 * 60 * 60),
                                  delta = getOption("future.wait.interval", 1.0),
@@ -319,10 +319,10 @@ await.ProcessxFuture <- function(future,
   expr <- future$expr
   process <- future$process
 
-  mdebug("processx::wait() ...")
+  mdebug("callr::wait() ...")
 
-  ## Control processx info output
-  oopts <- options(processx.verbose = debug)
+  ## Control callr info output
+  oopts <- options(callr.verbose = debug)
   on.exit(options(oopts))
 
   ## Sleep function - increases geometrically as a function of iterations
@@ -331,14 +331,14 @@ await.ProcessxFuture <- function(future,
   ## Poll process
   ii <- 1L
   while (process$is_alive()) {
-    mdebug("- iteration %d: processx::wait(timeout = %g)", ii, timeout)
+    mdebug("- iteration %d: callr::wait(timeout = %g)", ii, timeout)
     res <- process$wait(timeout = sleep_fcn(ii))
     ii <- ii + 1L
   }
   
   stat <- status(future)
   mdebug("- status(): %s", paste(sQuote(stat), collapse = ", "))
-  mdebug("processx::wait() ... done")
+  mdebug("callr::wait() ... done")
 
   finished <- is_na(stat) || any(c("done", "error") %in% stat)
 
@@ -350,7 +350,7 @@ await.ProcessxFuture <- function(future,
     if ("done" %in% stat) {
       res <- process$get_result()
     } else if ("error" %in% stat) {
-      msg <- sprintf("ProcessxError in %s ('%s'): %s",
+      msg <- sprintf("CallrError in %s ('%s'): %s",
                      class(future)[1], label, loggedError(future))
       stop(FutureError(msg, future = future, output = loggedOutput(future)))
     }

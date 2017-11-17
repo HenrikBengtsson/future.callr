@@ -1,7 +1,7 @@
 source("incl/start.R")
 library("listenv")
 
-strategies <- c("sequential", "multisession", "processx")
+strategies <- c("sequential", "multisession", "callr")
 
 message("*** future_lapply() ...")
 

@@ -1,6 +1,6 @@
 source("incl/start.R")
 
-plan(processx)
+plan(callr)
 
 message("*** Globals - manually ...")
 
