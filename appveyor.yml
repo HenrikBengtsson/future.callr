@@ -40,8 +40,9 @@ install:
 
 build_script:
   - echo Current directory=%CD%
-  - travis-tool.sh install_r processx future
+  - travis-tool.sh install_r callr future
   - travis-tool.sh install_r listenv markdown R.rsp
+  - travis-tool.sh install_github r-lib/callr
 
 test_script:
   - travis-tool.sh run_tests
