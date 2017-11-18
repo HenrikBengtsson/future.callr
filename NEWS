@@ -1,9 +1,11 @@
 Package: future.callr
 =====================
 
-Version: 0.1.0-9000 [2017-11-16]
+Version: 0.1.0-9000 [2017-11-18]
 
- o ...
+BUG FIX:
+
+ o Number of workers in plan(callr, workers = n) was not respected.
 
 
 Version: 0.1.0 [2017-11-16]

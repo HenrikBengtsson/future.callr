@@ -28,13 +28,11 @@ callr <- function(expr, envir = parent.frame(), substitute = TRUE,
   stopifnot(length(workers) == 1L, is.numeric(workers),
             is.finite(workers), workers >= 1L)
 
-  oopts <- options(mc.cores = workers)
-  on.exit(options(oopts))
-
   future <- CallrFuture(expr = expr, envir = envir, substitute = FALSE,
-                           globals = globals,
-                           label = label,
-                           ...)
+                        globals = globals,
+                        label = label,
+                        workers = workers,
+                        ...)
 
   if (!future$lazy) future <- run(future)
 
