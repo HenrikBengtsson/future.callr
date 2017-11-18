@@ -233,6 +233,8 @@ run <- function(...) UseMethod("run")
 #' @importFrom future getExpression
 #' @importFrom callr r_bg
 run.CallrFuture <- function(future, ...) {
+  FutureRegistry <- import_future("FutureRegistry")
+  
   if (future$state != "created") {
     label <- future$label
     if (is.null(label)) label <- "<none>"
@@ -265,10 +267,16 @@ run.CallrFuture <- function(future, ...) {
     .(expr)
   }))
 
+  ## 1. Wait for an available worker
+  waitForWorker(type = "callr", workers = future$workers)
+
+  ## 2. Allocate future now worker
+  FutureRegistry("workers-callr", action = "add", future = future, earlySignal = FALSE)
+  
   ## Launch
   future$process <- r_bg(func, args = globals)
   mdebug("Launched future #%d", future$process$get_pid())
-  
+
   ## 3. Running
   future$state <- "running"
 
