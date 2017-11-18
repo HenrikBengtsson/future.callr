@@ -57,6 +57,13 @@ R package future.callr is only available via [GitHub](https://github.com/HenrikB
 source('http://callr.org/install#HenrikBengtsson/future.callr')
 ```
 
+### Pre-release version
+
+To install the pre-release version that is available in Git branch `develop` on GitHub, use:
+```r
+source('http://callr.org/install#HenrikBengtsson/future.callr@develop')
+```
+This will install the package from source.  
 
 
 
