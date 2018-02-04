@@ -12,7 +12,6 @@ Suggests:
     R.rsp
 VignetteBuilder:
     R.rsp
-Remotes: r-lib/callr
 Title: A Future API for Parallel Processing using 'callr'
 Authors@R: c(person("Henrik", "Bengtsson", role=c("aut", "cre", "cph"),
                                           email = "henrikb@braju.com"))
