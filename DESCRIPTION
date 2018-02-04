@@ -4,7 +4,7 @@ Depends:
     R (>= 3.2.0),
     future (>= 1.6.2)
 Imports:
-    callr (>= 1.0.0.9000)
+    callr (>= 2.0.1)
 Suggests:
     listenv,
     markdown,
