@@ -6,6 +6,7 @@ Depends:
 Imports:
     callr (>= 2.0.1)
 Suggests:
+    future.apply,
     listenv,
     markdown,
     R.rsp

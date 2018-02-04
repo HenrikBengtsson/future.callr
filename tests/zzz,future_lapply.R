@@ -1,5 +1,6 @@
 source("incl/start.R")
 library("listenv")
+future_lapply <- future.apply::future_lapply
 
 strategies <- c("sequential", "multisession", "callr")
 
