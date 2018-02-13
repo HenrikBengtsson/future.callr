@@ -23,7 +23,9 @@ For example,
 [1] 5.85
 ```
 This is obviously a toy example to illustrate what futures look like
-and how to work with them.
+and how to work with them.  For further examples on how to use futures,
+see the vignettes of the [future] package as well as those of [future.apply]
+and [doFuture].
 
 
 ## Using the callr backend
@@ -74,6 +76,9 @@ demo("mandelbrot", package = "future", ask = FALSE)
 [callr]: https://cran.r-project.org/package=callr
 [future]: https://cran.r-project.org/package=future
 [future.callr]: https://github.com/HenrikBengtsson/callr
+[future.apply]: https://cran.r-project.org/package=future.apply
+[doFuture]: https://cran.r-project.org/package=doFuture
+
 
 ## Installation
 R package future.callr is only available via [GitHub](https://github.com/HenrikBengtsson/future.callr) and can be installed in R as:
