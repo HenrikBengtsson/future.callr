@@ -28,6 +28,9 @@ matrix:
       r: devel
     - os: osx
       r: oldrel
+      before_install:
+        - Rscript -e 'c(physical = parallel::detectCores(logical = FALSE), logical = parallel::detectCores())'
+        - Rscript -e 'install.packages(c("future", "callr"), type = "source")'
     - os: osx
       r: release
     - os: linux
