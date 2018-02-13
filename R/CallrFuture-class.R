@@ -96,8 +96,11 @@ print.CallrFuture <- function(x, ...) {
 
 
 status <- function(...) UseMethod("status")
+
 finished <- function(...) UseMethod("finished")
+
 loggedError <- function(...) UseMethod("loggedError")
+
 loggedOutput <- function(...) UseMethod("loggedOutput")
 
 #' Status of callr future
@@ -110,14 +113,8 @@ loggedOutput <- function(...) UseMethod("loggedOutput")
 #'
 #' @aliases status finished value
 #'          loggedError loggedOutput
+#' 
 #' @keywords internal
-#'
-#' @export
-#' @export status
-#' @export finished
-#' @export value
-#' @export loggedError
-#' @export loggedOutput
 status.CallrFuture <- function(future, ...) {
   process <- future$process
   if (!inherits(process, "r_process")) return(NA_character_)
@@ -125,8 +122,6 @@ status.CallrFuture <- function(future, ...) {
   future$state
 }
 
-
-#' @export
 #' @keywords internal
 finished.CallrFuture <- function(future, ...) {
   status <- status(future)
@@ -134,9 +129,8 @@ finished.CallrFuture <- function(future, ...) {
   any(c("done", "error") %in% status)
 }
 
-#' @importFrom future FutureError
-#' @export
 #' @keywords internal
+#' @importFrom future FutureError
 loggedError.CallrFuture <- function(future, ...) {
   stat <- status(future)
   if (is_na(stat)) return(NULL)
@@ -154,9 +148,8 @@ loggedError.CallrFuture <- function(future, ...) {
 } # loggedError()
 
 
-#' @importFrom future FutureError
-#' @export
 #' @keywords internal
+#' @importFrom future FutureError
 loggedOutput.CallrFuture <- function(future, ...) {
   stat <- status(future)
   if (is_na(stat)) return(NULL)
@@ -177,8 +170,8 @@ loggedOutput.CallrFuture <- function(future, ...) {
 # Future API
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #' @importFrom future resolved
-#' @export
 #' @keywords internal
+#' @export
 resolved.CallrFuture <- function(x, ...) {
   ## Has internal future state already been switched to be resolved
   resolved <- NextMethod("resolved")
@@ -192,8 +185,8 @@ resolved.CallrFuture <- function(x, ...) {
 }
 
 #' @importFrom future value FutureError
-#' @export
 #' @keywords internal
+#' @export
 value.CallrFuture <- function(future, signal = TRUE,
                                    onMissing = c("default", "error"),
                                    default = NULL, cleanup = TRUE, ...) {
