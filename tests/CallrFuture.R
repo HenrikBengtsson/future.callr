@@ -30,17 +30,23 @@ message("*** CallrFuture() - exceptions ...")
 ## print(res)
 ## stopifnot(inherits(res, "error"))
 
-res <- try(f <- CallrFuture(42L, workers = integer(0)), silent = TRUE)
+res <- tryCatch({
+  f <- CallrFuture(42L, workers = integer(0))
+}, error = identity)
 print(res)
-stopifnot(inherits(res, "try-error"))
+stopifnot(inherits(res, "error"))
 
-res <- try(f <- CallrFuture(42L, workers = 0L), silent = TRUE)
+res <- tryCatch({
+  f <- CallrFuture(42L, workers = 0L)
+}, error = identity)
 print(res)
-stopifnot(inherits(res, "try-error"))
+stopifnot(inherits(res, "error"))
 
-res <- try(f <- CallrFuture(42L, workers = TRUE), silent = TRUE)
+res <- tryCatch({
+  f <- CallrFuture(42L, workers = TRUE)
+}, error = identity)
 print(res)
-stopifnot(inherits(res, "try-error"))
+stopifnot(inherits(res, "error"))
 
 message("*** CallrFuture() - exceptions ... DONE")
 
@@ -60,8 +66,8 @@ if (fullTest) {
 
   res <- tryCatch({
     value(f)
-  }, error = function(ex) ex)
-  stopifnot(inherits(res, "error"))
+  }, FutureError = function(ex) ex)
+  stopifnot(inherits(res, "FutureError"))
 }
 
 message("*** CallrFuture() - timeout ... DONE")

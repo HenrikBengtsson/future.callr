@@ -41,10 +41,12 @@ for (strategy in c("sequential", "multiprocess", "callr")) {
     mprintf("** Sum function '%s' with plan('%s') ...", name, strategy)
     sum_fcn <- sum_fcns[[name]]
     print(sum_fcn)
-    y <- try(sum_fcn(1:2, 3))
+    y <- tryCatch({
+      sum_fcn(1:2, 3)
+    }, error = identity)
     print(y)
     if (name %in% c("D")) {
-      stopifnot(inherits(y, "try-error"))
+      stopifnot(inherits(y, "error"))
     } else {
       stopifnot(y == 6)
     }

@@ -36,7 +36,7 @@ for (cores in 1:min(2L, availableCores())) {
 
 
     ## A callr future is evaluated in a separated
-    ## rocess.  Changing the value of a global
+    ## process.  Changing the value of a global
     ## variable should not affect the result of the
     ## future.
     a <- 7  ## Make sure globals are frozen
@@ -47,7 +47,7 @@ for (cores in 1:min(2L, availableCores())) {
     } else {
       res <- tryCatch({ value(f) }, error = identity)
       print(res)
-      stopifnot(inherits(res, "simpleError"))
+      stopifnot(inherits(res, "error"))
     }
 
 
@@ -63,7 +63,7 @@ for (cores in 1:min(2L, availableCores())) {
       stopifnot(all(v == 1:4))
     } else {
       v <- lapply(x, FUN = function(f) tryCatch(value(f), error = identity))
-      stopifnot(all(sapply(v, FUN = inherits, "simpleError")))
+      stopifnot(all(sapply(v, FUN = inherits, "error")))
     }
 
     mprintf("*** callr(..., globals = %s) and errors", globals)
@@ -74,16 +74,20 @@ for (cores in 1:min(2L, availableCores())) {
     print(f)
     v <- value(f, signal = FALSE)
     print(v)
-    stopifnot(inherits(v, "simpleError"))
+    stopifnot(inherits(v, "error"))
 
-    res <- try(value(f), silent = TRUE)
+    res <- tryCatch({
+      v <- value(f)
+    }, error = identity)
     print(res)
-    stopifnot(inherits(res, "try-error"))
+    stopifnot(inherits(res, "error"))
 
     ## Error is repeated
-    res <- try(value(f), silent = TRUE)
+    res <- tryCatch({
+      v <- value(f)
+    }, error = identity)
     print(res)
-    stopifnot(inherits(res, "try-error"))
+    stopifnot(inherits(res, "error"))
 
   } # for (globals ...)
 

@@ -191,7 +191,7 @@ resolved.CallrFuture <- function(x, ...) {
   resolved
 }
 
-#' @importFrom future value
+#' @importFrom future value FutureError
 #' @export
 #' @keywords internal
 value.CallrFuture <- function(future, signal = TRUE,
@@ -212,13 +212,14 @@ value.CallrFuture <- function(future, signal = TRUE,
     if (onMissing == "default") return(default)
     label <- future$label
     if (is.null(label)) label <- "<none>"
-    stop(sprintf("The value no longer exists (or never existed) for Future ('%s') of class %s", label, paste(sQuote(class(future)), collapse = ", "))) #nolint
+    msg <- sprintf("The value no longer exists (or never existed) for Future ('%s') of class %s", label, paste(sQuote(class(future)), collapse = ", "))
+    stop(FutureError(msg, future = future)) #nolint
   }
 
   tryCatch({
     future$value <- await(future, cleanup = FALSE)
     future$state <- "finished"
-  }, simpleError = function(ex) {
+  }, error = function(ex) {
     future$state <- "failed"
     future$value <- ex
   })
@@ -230,7 +231,7 @@ value.CallrFuture <- function(future, signal = TRUE,
 
 run <- function(...) UseMethod("run")
 
-#' @importFrom future getExpression
+#' @importFrom future getExpression FutureError
 #' @importFrom callr r_bg
 run.CallrFuture <- function(future, ...) {
   FutureRegistry <- import_future("FutureRegistry")
@@ -238,7 +239,8 @@ run.CallrFuture <- function(future, ...) {
   if (future$state != "created") {
     label <- future$label
     if (is.null(label)) label <- "<none>"
-    stop(sprintf("A future ('%s') can only be launched once.", label))
+    msg <- sprintf("A future ('%s') can only be launched once.", label)
+    stop(FutureError(msg, future = future))
   }
 
   mdebug <- import_future("mdebug")

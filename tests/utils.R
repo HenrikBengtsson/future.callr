@@ -83,8 +83,8 @@ stopifnot(identical(future, future::future))
 future <- import_future("<unknown function>", default = future::future)
 stopifnot(identical(future, future::future))
 
-res <- try(import_future("<unknown function>"), silent = TRUE)
-stopifnot(inherits(res, "try-error"))
+res <- tryCatch(import_future("<unknown function>"), error = identity)
+stopifnot(inherits(res, "error"))
 
 message("*** import_future() ... DONE")
 
