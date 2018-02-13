@@ -1,10 +1,16 @@
 Package: future.callr
 =====================
 
-Version: 0.1.1-9000 [2017-11-18]
+Version: 0.1.1-9000 [2018-02-12]
 
- o ...
+NEW FEATURES:
 
+ o Producing errors of class FutureError where applicable.
+
+DOCUMENTATION:
+
+ o Minor updates to the vignette related to the callr package.
+ 
 
 Version: 0.1.1 [2017-11-18]
 
