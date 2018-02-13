@@ -94,7 +94,7 @@ demo("mandelbrot", package = "future", ask = FALSE)
 
 [callr]: https://cran.r-project.org/package=callr
 [future]: https://cran.r-project.org/package=future
-[future.callr]: https://github.com/HenrikBengtsson/callr
+[future.callr]: https://cran.r-project.org/package=future.callr
 [future.apply]: https://cran.r-project.org/package=future.apply
 [doFuture]: https://cran.r-project.org/package=doFuture
 
