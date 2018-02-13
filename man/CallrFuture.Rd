@@ -29,8 +29,7 @@ globals are used as is.}
 \item{workers}{(optional) The maximum number of workers the callr
 backend may use at any time.}
 
-\item{\ldots}{Additional arguments passed to
-\code{\link[future]{MultiprocessFuture}()}.}
+\item{\ldots}{Additional arguments passed to \code{\link[future:MultiprocessFuture]{future::MultiprocessFuture()}}.}
 }
 \value{
 A CallrFuture object

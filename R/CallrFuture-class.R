@@ -5,7 +5,7 @@
 #' @param envir The environment in which global environment
 #' should be located.
 #'
-#' @param substitute Controls whether \code{expr} should be `substitute()`:d
+#' @param substitute Controls whether `expr` should be `substitute()`:d
 #' or not.
 #'
 #' @param globals (optional) a logical, a character vector, a named list, or
@@ -21,8 +21,7 @@
 #' @param workers (optional) The maximum number of workers the callr
 #' backend may use at any time.
 #'
-#' @param \ldots Additional arguments passed to
-#'               \code{\link[future]{MultiprocessFuture}()}.
+#' @param \ldots Additional arguments passed to [future::MultiprocessFuture()].
 #'
 #' @return A CallrFuture object
 #'
