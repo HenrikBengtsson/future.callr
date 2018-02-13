@@ -2,6 +2,7 @@
 % Please edit documentation in R/CallrFuture-class.R
 \name{CallrFuture}
 \alias{CallrFuture}
+\alias{run.CallrFuture}
 \title{A callr future is a future whose value will be resolved via callr}
 \usage{
 CallrFuture(expr = NULL, envir = parent.frame(), substitute = TRUE,

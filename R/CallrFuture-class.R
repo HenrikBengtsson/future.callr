@@ -25,6 +25,7 @@
 #'
 #' @return A CallrFuture object
 #'
+#' @aliases run.CallrFuture
 #' @export
 #' @importFrom future MultiprocessFuture getGlobalsAndPackages
 #' @keywords internal
@@ -227,11 +228,11 @@ value.CallrFuture <- function(future, signal = TRUE,
 } # value()
 
 
-
-run <- function(...) UseMethod("run")
-
-#' @importFrom future getExpression FutureError
+#' @importFrom future run getExpression FutureError
 #' @importFrom callr r_bg
+#' @keywords internal
+#' @S3method run CallrFuture
+#' @export
 run.CallrFuture <- function(future, ...) {
   FutureRegistry <- import_future("FutureRegistry")
   

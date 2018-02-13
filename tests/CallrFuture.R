@@ -14,11 +14,20 @@ message("*** CallrFuture() - cleanup ... DONE")
 
 message("*** CallrFuture() - exceptions ...")
 
+f <- callr({ 42L })
+v <- value(f)
+print(v)
+res <- tryCatch({
+  f <- run(f)
+}, FutureError = identity)
+print(res)
+stopifnot(inherits(res, "FutureError"))
+
 ## f <- CallrFuture({ 42L })
 ## print(f)
 ## res <- tryCatch({
 ##   loggedError(f)
-## }, error = function(ex) ex)
+## }, error = identity)
 ## print(res)
 ## stopifnot(inherits(res, "error"))
 
@@ -26,7 +35,7 @@ message("*** CallrFuture() - exceptions ...")
 ## print(f)
 ## res <- tryCatch({
 ##   loggedOutput(f)
-## }, error = function(ex) ex)
+## }, error = identity)
 ## print(res)
 ## stopifnot(inherits(res, "error"))
 
