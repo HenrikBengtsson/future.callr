@@ -18,7 +18,6 @@
 #'
 #' @importFrom future availableCores
 #' @export
-#' @keywords internal
 callr <- function(expr, envir = parent.frame(), substitute = TRUE,
                      globals = TRUE, label = NULL,
                      workers = availableCores(), ...) {

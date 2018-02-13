@@ -5,7 +5,7 @@
 #' @param envir The environment in which global environment
 #' should be located.
 #'
-#' @param substitute Controls whether \code{expr} should be `substitute()`:d
+#' @param substitute Controls whether `expr` should be `substitute()`:d
 #' or not.
 #'
 #' @param globals (optional) a logical, a character vector, a named list, or
@@ -21,11 +21,11 @@
 #' @param workers (optional) The maximum number of workers the callr
 #' backend may use at any time.
 #'
-#' @param \ldots Additional arguments passed to
-#'               \code{\link[future]{MultiprocessFuture}()}.
+#' @param \ldots Additional arguments passed to [future::MultiprocessFuture()].
 #'
 #' @return A CallrFuture object
 #'
+#' @aliases run.CallrFuture
 #' @export
 #' @importFrom future MultiprocessFuture getGlobalsAndPackages
 #' @keywords internal
@@ -96,8 +96,11 @@ print.CallrFuture <- function(x, ...) {
 
 
 status <- function(...) UseMethod("status")
+
 finished <- function(...) UseMethod("finished")
+
 loggedError <- function(...) UseMethod("loggedError")
+
 loggedOutput <- function(...) UseMethod("loggedOutput")
 
 #' Status of callr future
@@ -110,14 +113,8 @@ loggedOutput <- function(...) UseMethod("loggedOutput")
 #'
 #' @aliases status finished value
 #'          loggedError loggedOutput
+#' 
 #' @keywords internal
-#'
-#' @export
-#' @export status
-#' @export finished
-#' @export value
-#' @export loggedError
-#' @export loggedOutput
 status.CallrFuture <- function(future, ...) {
   process <- future$process
   if (!inherits(process, "r_process")) return(NA_character_)
@@ -125,8 +122,6 @@ status.CallrFuture <- function(future, ...) {
   future$state
 }
 
-
-#' @export
 #' @keywords internal
 finished.CallrFuture <- function(future, ...) {
   status <- status(future)
@@ -134,9 +129,8 @@ finished.CallrFuture <- function(future, ...) {
   any(c("done", "error") %in% status)
 }
 
-#' @importFrom future FutureError
-#' @export
 #' @keywords internal
+#' @importFrom future FutureError
 loggedError.CallrFuture <- function(future, ...) {
   stat <- status(future)
   if (is_na(stat)) return(NULL)
@@ -154,9 +148,8 @@ loggedError.CallrFuture <- function(future, ...) {
 } # loggedError()
 
 
-#' @importFrom future FutureError
-#' @export
 #' @keywords internal
+#' @importFrom future FutureError
 loggedOutput.CallrFuture <- function(future, ...) {
   stat <- status(future)
   if (is_na(stat)) return(NULL)
@@ -177,8 +170,8 @@ loggedOutput.CallrFuture <- function(future, ...) {
 # Future API
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #' @importFrom future resolved
-#' @export
 #' @keywords internal
+#' @export
 resolved.CallrFuture <- function(x, ...) {
   ## Has internal future state already been switched to be resolved
   resolved <- NextMethod("resolved")
@@ -191,9 +184,9 @@ resolved.CallrFuture <- function(x, ...) {
   resolved
 }
 
-#' @importFrom future value
-#' @export
+#' @importFrom future value FutureError
 #' @keywords internal
+#' @export
 value.CallrFuture <- function(future, signal = TRUE,
                                    onMissing = c("default", "error"),
                                    default = NULL, cleanup = TRUE, ...) {
@@ -212,13 +205,14 @@ value.CallrFuture <- function(future, signal = TRUE,
     if (onMissing == "default") return(default)
     label <- future$label
     if (is.null(label)) label <- "<none>"
-    stop(sprintf("The value no longer exists (or never existed) for Future ('%s') of class %s", label, paste(sQuote(class(future)), collapse = ", "))) #nolint
+    msg <- sprintf("The value no longer exists (or never existed) for Future ('%s') of class %s", label, paste(sQuote(class(future)), collapse = ", "))
+    stop(FutureError(msg, future = future)) #nolint
   }
 
   tryCatch({
     future$value <- await(future, cleanup = FALSE)
     future$state <- "finished"
-  }, simpleError = function(ex) {
+  }, error = function(ex) {
     future$state <- "failed"
     future$value <- ex
   })
@@ -227,18 +221,19 @@ value.CallrFuture <- function(future, signal = TRUE,
 } # value()
 
 
-
-run <- function(...) UseMethod("run")
-
-#' @importFrom future getExpression
+#' @importFrom future run getExpression FutureError
 #' @importFrom callr r_bg
+#' @keywords internal
+#' @S3method run CallrFuture
+#' @export
 run.CallrFuture <- function(future, ...) {
   FutureRegistry <- import_future("FutureRegistry")
   
   if (future$state != "created") {
     label <- future$label
     if (is.null(label)) label <- "<none>"
-    stop(sprintf("A future ('%s') can only be launched once.", label))
+    msg <- sprintf("A future ('%s') can only be launched once.", label)
+    stop(FutureError(msg, future = future))
   }
 
   mdebug <- import_future("mdebug")

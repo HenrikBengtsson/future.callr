@@ -1,6 +1,7 @@
 # future.callr: A Future API for Parallel Processing using 'callr'
 
 ## Introduction
+
 The [future] package provides a generic API for using futures in R.
 A future is a simple yet powerful mechanism to evaluate an R expression
 and retrieve its value at some point in time.  Futures can be resolved
@@ -22,10 +23,13 @@ For example,
 [1] 5.85
 ```
 This is obviously a toy example to illustrate what futures look like
-and how to work with them.
+and how to work with them.  For further examples on how to use futures,
+see the vignettes of the [future] package as well as those of [future.apply]
+and [doFuture].
 
 
 ## Using the callr backend
+
 The future.callr package implements a future wrapper for callr.
 
 
@@ -34,7 +38,29 @@ The future.callr package implements a future wrapper for callr.
 | `callr` | parallel evaluation in a separate R process (on current machine) | `plan(multisession)`
 
 
+### Each callr future uses a fresh R session
+
+When using `callr` futures, each future is resolved in a fresh background R session which ends as soon as the value of the future has been collected.   In contrast, `multisession` futures are resolved in background R worker sessions that serve multiple futures over their life spans.  The advantage with using a new R process for each future is that it is that the R environment is guaranteed not to be contaminated by previous futures, e.g. memory allocations, finalizers, modified options, and loaded and attached packages.  The disadvantage, is an added overhead of lauching a new R process.
+(At the moment, I am neither aware of formal benchmarking of this extra overhead nor of performance comparisons of `callr` to alternative future backends.)
+
+
+### More than 125 parallel callr futures
+
+Another advantage with `callr` futures compared to `multisession` futures is that they do not communicate via R (socket) connections.  This avoids the limitation in the number of parallel futures that can be active at any time that `multisession` futures and `cluster` futures in general have, which they inherit from `SOCKcluster` clusters as defined by the parallel package.  The number of parallel futures these can serve is limited by the [maximum number of open connections in R](https://github.com/HenrikBengtsson/Wishlist-for-R/issues/28), which currently is 125 (excluding the three reserved by R itself).  Note that these 125 slots have to be shared with file connections etc.  To increase this limit, R has to be rebuilt from source.  However, since `callr` futures rely on [the callr package which does not make use of R-specific connections](https://github.com/r-lib/processx/issues/91), there is no limit(*) in the number of background R processes that can be used simulatenously.
+
+(*) On Windows, there is currently [a limit of 64 parallel processes](https://github.com/r-lib/processx/issues/91#issuecomment-351214242) but there is a plan to fix this in the callr package.
+
+
+### No ports are used - no port clashes or firewall issues
+
+A third advantage with `callr` futures, is that there is not risk for port-clashing with other processes on the system when clusters are set up (**), because callr does not rely on ports.  Furthermore, on Windows, the firewall triggers an alert that the user needs to approve whenever a not-previously-approved port is requested by R - [which happens also for local, non-public ports](https://stackoverflow.com/questions/47353848/localhost-connection-without-firewall-popup/47542866) that are used by `SOCKcluster`:s.  When using `callr` futures, no sockets and therefore no ports are involved.
+
+(**) To lower the risk for such clashes `SOCKcluster`:s (of the parallel package) request random ports, but clashes still occur at times.
+
+
+
 ## Demos
+
 The [future] package provides a demo using futures for calculating a
 set of Mandelbrot planes.  The demo does not assume anything about
 what type of futures are used.
@@ -49,35 +75,37 @@ demo("mandelbrot", package = "future", ask = FALSE)
 
 [callr]: https://cran.r-project.org/package=callr
 [future]: https://cran.r-project.org/package=future
-[future.callr]: https://github.com/HenrikBengtsson/callr
+[future.callr]: https://cran.r-project.org/package=future.callr
+[future.apply]: https://cran.r-project.org/package=future.apply
+[doFuture]: https://cran.r-project.org/package=doFuture
+
 
 ## Installation
-R package future.callr is only available via [GitHub](https://github.com/HenrikBengtsson/future.callr) and can be installed in R as:
+R package future.callr is available on [CRAN](https://cran.r-project.org/package=future.callr) and can be installed in R as:
 ```r
-source('http://callr.org/install#HenrikBengtsson/future.callr')
+install.packages('future.callr')
 ```
 
 ### Pre-release version
 
 To install the pre-release version that is available in Git branch `develop` on GitHub, use:
 ```r
-source('http://callr.org/install#HenrikBengtsson/future.callr@develop')
+remotes::install_github('HenrikBengtsson/future.callr@develop')
 ```
-This will install the package from source.  
-
+This will install the package from source.
 
 
 ## Contributions
 
-This Git repository uses the [Git Flow](http://nvie.com/posts/a-successful-git-branching-model/) branching model (the [`git flow`](https://github.com/petervanderdoes/gitflow-avh) extension is useful for this).  The [`develop`](https://github.com/HenrikBengtsson/future.callr/tree/develop) branch contains the latest contributions and other code that will appear in the next release, and the [`master`](https://github.com/HenrikBengtsson/future.callr) branch contains the code of the latest release.
+This Git repository uses the [Git Flow](http://nvie.com/posts/a-successful-git-branching-model/) branching model (the [`git flow`](https://github.com/petervanderdoes/gitflow-avh) extension is useful for this).  The [`develop`](https://github.com/HenrikBengtsson/future.callr/tree/develop) branch contains the latest contributions and other code that will appear in the next release, and the [`master`](https://github.com/HenrikBengtsson/future.callr) branch contains the code of the latest release, which is exactly what is currently on [CRAN](https://cran.r-project.org/package=future.callr).
 
 Contributing to this package is easy.  Just send a [pull request](https://help.github.com/articles/using-pull-requests/).  When you send your PR, make sure `develop` is the destination branch on the [future.callr repository](https://github.com/HenrikBengtsson/future.callr).  Your PR should pass `R CMD check --as-cran`, which will also be checked by <a href="https://travis-ci.org/HenrikBengtsson/future.callr">Travis CI</a> and <a href="https://ci.appveyor.com/project/HenrikBengtsson/future-callr">AppVeyor CI</a> when the PR is submitted.
 
 
 ## Software status
 
-| Resource:     | GitHub        | Travis CI       | Appveyor         |
+| Resource:     | CRAN        | Travis CI       | Appveyor         |
 | ------------- | ------------------- | --------------- | ---------------- |
 | _Platforms:_  | _Multiple_          | _Linux & macOS_ | _Windows_        |
-| R CMD check   |  | <a href="https://travis-ci.org/HenrikBengtsson/future.callr"><img src="https://travis-ci.org/HenrikBengtsson/future.callr.svg" alt="Build status"></a>   | <a href="https://ci.appveyor.com/project/HenrikBengtsson/future-callr"><img src="https://ci.appveyor.com/api/projects/status/github/HenrikBengtsson/future.callr?svg=true" alt="Build status"></a> |
+| R CMD check   | <a href="https://cran.r-project.org/web/checks/check_results_future.callr.html"><img border="0" src="http://www.r-pkg.org/badges/version/future.callr" alt="CRAN version"></a> | <a href="https://travis-ci.org/HenrikBengtsson/future.callr"><img src="https://travis-ci.org/HenrikBengtsson/future.callr.svg" alt="Build status"></a>   | <a href="https://ci.appveyor.com/project/HenrikBengtsson/future-callr"><img src="https://ci.appveyor.com/api/projects/status/github/HenrikBengtsson/future.callr?svg=true" alt="Build status"></a> |
 | Test coverage |                     | <a href="https://codecov.io/gh/HenrikBengtsson/future.callr"><img src="https://codecov.io/gh/HenrikBengtsson/future.callr/branch/develop/graph/badge.svg" alt="Coverage Status"/></a>     |                  |

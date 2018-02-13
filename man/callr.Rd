@@ -42,4 +42,3 @@ future that will be evaluated in a background R session.
 callr futures rely on the \pkg{callr} package, which is supported
 on all operating systems.
 }
-\keyword{internal}

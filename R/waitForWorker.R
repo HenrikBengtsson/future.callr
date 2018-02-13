@@ -1,3 +1,4 @@
+#' @importFrom future FutureError
 waitForWorker <- function(type, workers, await = NULL, timeout = getOption("future.wait.timeout", 30 * 24 * 60 * 60), delta = getOption("future.wait.interval", 0.2), alpha = getOption("future.wait.alpha", 1.01)) {
   FutureRegistry <- import_future("FutureRegistry")
   mdebug <- import_future("mdebug")
@@ -51,6 +52,6 @@ waitForWorker <- function(type, workers, await = NULL, timeout = getOption("futu
   if (!finished) {
     msg <- sprintf("TIMEOUT: All %d workers are still occupied after %s (polled %d times)", workers, format(round(dt, digits = 2L)), iter)
     if (debug) mdebug(msg)
-    stop(msg)
+    stop(FutureError(msg))
   }
 }
