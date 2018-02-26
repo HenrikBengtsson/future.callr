@@ -54,7 +54,8 @@ CallrFuture <- function(expr = NULL, envir = parent.frame(),
   ## Create CallrFuture object
   future <- MultiprocessFuture(expr = gp$expr, envir = envir,
                                substitute = FALSE, workers = workers,
-                               label = label, ...)
+                               label = label, version = "1.8", ...)
+  future$.callResult <- TRUE
 
   future$globals <- gp$globals
   future$packages <- unique(c(packages, gp$packages))
@@ -184,41 +185,30 @@ resolved.CallrFuture <- function(x, ...) {
   resolved
 }
 
-#' @importFrom future value FutureError
+#' @importFrom future result
 #' @keywords internal
 #' @export
-value.CallrFuture <- function(future, signal = TRUE,
-                                   onMissing = c("default", "error"),
-                                   default = NULL, cleanup = TRUE, ...) {
-  ## Has the value already been collected?
-  if (future$state %in% c("finished", "failed", "interrupted")) {
-    return(NextMethod("value"))
-  }
-
+result.CallrFuture <- function(future, ...) {
+  result <- future$result
+  if (!is.null(result)) return(result)
+  
   if (future$state == "created") {
     future <- run(future)
   }
 
-  stat <- status(future)
-  if (is_na(stat)) {
-    onMissing <- match.arg(onMissing)
-    if (onMissing == "default") return(default)
+  result <- await(future, cleanup = FALSE)
+
+  if (!inherits(result, "FutureResult")) {
     label <- future$label
     if (is.null(label)) label <- "<none>"
-    msg <- sprintf("The value no longer exists (or never existed) for Future ('%s') of class %s", label, paste(sQuote(class(future)), collapse = ", "))
-    stop(FutureError(msg, future = future)) #nolint
+    stop(FutureError(sprintf("Internal error: Unexpected value retrieve a %s future (%s): %s", result, class(future)[1], sQuote(label), sQuote(hexpr(future$expr))), future = future))
   }
-
-  tryCatch({
-    future$value <- await(future, cleanup = FALSE)
-    future$state <- "finished"
-  }, error = function(ex) {
-    future$state <- "failed"
-    future$value <- ex
-  })
-
-  NextMethod("value")
-} # value()
+  
+  future$result <- result
+  future$state <- "done"
+  
+  result
+}
 
 
 #' @importFrom future run getExpression FutureError
@@ -353,13 +343,13 @@ await.CallrFuture <- function(future,
     label <- future$label
     if (is.null(label)) label <- "<none>"
     if ("done" %in% stat) {
-      res <- process$get_result()
+      result <- process$get_result()
     } else if ("error" %in% stat) {
       msg <- sprintf("CallrError in %s ('%s'): %s",
                      class(future)[1], label, loggedError(future))
       stop(FutureError(msg, future = future, output = loggedOutput(future)))
     }
-    if (debug) { mstr(res) }
+    if (debug) { mstr(result) }
   } else {
     label <- future$label
     msg <- sprintf("AsyncNotReadyError: Polled for results for %s seconds every %g seconds, but asynchronous evaluation for future ('%s') is still running: %s", timeout, delta, label, process$get_pid()) #nolint
@@ -367,5 +357,5 @@ await.CallrFuture <- function(future,
     stop(FutureError(msg, future = future))
   }
 
-  res
+  result
 } # await()
