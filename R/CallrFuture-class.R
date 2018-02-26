@@ -81,7 +81,6 @@ print.CallrFuture <- function(x, ...) {
   ## Ask for status once
   status <- status(x)
   printf("callr status: %s\n", paste(sQuote(status), collapse = ", "))
-  if ("error" %in% status) printf("Error: %s\n", loggedError(x))
 
   process <- x$process
   if (is_na(status)) {
@@ -100,10 +99,6 @@ status <- function(...) UseMethod("status")
 
 finished <- function(...) UseMethod("finished")
 
-loggedError <- function(...) UseMethod("loggedError")
-
-loggedOutput <- function(...) UseMethod("loggedOutput")
-
 #' Status of callr future
 #'
 #' @param future The future.
@@ -113,14 +108,14 @@ loggedOutput <- function(...) UseMethod("loggedOutput")
 #' @return A character vector or a logical scalar.
 #'
 #' @aliases status finished value
-#'          loggedError loggedOutput
 #' 
 #' @keywords internal
 status.CallrFuture <- function(future, ...) {
   process <- future$process
   if (!inherits(process, "r_process")) return(NA_character_)
-  future$state <- if (process$is_alive()) "running" else "done"
-  future$state
+  state <- if (process$is_alive()) "running" else "done"
+  future$state <- state
+  state
 }
 
 #' @keywords internal
@@ -130,42 +125,6 @@ finished.CallrFuture <- function(future, ...) {
   any(c("done", "error") %in% status)
 }
 
-#' @keywords internal
-#' @importFrom future FutureError
-loggedError.CallrFuture <- function(future, ...) {
-  stat <- status(future)
-  if (is_na(stat)) return(NULL)
-
-  if (!finished(future)) {
-    label <- future$label
-    if (is.null(label)) label <- "<none>"
-    msg <- sprintf("%s ('%s') has not finished yet", class(future)[1L], label)
-    stop(FutureError(msg, future = future))
-  }
-
-  if (!"error" %in% stat) return(NULL)
-
-  "loggedError(): TO BE IMPLEMENTED"
-} # loggedError()
-
-
-#' @keywords internal
-#' @importFrom future FutureError
-loggedOutput.CallrFuture <- function(future, ...) {
-  stat <- status(future)
-  if (is_na(stat)) return(NULL)
-
-  if (!finished(future)) {
-    label <- future$label
-    if (is.null(label)) label <- "<none>"
-    msg <- sprintf("%s ('%s') has not finished yet", class(future)[1L], label)
-    stop(FutureError(msg, future = future))
-  }
-
-  process <- future$process
-  process$read_all_output()
-} # loggedOutput()
-
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Future API
@@ -174,15 +133,10 @@ loggedOutput.CallrFuture <- function(future, ...) {
 #' @keywords internal
 #' @export
 resolved.CallrFuture <- function(x, ...) {
-  ## Has internal future state already been switched to be resolved
-  resolved <- NextMethod("resolved")
-  if (resolved) return(TRUE)
-
-  ## If not, checks the callr registry status
-  resolved <- finished(x)
-  if (is.na(resolved)) return(FALSE)
-
-  resolved
+  if (inherits(x$result, "FutureResult")) return(TRUE)
+  process <- x$process
+  if (!inherits(process, "r_process")) return(FALSE)
+  !process$is_alive()
 }
 
 #' @importFrom future result
@@ -203,7 +157,7 @@ result.CallrFuture <- function(future, ...) {
     if (is.null(label)) label <- "<none>"
     stop(FutureError(sprintf("Internal error: Unexpected value retrieve a %s future (%s): %s", result, class(future)[1], sQuote(label), sQuote(hexpr(future$expr))), future = future))
   }
-  
+
   future$result <- result
   future$state <- "done"
   
@@ -295,7 +249,7 @@ await <- function(...) UseMethod("await")
 #'
 #' @export
 #' @importFrom utils tail
-#' @importFrom future FutureError
+#' @importFrom future FutureError FutureWarning
 #' @keywords internal
 await.CallrFuture <- function(future, 
                                  timeout = getOption("future.wait.timeout",
@@ -312,7 +266,7 @@ await.CallrFuture <- function(future,
   expr <- future$expr
   process <- future$process
 
-  mdebug("callr::wait() ...")
+  if (debug) mdebug("callr::wait() ...")
 
   ## Control callr info output
   oopts <- options(callr.verbose = debug)
@@ -325,37 +279,54 @@ await.CallrFuture <- function(future,
   ii <- 1L
   while (process$is_alive()) {
     timeout_ii <- sleep_fcn(ii)
-    if (ii %% 100 == 0)
+    if (debug && ii %% 100 == 0)
       mdebug("- iteration %d: callr::wait(timeout = %g)", ii, timeout_ii)
     res <- process$wait(timeout = timeout_ii)
     ii <- ii + 1L
   }
-  
-  stat <- status(future)
-  mdebug("- status(): %s", paste(sQuote(stat), collapse = ", "))
-  mdebug("callr::wait() ... done")
 
-  finished <- is_na(stat) || any(c("done", "error") %in% stat)
-
-  res <- NULL
-  if (finished) {
-    mdebug("Results:")
+  if (process$is_alive()) {
+    mdebug("- callr process: running")
     label <- future$label
     if (is.null(label)) label <- "<none>"
-    if ("done" %in% stat) {
-      result <- process$get_result()
-    } else if ("error" %in% stat) {
-      msg <- sprintf("CallrError in %s ('%s'): %s",
-                     class(future)[1], label, loggedError(future))
-      stop(FutureError(msg, future = future, output = loggedOutput(future)))
-    }
-    if (debug) { mstr(result) }
-  } else {
-    label <- future$label
-    msg <- sprintf("AsyncNotReadyError: Polled for results for %s seconds every %g seconds, but asynchronous evaluation for future ('%s') is still running: %s", timeout, delta, label, process$get_pid()) #nolint
-    message(msg)
+    msg <- sprintf("AsyncNotReadyError: Polled for results for %s seconds every %g seconds, but asynchronous evaluation for %s future (%s) is still running: %s", timeout, delta, class(future)[1], sQuote(label), process$get_pid()) #nolint
+    mdebug(msg)
     stop(FutureError(msg, future = future))
   }
 
+  if (debug) {
+    mdebug("- callr process: finished")
+    mdebug("callr::wait() ... done")
+  }
+
+  result <- process$get_result()
+  if (debug) {
+    mdebug("Results:")
+    mstr(result)
+  }
+
+  ## Retrieve any logged standard output and standard error
+  process <- future$process
+
+  result$prototype_only <- list()
+  
+  result$prototype_only$stdout <- tryCatch({
+    process$read_all_output()
+  }, error = function(ex) {
+    label <- future$label
+    if (is.null(label)) label <- "<none>"
+    warning(FutureWarning(sprintf("Failed to retrieve standard output from %s (%s). The reason was: %s", class(future)[1], sQuote(label), conditionMessage(ex)), future = future))
+    NULL
+  })
+
+  result$prototype_only$stderr <- tryCatch({
+    process$read_all_error()
+  }, error = function(ex) {
+    label <- future$label
+    if (is.null(label)) label <- "<none>"
+    warning(FutureWarning(sprintf("Failed to retrieve standard error from %s (%s). The reason was: %s", class(future)[1], sQuote(label), conditionMessage(ex)), future = future))
+    NULL
+  })
+  
   result
 } # await()
