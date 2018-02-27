@@ -14,6 +14,9 @@ warnings_are_errors: false
 r_check_args: --as-cran
 latex: false
 
+r_github_packages:
+  - HenrikBengtsson/future@FutureResults
+
 env:
   global:
     - _R_CHECK_FULL_=  ## Package specific
@@ -36,6 +39,7 @@ matrix:
     - os: linux
       r: release
       r_github_packages:
+        - HenrikBengtsson/future@FutureResults
         - jimhester/covr
       r_check_args: --no-codoc --no-examples --no-tests --ignore-vignettes
       after_success:
@@ -44,6 +48,7 @@ matrix:
     - os: linux
       r: release
       r_github_packages:
+        - HenrikBengtsson/future@FutureResults
         - jimhester/lintr
       r_check_args: --no-codoc --no-examples --no-tests --ignore-vignettes
       after_success:
