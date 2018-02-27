@@ -15,7 +15,7 @@ r_check_args: --as-cran
 latex: false
 
 r_github_packages:
-  - HenrikBengtsson/future@FutureResults
+  - HenrikBengtsson/future@feature/FutureResults
 
 env:
   global:
@@ -39,7 +39,7 @@ matrix:
     - os: linux
       r: release
       r_github_packages:
-        - HenrikBengtsson/future@FutureResults
+        - HenrikBengtsson/future@feature/FutureResults
         - jimhester/covr
       r_check_args: --no-codoc --no-examples --no-tests --ignore-vignettes
       after_success:
@@ -48,7 +48,7 @@ matrix:
     - os: linux
       r: release
       r_github_packages:
-        - HenrikBengtsson/future@FutureResults
+        - HenrikBengtsson/future@feature/FutureResults
         - jimhester/lintr
       r_check_args: --no-codoc --no-examples --no-tests --ignore-vignettes
       after_success:
