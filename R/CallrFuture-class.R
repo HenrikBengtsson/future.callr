@@ -113,7 +113,7 @@ finished <- function(...) UseMethod("finished")
 status.CallrFuture <- function(future, ...) {
   process <- future$process
   if (!inherits(process, "r_process")) return(NA_character_)
-  state <- if (process$is_alive()) "running" else "done"
+  state <- if (process$is_alive()) "running" else "finished"
   future$state <- state
   state
 }
@@ -122,7 +122,7 @@ status.CallrFuture <- function(future, ...) {
 finished.CallrFuture <- function(future, ...) {
   status <- status(future)
   if (is_na(status)) return(NA)
-  any(c("done", "error") %in% status)
+  any(c("finished", "error") %in% status)
 }
 
 
@@ -159,7 +159,7 @@ result.CallrFuture <- function(future, ...) {
   }
 
   future$result <- result
-  future$state <- "done"
+  future$state <- "finished"
   
   result
 }
