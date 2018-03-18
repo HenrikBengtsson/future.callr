@@ -39,7 +39,7 @@ matrix:
     - os: linux
       r: release
       r_github_packages:
-        - HenrikBengtsson/future@feature/FutureResults
+        - HenrikBengtsson/future@develop
         - jimhester/covr
       r_check_args: --no-codoc --no-examples --no-tests --ignore-vignettes
       after_success:
@@ -48,7 +48,7 @@ matrix:
     - os: linux
       r: release
       r_github_packages:
-        - HenrikBengtsson/future@feature/FutureResults
+        - HenrikBengtsson/future@develop
         - jimhester/lintr
       r_check_args: --no-codoc --no-examples --no-tests --ignore-vignettes
       after_success:
