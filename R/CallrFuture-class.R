@@ -260,7 +260,7 @@ run.CallrFuture <- function(future, ...) {
       fasten(list(...), pos = 2L, name = "r_bg_arguments")
     })
     .(expr)
-  }))
+  }), enclos = baseenv())
 
   ## 1. Wait for an available worker
   waitForWorker(type = "callr", workers = future$workers)

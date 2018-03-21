@@ -18,7 +18,7 @@ capture_output <- function(expr, envir = parent.frame(), ...) {
     on.exit(close(file))
     capture.output(expr, file = file)
     rawToChar(rawConnectionValue(file))
-  }, envir = envir, enclos = envir)
+  }, envir = envir, enclos = baseenv())
   unlist(strsplit(res, split = "\n", fixed = TRUE), use.names = FALSE)
 }
 
