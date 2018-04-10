@@ -300,6 +300,10 @@ await.CallrFuture <- function(future,
   }
 
   result <- process$get_result()
+  
+  ## WORKAROUND: future 1.8.0 does not set the correct 'version' of the result
+  result$version <- future$version
+  
   if (debug) {
     mdebug("Results:")
     mstr(result)
