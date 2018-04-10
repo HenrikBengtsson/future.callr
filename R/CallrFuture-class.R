@@ -309,12 +309,13 @@ await.CallrFuture <- function(future,
     mstr(result)
   }
 
+  ## PROTOTYPE RESULTS BELOW:
+  result$PROTOTYPE_WARNING <- "WARNING: The 'stdout' and 'stderr' fields should be considered internal and experimental for now, i.e. until the Future API for these additional features has been settled. For more information, please see https://github.com/HenrikBengtsson/future/issues/172"
+  
   ## Retrieve any logged standard output and standard error
   process <- future$process
-
-  result$prototype_only <- list()
   
-  result$prototype_only$stdout <- tryCatch({
+  result$stdout <- tryCatch({
     process$read_all_output()
   }, error = function(ex) {
     label <- future$label
@@ -323,7 +324,7 @@ await.CallrFuture <- function(future,
     NULL
   })
 
-  result$prototype_only$stderr <- tryCatch({
+  result$stderr <- tryCatch({
     process$read_all_error()
   }, error = function(ex) {
     label <- future$label
@@ -331,6 +332,6 @@ await.CallrFuture <- function(future,
     warning(FutureWarning(sprintf("Failed to retrieve standard error from %s (%s). The reason was: %s", class(future)[1], sQuote(label), conditionMessage(ex)), future = future))
     NULL
   })
-  
+
   result
 } # await()
