@@ -30,11 +30,11 @@
 #' @importFrom future MultiprocessFuture getGlobalsAndPackages
 #' @keywords internal
 CallrFuture <- function(expr = NULL, envir = parent.frame(),
-                             substitute = TRUE,
-                             globals = TRUE, packages = NULL,
-                             label = NULL,
-                             workers = NULL,
-                             ...) {
+                        substitute = TRUE,
+                        globals = TRUE, packages = NULL,
+                        label = NULL,
+                        workers = NULL,
+                        ...) {
   if (substitute) expr <- substitute(expr)
 
   if (!is.null(label)) label <- as.character(label)
@@ -310,28 +310,40 @@ await.CallrFuture <- function(future,
   }
 
   ## PROTOTYPE RESULTS BELOW:
-  result$PROTOTYPE_WARNING <- "WARNING: The 'stdout' and 'stderr' fields should be considered internal and experimental for now, i.e. until the Future API for these additional features has been settled. For more information, please see https://github.com/HenrikBengtsson/future/issues/172"
+  prototype_fields <- NULL
   
   ## Retrieve any logged standard output and standard error
   process <- future$process
+
+  ## Has 'stdout' already been collected (by the future package)?
+  if (is.null(result$stdout)) {
+    prototype_fields <- c(prototype_fields, "stdout")
+    result$stdout <- tryCatch({
+      process$read_all_output()
+    }, error = function(ex) {
+      label <- future$label
+      if (is.null(label)) label <- "<none>"
+      warning(FutureWarning(sprintf("Failed to retrieve standard output from %s (%s). The reason was: %s", class(future)[1], sQuote(label), conditionMessage(ex)), future = future))
+      NULL
+    })
+  }
   
-  result$stdout <- tryCatch({
-    process$read_all_output()
-  }, error = function(ex) {
-    label <- future$label
-    if (is.null(label)) label <- "<none>"
-    warning(FutureWarning(sprintf("Failed to retrieve standard output from %s (%s). The reason was: %s", class(future)[1], sQuote(label), conditionMessage(ex)), future = future))
-    NULL
-  })
+  ## Has 'stderr' already been collected (by the future package)?
+  if (is.null(result$stderr)) {
+    prototype_fields <- c(prototype_fields, "stderr")
+    result$stderr <- tryCatch({
+      process$read_all_error()
+    }, error = function(ex) {
+      label <- future$label
+      if (is.null(label)) label <- "<none>"
+      warning(FutureWarning(sprintf("Failed to retrieve standard error from %s (%s). The reason was: %s", class(future)[1], sQuote(label), conditionMessage(ex)), future = future))
+      NULL
+    })
+  }
 
-  result$stderr <- tryCatch({
-    process$read_all_error()
-  }, error = function(ex) {
-    label <- future$label
-    if (is.null(label)) label <- "<none>"
-    warning(FutureWarning(sprintf("Failed to retrieve standard error from %s (%s). The reason was: %s", class(future)[1], sQuote(label), conditionMessage(ex)), future = future))
-    NULL
-  })
-
+  if (length(prototype_fields) > 0) {
+    result$PROTOTYPE_WARNING <- sprintf("WARNING: The fields %s should be considered internal and experimental for now, that is, until the Future API for these additional features has been settled. For more information, please see https://github.com/HenrikBengtsson/future/issues/172", hpaste(sQuote(prototype_fields), max_head = Inf, collapse = ", ", last_collapse  = " and "))
+  }
+  
   result
 } # await()
