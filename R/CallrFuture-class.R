@@ -41,11 +41,11 @@ CallrFuture <- function(expr = NULL, envir = parent.frame(),
 
   if (is.function(workers)) workers <- workers()
   if (!is.null(workers)) {
-    stopifnot(length(workers) >= 1)
+    stop_if_not(length(workers) >= 1)
     if (is.numeric(workers)) {
-      stopifnot(!anyNA(workers), all(workers >= 1))
+      stop_if_not(!anyNA(workers), all(workers >= 1))
     } else {
-      stopifnot("Argument 'workers' should be numeric: ", mode(workers))
+      stop_if_not("Argument 'workers' should be numeric: ", mode(workers))
     }
   }
 
@@ -259,8 +259,8 @@ await.CallrFuture <- function(future,
                                  alpha = getOption("future.wait.alpha", 1.01),
                                  ...) {
   mdebug <- import_future("mdebug")
-  stopifnot(is.finite(timeout), timeout >= 0)
-  stopifnot(is.finite(alpha), alpha > 0)
+  stop_if_not(is.finite(timeout), timeout >= 0)
+  stop_if_not(is.finite(alpha), alpha > 0)
   
   debug <- getOption("future.debug", FALSE)
 
