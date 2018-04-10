@@ -34,7 +34,7 @@ sum_fcns$D <- function(x, y) {
 }
 
 
-for (strategy in c("sequential", "multiprocess", "callr")) {
+for (strategy in c("callr")) {
   plan(strategy, substitute = FALSE)
 
   for (name in names(sum_fcns)) {
