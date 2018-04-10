@@ -9,6 +9,10 @@ warnings_are_errors: false
 r_check_args: --as-cran
 latex: false
 
+env:
+  global:
+    - _R_CHECK_FULL_=true  ## Package specific
+
 matrix:
   include:
     - os: linux
