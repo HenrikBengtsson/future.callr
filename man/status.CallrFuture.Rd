@@ -5,8 +5,6 @@
 \alias{status}
 \alias{finished}
 \alias{value}
-\alias{loggedError}
-\alias{loggedOutput}
 \title{Status of callr future}
 \usage{
 \method{status}{CallrFuture}(future, ...)

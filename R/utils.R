@@ -83,6 +83,12 @@ trim <- function(x, ...) {
   sub("[\t\n\f\r ]*$", "", sub("^[\t\n\f\r ]*", "", x))
 }
 
+hexpr <- function(expr, trim = TRUE, collapse = "; ", maxHead = 6L, maxTail = 3L, 
+...) {
+  code <- deparse(expr)
+  if (trim) code <- trim(code)
+  hpaste(code, collapse = collapse, maxHead = maxHead, maxTail = maxTail, ...)
+}
 
 import_from <- function(name, default = NULL, package) {
   ns <- getNamespace(package)

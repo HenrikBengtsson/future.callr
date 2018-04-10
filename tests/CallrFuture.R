@@ -8,6 +8,7 @@ f <- callr({ 1L })
 print(f)
 res <- await(f)
 print(res)
+if (inherits(res, "FutureResult")) res <- res$value
 stopifnot(res == 1L)
 
 message("*** CallrFuture() - cleanup ... DONE")
