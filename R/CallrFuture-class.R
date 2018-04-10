@@ -39,6 +39,7 @@ CallrFuture <- function(expr = NULL, envir = parent.frame(),
 
   if (!is.null(label)) label <- as.character(label)
 
+  if (is.function(workers)) workers <- workers()
   if (!is.null(workers)) {
     stopifnot(length(workers) >= 1)
     if (is.numeric(workers)) {
