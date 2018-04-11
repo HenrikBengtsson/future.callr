@@ -45,7 +45,7 @@ CallrFuture <- function(expr = NULL, envir = parent.frame(),
     if (is.numeric(workers)) {
       stop_if_not(!anyNA(workers), all(workers >= 1))
     } else {
-      stop_if_not("Argument 'workers' should be numeric: ", mode(workers))
+      stop("Argument 'workers' should be numeric: ", mode(workers))
     }
   }
 
@@ -277,8 +277,11 @@ await.CallrFuture <- function(future,
   sleep_fcn <- function(i) delta * alpha ^ (i - 1)
 
   ## Poll process
+  t_timeout <- Sys.time() + timeout
   ii <- 1L
   while (process$is_alive()) {
+    ## Timed out?
+    if (Sys.time() > t_timeout) break
     timeout_ii <- sleep_fcn(ii)
     if (debug && ii %% 100 == 0)
       mdebug("- iteration %d: callr::wait(timeout = %g)", ii, timeout_ii)

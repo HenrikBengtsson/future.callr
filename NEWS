@@ -1,7 +1,7 @@
 Package: future.callr
 =====================
 
-Version: 0.2.0-9000 [2018-04-09]
+Version: 0.2.0-9000 [2018-04-10]
 
 NEW FEATURES:
 
@@ -16,6 +16,10 @@ CODE REFACTORING:
 
  o Prepared code to gather a richer set of results from futures.
 
+BUG FIX:
+
+ o Callr futures did not acknowledge timeout option 'future.wait.timeout'.
+ 
 
 Version: 0.2.0 [2018-02-12]
 

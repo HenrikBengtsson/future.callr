@@ -64,6 +64,12 @@ message("*** CallrFuture() - exceptions ... DONE")
 message("*** CallrFuture() - timeout ...")
 
 if (fullTest) {
+  plan(sequential)
+  gc()
+  f <- future(1, label = "reset")
+  v <- value(f)
+  print(v)
+  
   plan(callr)
 
   options(future.wait.timeout = 0.15, future.wait.interval = 0.1)
@@ -71,7 +77,7 @@ if (fullTest) {
   f <- future({
     Sys.sleep(5)
     x <- 1
-  })
+  }, label = "timeout")
   print(f)
 
   res <- tryCatch({
