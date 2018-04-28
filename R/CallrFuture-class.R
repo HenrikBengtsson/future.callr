@@ -145,7 +145,10 @@ resolved.CallrFuture <- function(x, ...) {
 #' @export
 result.CallrFuture <- function(future, ...) {
   result <- future$result
-  if (!is.null(result)) return(result)
+  if (!is.null(result)) {
+    if (inherits(result, "FutureError")) stop(result)
+    return(result)
+  }
   
   if (future$state == "created") {
     future <- run(future)
@@ -154,9 +157,9 @@ result.CallrFuture <- function(future, ...) {
   result <- await(future, cleanup = FALSE)
 
   if (!inherits(result, "FutureResult")) {
-    label <- future$label
-    if (is.null(label)) label <- "<none>"
-    stop(FutureError(sprintf("Internal error: Unexpected result retrieved for %s future (%s): %s", class(future)[1], sQuote(label), sQuote(hexpr(future$expr))), future = future))
+    ex <- UnexpectedFutureResultError(future)
+    future$result <- ex
+    stop(ex)
   }
 
   future$result <- result
