@@ -306,8 +306,25 @@ await.CallrFuture <- function(future,
     mdebug("callr::wait() ... done")
   }
 
-  result <- process$get_result()
-  
+  ## callr:::get_result() assert that "result" and "error" files exist
+  ## based on file.exist().  In case there is a delay in the file system
+  ## we might get a false-positive error:
+  ## "Error: callr failed, could not start R, or it has crashed or was killed"
+  ## If so, let's retry a few times before giving up.
+  ## NOTE: This was observed, somewhat randomly, on R-devel (2018-04-20 r74620)
+  ## on Linux (local and on Travis) with tests/demo.R /HB 2018-04-27
+  if (debug) mdebug("- callr:::get_result() ...")
+  for (ii in 1:5) {
+    result <- tryCatch({
+      process$get_result()
+    }, error = identity)
+    if (!inherits(result, "error")) break
+    if (debug) mdebug("- process$get_result() failed; will retry after 0.1s")
+    Sys.sleep(0.1)
+  }
+  if (inherits(result, "error")) result <- process$get_result()
+  if (debug) mdebug("- callr:::get_result() ... done (after %d attempts)", ii)
+
   ## WORKAROUND: future 1.8.0 does not set the correct 'version' of the result
   result$version <- future$version
   
