@@ -27,7 +27,7 @@ install:
         Bootstrap
 
 cache:
-  - C:\RLibrary -> appveyor.yml
+#  - C:\RLibrary -> appveyor.yml
 
 build_script:
   - echo Current directory=%CD%
