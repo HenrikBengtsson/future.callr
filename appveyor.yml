@@ -1,12 +1,8 @@
 #----------------------------------------------------------------
-# AppVeyor configuration for R packages
-#
-# REFERENCES:
-# * AppVeyor CI: https://ci.appveyor.com/
-# * r-appveyor: https://github.com/krlmlr/r-appveyor
-#
-# Validate your .appveyor.yml file at
-# https://ci.appveyor.com/tools/validate-yaml
+# AppVeyor CI for R Packages
+# https://github.com/krlmlr/r-appveyor
+# https://raw.githubusercontent.com/krlmlr/r-appveyor/master/r-travis/scripts/travis-tool.sh
+# Validator: https://ci.appveyor.com/tools/validate-yaml
 #----------------------------------------------------------------
 environment:
   _R_CHECK_FORCE_SUGGESTS_: false
@@ -22,10 +18,6 @@ environment:
   - R_VERSION: release
     R_ARCH: x64
 
-
-# DO NOT CHANGE the "init" and "install" sections below
-
-# Download script file from GitHub
 init:
   ps: |
         $ErrorActionPreference = "Stop"
@@ -34,15 +26,15 @@ init:
 install:
   ps: |
         Bootstrap
-        InstallRtools
 
-# Adapt as necessary starting from here
+cache:
+  - C:\RLibrary -> appveyor.yml
 
 build_script:
   - echo Current directory=%CD%
   - travis-tool.sh install_r callr future
+  - travis-tool.sh install_github HenrikBengtsson/future
   - travis-tool.sh install_r listenv future.apply markdown R.rsp
-#  - travis-tool.sh install_github r-lib/processx r-lib/callr
 
 test_script:
   - travis-tool.sh run_tests

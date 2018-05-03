@@ -10,6 +10,22 @@ is_false <- function(x) {
   identical(FALSE, x)
 }
 
+stop_if_not <- function(...) {
+  res <- list(...)
+  for (ii in 1L:length(res)) {
+    res_ii <- .subset2(res, ii)
+    if (length(res_ii) != 1L || is.na(res_ii) || !res_ii) {
+        mc <- match.call()
+        call <- deparse(mc[[ii + 1]], width.cutoff = 60L)
+        if (length(call) > 1L) call <- paste(call[1L], "....")
+        stop(sprintf("%s is not TRUE", sQuote(call)),
+             call. = FALSE, domain = NA)
+    }
+  }
+  
+  NULL
+}
+
 ## Adopted R.utils 2.1.0 (2015-06-15)
 #' @importFrom utils capture.output
 capture_output <- function(expr, envir = parent.frame(), ...) {
@@ -18,7 +34,7 @@ capture_output <- function(expr, envir = parent.frame(), ...) {
     on.exit(close(file))
     capture.output(expr, file = file)
     rawToChar(rawConnectionValue(file))
-  }, envir = envir, enclos = envir)
+  }, envir = envir, enclos = baseenv())
   unlist(strsplit(res, split = "\n", fixed = TRUE), use.names = FALSE)
 }
 
@@ -83,6 +99,12 @@ trim <- function(x, ...) {
   sub("[\t\n\f\r ]*$", "", sub("^[\t\n\f\r ]*", "", x))
 }
 
+hexpr <- function(expr, trim = TRUE, collapse = "; ", maxHead = 6L, maxTail = 3L, 
+...) {
+  code <- deparse(expr)
+  if (trim) code <- trim(code)
+  hpaste(code, collapse = collapse, maxHead = maxHead, maxTail = maxTail, ...)
+}
 
 import_from <- function(name, default = NULL, package) {
   ns <- getNamespace(package)

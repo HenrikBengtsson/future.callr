@@ -39,3 +39,4 @@ attach_locally <- function(x, envir = parent.frame()) {
     assign(name, value = x[[name]], envir = envir)
   }
 }
+

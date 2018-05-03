@@ -5,12 +5,12 @@ waitForWorker <- function(type, workers, await = NULL, timeout = getOption("futu
 
   debug <- getOption("future.debug", FALSE)
 
-  stopifnot(length(type) == 1, is.character(type), !is.na(type), nzchar(type))
-  stopifnot(is.null(await) || is.function(await))
+  stop_if_not(length(type) == 1, is.character(type), !is.na(type), nzchar(type))
+  stop_if_not(is.null(await) || is.function(await))
   workers <- as.integer(workers)
-  stopifnot(length(workers) == 1, is.finite(workers), workers >= 1L)
-  stopifnot(length(timeout) == 1, is.finite(timeout), timeout >= 0)
-  stopifnot(length(alpha) == 1, is.finite(alpha), alpha > 0)
+  stop_if_not(length(workers) == 1, is.finite(workers), workers >= 1L)
+  stop_if_not(length(timeout) == 1, is.finite(timeout), timeout >= 0)
+  stop_if_not(length(alpha) == 1, is.finite(alpha), alpha > 0)
  
   ## FutureRegistry to use
   reg <- sprintf("workers-%s", type)
