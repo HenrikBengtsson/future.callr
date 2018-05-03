@@ -140,7 +140,7 @@ resolved.CallrFuture <- function(x, ...) {
   !process$is_alive()
 }
 
-#' @importFrom future result
+#' @importFrom future result UnexpectedFutureResultError
 #' @keywords internal
 #' @export
 result.CallrFuture <- function(future, ...) {
