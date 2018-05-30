@@ -77,7 +77,7 @@ CallrFuture <- function(expr = NULL, envir = parent.frame(),
 #' @export
 #' @keywords internal
 print.CallrFuture <- function(x, ...) {
-  NextMethod("print")
+  NextMethod()
 
   ## Ask for status once
   status <- status(x)
