@@ -4,7 +4,7 @@ Depends:
     R (>= 3.2.0),
     future (>= 1.8.1)
 Imports:
-    callr (>= 2.0.3)
+    callr (>= 2.0.4)
 Suggests:
     future.apply,
     listenv,
