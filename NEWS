@@ -1,10 +1,16 @@
 Package: future.callr
 =====================
 
-Version: 0.3.0-9000 [2018-05-03]
+Version: 0.3.0-9000 [2018-06-13]
 
  o ...
- 
+
+BUG FIX:
+
+ o Callr futures did not protect against recursive parallelism, e.g. with
+   plan(list(callr, callr)) the second layer of futures would use the same
+   number of workers as the first layer.
+
 
 Version: 0.3.0 [2018-05-03]
 

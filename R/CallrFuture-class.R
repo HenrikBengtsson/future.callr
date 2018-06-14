@@ -95,6 +95,10 @@ print.CallrFuture <- function(x, ...) {
   invisible(x)
 }
 
+#' @export
+getExpression.CallrFuture <- function(future, mc.cores = 1L, ...) {
+  NextMethod(mc.cores = mc.cores)
+}
 
 status <- function(...) UseMethod("status")
 
