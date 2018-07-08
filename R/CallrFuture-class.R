@@ -112,7 +112,7 @@ finished <- function(...) UseMethod("finished")
 #'
 #' @return A character vector or a logical scalar.
 #'
-#' @aliases status finished value
+#' @aliases status finished
 #' 
 #' @keywords internal
 status.CallrFuture <- function(future, ...) {
@@ -233,7 +233,7 @@ run.CallrFuture <- function(future, ...) {
 
 await <- function(...) UseMethod("await")
 
-#' Awaits the value of a callr future
+#' Awaits the result of a callr future
 #'
 #' @param future The future.
 #' 
@@ -246,7 +246,7 @@ await <- function(...) UseMethod("await")
 #' 
 #' @param \ldots Not used.
 #'
-#' @return The value of the evaluated expression.
+#' @return The FutureResult of the evaluated expression.
 #' If an error occurs, an informative Exception is thrown.
 #'
 #' @details
@@ -265,6 +265,8 @@ await.CallrFuture <- function(future,
                                  delta = getOption("future.wait.interval", 1.0),
                                  alpha = getOption("future.wait.alpha", 1.01),
                                  ...) {
+  FutureRegistry <- import_future("FutureRegistry")
+  
   mdebug <- import_future("mdebug")
   stop_if_not(is.finite(timeout), timeout >= 0)
   stop_if_not(is.finite(alpha), alpha > 0)
@@ -372,6 +374,8 @@ await.CallrFuture <- function(future,
   if (length(prototype_fields) > 0) {
     result$PROTOTYPE_WARNING <- sprintf("WARNING: The fields %s should be considered internal and experimental for now, that is, until the Future API for these additional features has been settled. For more information, please see https://github.com/HenrikBengtsson/future/issues/172", hpaste(sQuote(prototype_fields), max_head = Inf, collapse = ", ", last_collapse  = " and "))
   }
+
+  FutureRegistry("workers-callr", action = "remove", future = future)
   
   result
 } # await()

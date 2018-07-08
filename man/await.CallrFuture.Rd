@@ -2,7 +2,7 @@
 % Please edit documentation in R/CallrFuture-class.R
 \name{await.CallrFuture}
 \alias{await.CallrFuture}
-\title{Awaits the value of a callr future}
+\title{Awaits the result of a callr future}
 \usage{
 \method{await}{CallrFuture}(future, timeout = getOption("future.wait.timeout",
   30 * 24 * 60 * 60), delta = getOption("future.wait.interval", 1),
@@ -21,11 +21,11 @@ that the waiting time in the k:th iteration is \code{alpha ^ k * delta}.}
 \item{\ldots}{Not used.}
 }
 \value{
-The value of the evaluated expression.
+The FutureResult of the evaluated expression.
 If an error occurs, an informative Exception is thrown.
 }
 \description{
-Awaits the value of a callr future
+Awaits the result of a callr future
 }
 \details{
 Note that \code{await()} should only be called once, because
