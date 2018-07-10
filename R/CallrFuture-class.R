@@ -200,7 +200,8 @@ run.CallrFuture <- function(future, ...) {
   debug <- getOption("future.debug", FALSE)
 
   ## Get future expression
-  expr <- getExpression(future)
+  stdout <- if (isTRUE(future$stdout)) TRUE else NA
+  expr <- getExpression(future, stdout = stdout)
 
   ## Get globals
   globals <- future$globals
@@ -219,9 +220,12 @@ run.CallrFuture <- function(future, ...) {
 
   ## 2. Allocate future now worker
   FutureRegistry("workers-callr", action = "add", future = future, earlySignal = FALSE)
+
+  ## Discard standard output? (as soon as possible)
+  stdout <- if (isTRUE(stdout)) "|" else NULL
   
   ## Launch
-  future$process <- r_bg(func, args = globals)
+  future$process <- r_bg(func, args = globals, stdout = stdout)
   mdebug("Launched future #%d", future$process$get_pid())
 
   ## 3. Running
@@ -339,15 +343,11 @@ await.CallrFuture <- function(future,
     mstr(result)
   }
 
-  ## PROTOTYPE RESULTS BELOW:
-  prototype_fields <- NULL
-  
   ## Retrieve any logged standard output and standard error
   process <- future$process
 
   ## Has 'stdout' already been collected (by the future package)?
-  if (is.null(result$stdout)) {
-    prototype_fields <- c(prototype_fields, "stdout")
+  if (is.null(result$stdout) && isTRUE(future$stdout)) {
     result$stdout <- tryCatch({
       process$read_all_output()
     }, error = function(ex) {
@@ -357,6 +357,9 @@ await.CallrFuture <- function(future,
       NULL
     })
   }
+  
+  ## PROTOTYPE RESULTS BELOW:
+  prototype_fields <- NULL
   
   ## Has 'stderr' already been collected (by the future package)?
   if (is.null(result$stderr)) {
