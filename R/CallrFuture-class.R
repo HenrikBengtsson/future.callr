@@ -77,7 +77,7 @@ CallrFuture <- function(expr = NULL, envir = parent.frame(),
 #' @export
 #' @keywords internal
 print.CallrFuture <- function(x, ...) {
-  NextMethod("print")
+  NextMethod()
 
   ## Ask for status once
   status <- status(x)
@@ -95,6 +95,10 @@ print.CallrFuture <- function(x, ...) {
   invisible(x)
 }
 
+#' @export
+getExpression.CallrFuture <- function(future, mc.cores = 1L, ...) {
+  NextMethod(mc.cores = mc.cores)
+}
 
 status <- function(...) UseMethod("status")
 
@@ -108,7 +112,7 @@ finished <- function(...) UseMethod("finished")
 #'
 #' @return A character vector or a logical scalar.
 #'
-#' @aliases status finished value
+#' @aliases status finished
 #' 
 #' @keywords internal
 status.CallrFuture <- function(future, ...) {
@@ -196,7 +200,8 @@ run.CallrFuture <- function(future, ...) {
   debug <- getOption("future.debug", FALSE)
 
   ## Get future expression
-  expr <- getExpression(future)
+  stdout <- if (isTRUE(future$stdout)) TRUE else NA
+  expr <- getExpression(future, stdout = stdout)
 
   ## Get globals
   globals <- future$globals
@@ -215,9 +220,12 @@ run.CallrFuture <- function(future, ...) {
 
   ## 2. Allocate future now worker
   FutureRegistry("workers-callr", action = "add", future = future, earlySignal = FALSE)
+
+  ## Discard standard output? (as soon as possible)
+  stdout <- if (isTRUE(stdout)) "|" else NULL
   
   ## Launch
-  future$process <- r_bg(func, args = globals)
+  future$process <- r_bg(func, args = globals, stdout = stdout)
   mdebug("Launched future #%d", future$process$get_pid())
 
   ## 3. Running
@@ -229,7 +237,7 @@ run.CallrFuture <- function(future, ...) {
 
 await <- function(...) UseMethod("await")
 
-#' Awaits the value of a callr future
+#' Awaits the result of a callr future
 #'
 #' @param future The future.
 #' 
@@ -242,7 +250,7 @@ await <- function(...) UseMethod("await")
 #' 
 #' @param \ldots Not used.
 #'
-#' @return The value of the evaluated expression.
+#' @return The FutureResult of the evaluated expression.
 #' If an error occurs, an informative Exception is thrown.
 #'
 #' @details
@@ -261,6 +269,8 @@ await.CallrFuture <- function(future,
                                  delta = getOption("future.wait.interval", 1.0),
                                  alpha = getOption("future.wait.alpha", 1.01),
                                  ...) {
+  FutureRegistry <- import_future("FutureRegistry")
+  
   mdebug <- import_future("mdebug")
   stop_if_not(is.finite(timeout), timeout >= 0)
   stop_if_not(is.finite(alpha), alpha > 0)
@@ -333,15 +343,11 @@ await.CallrFuture <- function(future,
     mstr(result)
   }
 
-  ## PROTOTYPE RESULTS BELOW:
-  prototype_fields <- NULL
-  
   ## Retrieve any logged standard output and standard error
   process <- future$process
 
   ## Has 'stdout' already been collected (by the future package)?
-  if (is.null(result$stdout)) {
-    prototype_fields <- c(prototype_fields, "stdout")
+  if (is.null(result$stdout) && isTRUE(future$stdout)) {
     result$stdout <- tryCatch({
       process$read_all_output()
     }, error = function(ex) {
@@ -351,6 +357,9 @@ await.CallrFuture <- function(future,
       NULL
     })
   }
+  
+  ## PROTOTYPE RESULTS BELOW:
+  prototype_fields <- NULL
   
   ## Has 'stderr' already been collected (by the future package)?
   if (is.null(result$stderr)) {
@@ -368,6 +377,8 @@ await.CallrFuture <- function(future,
   if (length(prototype_fields) > 0) {
     result$PROTOTYPE_WARNING <- sprintf("WARNING: The fields %s should be considered internal and experimental for now, that is, until the Future API for these additional features has been settled. For more information, please see https://github.com/HenrikBengtsson/future/issues/172", hpaste(sQuote(prototype_fields), max_head = Inf, collapse = ", ", last_collapse  = " and "))
   }
+
+  FutureRegistry("workers-callr", action = "remove", future = future)
   
   result
 } # await()

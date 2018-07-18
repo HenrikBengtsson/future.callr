@@ -4,7 +4,6 @@
 \alias{status.CallrFuture}
 \alias{status}
 \alias{finished}
-\alias{value}
 \title{Status of callr future}
 \usage{
 \method{status}{CallrFuture}(future, ...)

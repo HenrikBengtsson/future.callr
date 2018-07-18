@@ -1,10 +1,10 @@
 Package: future.callr
-Version: 0.3.0
+Version: 0.3.1
 Depends:
     R (>= 3.2.0),
     future (>= 1.8.1)
 Imports:
-    callr (>= 2.0.2)
+    callr (>= 2.0.4)
 Suggests:
     future.apply,
     listenv,
