@@ -225,7 +225,11 @@ run.CallrFuture <- function(future, ...) {
   stdout <- if (isTRUE(stdout)) "|" else NULL
   
   ## Launch
-  future$process <- r_bg(func, args = globals, stdout = stdout)
+  cmdargs <- eval(formals(r_bg)$cmdargs)
+  if (!is.null(future$label)) {
+    cmdargs <- c(cmdargs, sprintf("--future.label=%s", shQuote(future$label)))
+  }
+  future$process <- r_bg(func, args = globals, stdout = stdout, cmdargs = cmdargs)
   mdebug("Launched future #%d", future$process$get_pid())
 
   ## 3. Running
