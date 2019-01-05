@@ -182,6 +182,9 @@ run.CallrFuture <- local({
   FutureRegistry <- import_future("FutureRegistry")
   mdebug <- import_future("mdebug")
   assertOwner <- import_future("assertOwner")
+
+  ## MEMOIZATION
+  cmdargs <- eval(formals(r_bg)$cmdargs)
   
   function(future, ...) {
     if (future$state != "created") {
@@ -225,7 +228,6 @@ run.CallrFuture <- local({
     stdout <- if (isTRUE(stdout)) "|" else NULL
     
     ## Launch
-    cmdargs <- eval(formals(r_bg)$cmdargs)
     if (!is.null(future$label)) {
       ## Ideally this comes after a '--args' argument to R, but that is
       ## not possible with the current r_bg() because it will *append*
@@ -274,7 +276,7 @@ await <- function(...) UseMethod("await")
 await.CallrFuture <- local({
   FutureRegistry <- import_future("FutureRegistry")
   mdebug <- import_future("mdebug")
-  
+
   function(future, timeout = getOption("future.wait.timeout", 30*24*60*60),
                    delta = getOption("future.wait.interval", 1.0),
                    alpha = getOption("future.wait.alpha", 1.01),
@@ -292,10 +294,10 @@ await.CallrFuture <- local({
     ## Control callr info output
     oopts <- options(callr.verbose = debug)
     on.exit(options(oopts))
-  
+
     ## Sleep function - increases geometrically as a function of iterations
     sleep_fcn <- function(i) delta * alpha ^ (i - 1)
-  
+
     ## Poll process
     t_timeout <- Sys.time() + timeout
     ii <- 1L
