@@ -1,7 +1,9 @@
 #' @importFrom future FutureError
-waitForWorker <- function(type, workers, await = NULL, timeout = getOption("future.wait.timeout", 30 * 24 * 60 * 60), delta = getOption("future.wait.interval", 0.2), alpha = getOption("future.wait.alpha", 1.01)) {
+waitForWorker <- local({
   FutureRegistry <- import_future("FutureRegistry")
   mdebug <- import_future("mdebug")
+  
+  function(type, workers, await = NULL, timeout = getOption("future.wait.timeout", 30 * 24 * 60 * 60), delta = getOption("future.wait.interval", 0.2), alpha = getOption("future.wait.alpha", 1.01)) {
 
   debug <- getOption("future.debug", FALSE)
 
@@ -55,3 +57,4 @@ waitForWorker <- function(type, workers, await = NULL, timeout = getOption("futu
     stop(FutureError(msg))
   }
 }
+})

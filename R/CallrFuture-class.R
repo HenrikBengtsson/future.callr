@@ -178,8 +178,12 @@ result.CallrFuture <- function(future, ...) {
 #' @keywords internal
 #' @S3method run CallrFuture
 #' @export
-run.CallrFuture <- function(future, ...) {
+run.CallrFuture <- local({
   FutureRegistry <- import_future("FutureRegistry")
+  mdebug <- import_future("mdebug")
+  assertOwner <- import_future("assertOwner")
+  
+  function(future, ...) {
   
   if (future$state != "created") {
     label <- future$label
@@ -188,11 +192,8 @@ run.CallrFuture <- function(future, ...) {
     stop(FutureError(msg, future = future))
   }
 
-  mdebug <- import_future("mdebug")
-
   ## Assert that the process that created the future is
   ## also the one that evaluates/resolves/queries it.
-  assertOwner <- import_future("assertOwner")
   assertOwner(future)
 
   ## Temporarily disable callr output?
@@ -233,13 +234,14 @@ run.CallrFuture <- function(future, ...) {
     cmdargs <- c(cmdargs, sprintf("--future-label=%s", shQuote(future$label)))
   }
   future$process <- r_bg(func, args = globals, stdout = stdout, cmdargs = cmdargs)
-  mdebug("Launched future #%d", future$process$get_pid())
+  if (debug) mdebug("Launched future #%d", future$process$get_pid())
 
   ## 3. Running
   future$state <- "running"
 
   invisible(future)
 } ## run()
+})
 
 
 await <- function(...) UseMethod("await")
@@ -270,15 +272,16 @@ await <- function(...) UseMethod("await")
 #' @importFrom utils tail
 #' @importFrom future FutureError FutureWarning
 #' @keywords internal
-await.CallrFuture <- function(future, 
+await.CallrFuture <- local({
+  FutureRegistry <- import_future("FutureRegistry")
+  mdebug <- import_future("mdebug")
+  
+  function(future, 
                                  timeout = getOption("future.wait.timeout",
                                                      30 * 24 * 60 * 60),
                                  delta = getOption("future.wait.interval", 1.0),
                                  alpha = getOption("future.wait.alpha", 1.01),
                                  ...) {
-  FutureRegistry <- import_future("FutureRegistry")
-  
-  mdebug <- import_future("mdebug")
   stop_if_not(is.finite(timeout), timeout >= 0)
   stop_if_not(is.finite(alpha), alpha > 0)
   
@@ -310,11 +313,11 @@ await.CallrFuture <- function(future,
   }
 
   if (process$is_alive()) {
-    mdebug("- callr process: running")
+    if (debug) mdebug("- callr process: running")
     label <- future$label
     if (is.null(label)) label <- "<none>"
     msg <- sprintf("AsyncNotReadyError: Polled for results for %s seconds every %g seconds, but asynchronous evaluation for %s future (%s) is still running: %s", timeout, delta, class(future)[1], sQuote(label), process$get_pid()) #nolint
-    mdebug(msg)
+    if (debug) mdebug(msg)
     stop(FutureError(msg, future = future))
   }
 
@@ -374,3 +377,4 @@ await.CallrFuture <- function(future,
   
   result
 } # await()
+})
