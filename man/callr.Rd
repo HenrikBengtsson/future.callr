@@ -4,8 +4,8 @@
 \alias{callr}
 \title{callr futures}
 \usage{
-callr(expr, envir = parent.frame(), substitute = TRUE, globals = TRUE,
-  label = NULL, workers = availableCores(), ...)
+callr(expr, envir = parent.frame(), substitute = TRUE,
+  globals = TRUE, label = NULL, workers = availableCores(), ...)
 }
 \arguments{
 \item{expr}{The \R expression to be evaluated.}

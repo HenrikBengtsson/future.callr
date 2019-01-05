@@ -40,13 +40,13 @@ The future.callr package implements a future wrapper for callr.
 
 ### Each callr future uses a fresh R session
 
-When using `callr` futures, each future is resolved in a fresh background R session which ends as soon as the value of the future has been collected.   In contrast, `multisession` futures are resolved in background R worker sessions that serve multiple futures over their life spans.  The advantage with using a new R process for each future is that it is that the R environment is guaranteed not to be contaminated by previous futures, e.g. memory allocations, finalizers, modified options, and loaded and attached packages.  The disadvantage, is an added overhead of lauching a new R process.
+When using `callr` futures, each future is resolved in a fresh background R session which ends as soon as the value of the future has been collected.   In contrast, `multisession` futures are resolved in background R worker sessions that serve multiple futures over their life spans.  The advantage with using a new R process for each future is that it is that the R environment is guaranteed not to be contaminated by previous futures, e.g. memory allocations, finalizers, modified options, and loaded and attached packages.  The disadvantage, is an added overhead of launching a new R process.
 (At the moment, I am neither aware of formal benchmarking of this extra overhead nor of performance comparisons of `callr` to alternative future backends.)
 
 
 ### More than 125 parallel callr futures
 
-Another advantage with `callr` futures compared to `multisession` futures is that they do not communicate via R (socket) connections.  This avoids the limitation in the number of parallel futures that can be active at any time that `multisession` futures and `cluster` futures in general have, which they inherit from `SOCKcluster` clusters as defined by the parallel package.  The number of parallel futures these can serve is limited by the [maximum number of open connections in R](https://github.com/HenrikBengtsson/Wishlist-for-R/issues/28), which currently is 125 (excluding the three reserved by R itself).  Note that these 125 slots have to be shared with file connections etc.  To increase this limit, R has to be rebuilt from source.  However, since `callr` futures rely on [the callr package which does not make use of R-specific connections](https://github.com/r-lib/processx/issues/91), there is no limit(*) in the number of background R processes that can be used simulatenously.
+Another advantage with `callr` futures compared to `multisession` futures is that they do not communicate via R (socket) connections.  This avoids the limitation in the number of parallel futures that can be active at any time that `multisession` futures and `cluster` futures in general have, which they inherit from `SOCKcluster` clusters as defined by the parallel package.  The number of parallel futures these can serve is limited by the [maximum number of open connections in R](https://github.com/HenrikBengtsson/Wishlist-for-R/issues/28), which currently is 125 (excluding the three reserved by R itself).  Note that these 125 slots have to be shared with file connections etc.  To increase this limit, R has to be rebuilt from source.  However, since `callr` futures rely on [the callr package which does not make use of R-specific connections](https://github.com/r-lib/processx/issues/91), there is no limit(*) in the number of background R processes that can be used simultaneously.
 
 (*) On Windows, there is currently [a limit of 64 parallel processes](https://github.com/r-lib/processx/issues/91#issuecomment-351214242) but there is a plan to fix this in the callr package.
 
@@ -83,16 +83,17 @@ demo("mandelbrot", package = "future", ask = FALSE)
 ## Installation
 R package future.callr is available on [CRAN](https://cran.r-project.org/package=future.callr) and can be installed in R as:
 ```r
-install.packages('future.callr')
+install.packages("future.callr")
 ```
 
 ### Pre-release version
 
 To install the pre-release version that is available in Git branch `develop` on GitHub, use:
 ```r
-remotes::install_github('HenrikBengtsson/future.callr@develop')
+remotes::install_github("HenrikBengtsson/future.callr@develop")
 ```
-This will install the package from source.
+This will install the package from source.  
+
 
 
 ## Contributions
@@ -104,7 +105,7 @@ Contributing to this package is easy.  Just send a [pull request](https://help.g
 
 ## Software status
 
-| Resource:     | CRAN        | Travis CI       | Appveyor         |
+| Resource:     | CRAN        | Travis CI       | AppVeyor         |
 | ------------- | ------------------- | --------------- | ---------------- |
 | _Platforms:_  | _Multiple_          | _Linux & macOS_ | _Windows_        |
 | R CMD check   | <a href="https://cran.r-project.org/web/checks/check_results_future.callr.html"><img border="0" src="http://www.r-pkg.org/badges/version/future.callr" alt="CRAN version"></a> | <a href="https://travis-ci.org/HenrikBengtsson/future.callr"><img src="https://travis-ci.org/HenrikBengtsson/future.callr.svg" alt="Build status"></a>   | <a href="https://ci.appveyor.com/project/HenrikBengtsson/future-callr"><img src="https://ci.appveyor.com/api/projects/status/github/HenrikBengtsson/future.callr?svg=true" alt="Build status"></a> |
