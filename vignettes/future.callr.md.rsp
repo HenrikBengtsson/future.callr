@@ -97,4 +97,4 @@ demo("mandelbrot", package = "future", ask = FALSE)
 [doFuture]: https://cran.r-project.org/package=doFuture
 
 ---
-Copyright Henrik Bengtsson, 2017-2018
+Copyright Henrik Bengtsson, 2017-2019
