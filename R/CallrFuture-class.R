@@ -102,8 +102,6 @@ getExpression.CallrFuture <- function(future, mc.cores = 1L, ...) {
 
 status <- function(...) UseMethod("status")
 
-finished <- function(...) UseMethod("finished")
-
 #' Status of callr future
 #'
 #' @param future The future.
@@ -112,8 +110,6 @@ finished <- function(...) UseMethod("finished")
 #'
 #' @return A character vector or a logical scalar.
 #'
-#' @aliases status finished
-#' 
 #' @keywords internal
 status.CallrFuture <- function(future, ...) {
   process <- future$process
@@ -121,13 +117,6 @@ status.CallrFuture <- function(future, ...) {
   state <- if (process$is_alive()) "running" else "finished"
   future$state <- state
   state
-}
-
-#' @keywords internal
-finished.CallrFuture <- function(future, ...) {
-  status <- status(future)
-  if (is_na(status)) return(NA)
-  any(c("finished", "error") %in% status)
 }
 
 
