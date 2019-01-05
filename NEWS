@@ -1,12 +1,12 @@
 Package: future.callr
 =====================
 
-Version: 0.3.1-9000 [2018-11-10]
+Version: 0.3.1-9000 [2019-01-05]
 
 NEW FEATURES:
 
  o Now the future label is exposed in the process information (e.g. top)
-   via a dummy `--future.label="<label>"` argument in the callr system call.
+   via a dummy --future-label="<label>" argument in the callr system call.
  
 
 Version: 0.3.1 [2018-07-18]

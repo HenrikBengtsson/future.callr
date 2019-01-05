@@ -230,7 +230,7 @@ run.CallrFuture <- function(future, ...) {
     ## Ideally this comes after a '--args' argument to R, but that is
     ## not possible with the current r_bg() because it will *append*
     ## '-f a-file.R' after these. /HB 2018-11-10
-    cmdargs <- c(cmdargs, sprintf("--future.label=%s", shQuote(future$label)))
+    cmdargs <- c(cmdargs, sprintf("--future-label=%s", shQuote(future$label)))
   }
   future$process <- r_bg(func, args = globals, stdout = stdout, cmdargs = cmdargs)
   mdebug("Launched future #%d", future$process$get_pid())
