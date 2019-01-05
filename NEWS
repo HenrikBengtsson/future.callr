@@ -7,6 +7,11 @@ NEW FEATURES:
 
  o Now the future label is exposed in the process information (e.g. top)
    via a dummy --future-label="<label>" argument in the callr system call.
+
+BUG FIXES:
+
+ o plan(callr, workers) where 'workers' being a function would result in
+   an error when a future was created.
  
 
 Version: 0.3.1 [2018-07-18]
@@ -16,7 +21,7 @@ NEW FEATURES:
  o The callr backend supports the handling of the standard output as
    implemented in future (>= 1.9.0).
 
-BUG FIX:
+BUG FIXES:
 
  o Callr futures did not protect against recursive parallelism, e.g. with
    plan(list(callr, callr)) the second layer of futures would use the same
@@ -42,7 +47,7 @@ CODE REFACTORING:
 
  o Prepared code to gather a richer set of results from futures.
 
-BUG FIX:
+BUG FIXES:
 
  o Callr futures did not acknowledge timeout option 'future.wait.timeout'.
  
@@ -60,7 +65,7 @@ DOCUMENTATION:
 
 Version: 0.1.1 [2017-11-18]
 
-BUG FIX:
+BUG FIXES:
 
  o Number of workers in plan(callr, workers = n) was not respected.
 

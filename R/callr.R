@@ -24,8 +24,6 @@ callr <- function(expr, envir = parent.frame(), substitute = TRUE,
   if (substitute) expr <- substitute(expr)
 
   if (is.null(workers)) workers <- availableCores()
-  stop_if_not(length(workers) == 1L, is.numeric(workers),
-            is.finite(workers), workers >= 1L)
 
   future <- CallrFuture(expr = expr, envir = envir, substitute = FALSE,
                         globals = globals,
