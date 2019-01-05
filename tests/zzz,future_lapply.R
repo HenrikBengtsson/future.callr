@@ -10,18 +10,18 @@ if (requireNamespace("future.apply", quietly = TRUE)) {
   
   message("- future_lapply(x, FUN = vector, ...) ...")
   
-  x <- list(a = "integer", b = "numeric", c = "character", c = "list")
+  x <- list(a = "integer", c = "character", c = "list")
   str(list(x = x))
   
   y0 <- lapply(x, FUN = vector, length = 2L)
   str(list(y0 = y0))
   
-  for (scheduling in list(FALSE, TRUE)) {
-    for (strategy in strategies) {
-      mprintf("- plan('%s') ...", strategy)
-      plan(strategy)
-      stopifnot(nbrOfWorkers() < Inf)
-  
+  for (strategy in strategies) {
+    mprintf("- plan('%s') ...", strategy)
+    plan(strategy)
+    stopifnot(nbrOfWorkers() < Inf)
+    
+    for (scheduling in list(FALSE, TRUE)) {
       y <- future_lapply(x, FUN = vector, length = 2L,
                          future.scheduling = scheduling)
       str(list(y = y))
@@ -32,18 +32,18 @@ if (requireNamespace("future.apply", quietly = TRUE)) {
   
   message("- future_lapply(x, FUN = base::vector, ...) ...")
   
-  x <- list(a = "integer", b = "numeric", c = "character", c = "list")
+  x <- list(a = "integer", c = "character", c = "list")
   str(list(x = x))
   
   y0 <- lapply(x, FUN = base::vector, length = 2L)
   str(list(y0 = y0))
   
-  for (scheduling in list(FALSE, TRUE)) {
-    for (strategy in strategies) {
-      mprintf("- plan('%s') ...", strategy)
-      plan(strategy)
-      stopifnot(nbrOfWorkers() < Inf)
+  for (strategy in strategies) {
+    mprintf("- plan('%s') ...", strategy)
+    plan(strategy)
+    stopifnot(nbrOfWorkers() < Inf)
   
+    for (scheduling in list(FALSE, TRUE)) {
       y <- future_lapply(x, FUN = base::vector, length = 2L,
                          future.scheduling = scheduling)
       str(list(y = y))
@@ -59,12 +59,12 @@ if (requireNamespace("future.apply", quietly = TRUE)) {
   y0 <- lapply(x, FUN = future:::hpaste, collapse = "; ", maxHead = 3L)
   str(list(y0 = y0))
   
-  for (scheduling in list(FALSE, TRUE)) {
-    for (strategy in strategies) {
-      mprintf("- plan('%s') ...", strategy)
-      plan(strategy)
-      stopifnot(nbrOfWorkers() < Inf)
+  for (strategy in strategies) {
+    mprintf("- plan('%s') ...", strategy)
+    plan(strategy)
+    stopifnot(nbrOfWorkers() < Inf)
   
+    for (scheduling in list(FALSE, TRUE)) {
       y <- future_lapply(x, FUN = future:::hpaste, collapse = "; ",
                          maxHead = 3L, future.scheduling = scheduling)
       str(list(y = y))
@@ -91,12 +91,12 @@ if (requireNamespace("future.apply", quietly = TRUE)) {
   y0 <- lapply(x, FUN = listenv::map)
   str(list(y0 = y0))
   
-  for (scheduling in list(FALSE, TRUE)) {
-    for (strategy in strategies) {
-      mprintf("- plan('%s') ...", strategy)
-      plan(strategy)
-      stopifnot(nbrOfWorkers() < Inf)
+  for (strategy in strategies) {
+    mprintf("- plan('%s') ...", strategy)
+    plan(strategy)
+    stopifnot(nbrOfWorkers() < Inf)
   
+    for (scheduling in list(FALSE, TRUE)) {
       y <- future_lapply(x, FUN = listenv::map, future.scheduling = scheduling)
       str(list(y = y))
       stopifnot(identical(y, y0))
