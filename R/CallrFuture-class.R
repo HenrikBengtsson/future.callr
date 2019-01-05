@@ -342,9 +342,6 @@ await.CallrFuture <- function(future,
   if (inherits(result, "error")) result <- process$get_result()
   if (debug) mdebug("- callr:::get_result() ... done (after %d attempts)", ii)
 
-  ## WORKAROUND: future 1.8.0 does not set the correct 'version' of the result
-  result$version <- future$version
-  
   if (debug) {
     mdebug("Results:")
     mstr(result)
@@ -353,18 +350,6 @@ await.CallrFuture <- function(future,
   ## Retrieve any logged standard output and standard error
   process <- future$process
 
-  ## Has 'stdout' already been collected (by the future package)?
-  if (is.null(result$stdout) && isTRUE(future$stdout)) {
-    result$stdout <- tryCatch({
-      process$read_all_output()
-    }, error = function(ex) {
-      label <- future$label
-      if (is.null(label)) label <- "<none>"
-      warning(FutureWarning(sprintf("Failed to retrieve standard output from %s (%s). The reason was: %s", class(future)[1], sQuote(label), conditionMessage(ex)), future = future))
-      NULL
-    })
-  }
-  
   ## PROTOTYPE RESULTS BELOW:
   prototype_fields <- NULL
   
