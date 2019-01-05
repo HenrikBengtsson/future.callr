@@ -80,7 +80,13 @@ print.CallrFuture <- function(x, ...) {
   NextMethod()
 
   ## Ask for status once
-  status <- status(x)
+  process <- x$process
+  if (inherits(process, "r_process")) {
+    status <- if (process$is_alive()) "running" else "finished"
+    x$state <- status
+  } else {
+    status <- NA_character_
+  }
   printf("callr status: %s\n", paste(sQuote(status), collapse = ", "))
 
   process <- x$process
@@ -98,25 +104,6 @@ print.CallrFuture <- function(x, ...) {
 #' @export
 getExpression.CallrFuture <- function(future, mc.cores = 1L, ...) {
   NextMethod(mc.cores = mc.cores)
-}
-
-status <- function(...) UseMethod("status")
-
-#' Status of callr future
-#'
-#' @param future The future.
-#' 
-#' @param \ldots Not used.
-#'
-#' @return A character vector or a logical scalar.
-#'
-#' @keywords internal
-status.CallrFuture <- function(future, ...) {
-  process <- future$process
-  if (!inherits(process, "r_process")) return(NA_character_)
-  state <- if (process$is_alive()) "running" else "finished"
-  future$state <- state
-  state
 }
 
 
