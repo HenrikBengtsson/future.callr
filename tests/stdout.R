@@ -36,7 +36,7 @@ for (stdout in c(TRUE, FALSE, NA)) {
 
   if (test_stdout) {
     if (is.na(stdout)) {
-      stopifnot(!"stdout" %in% names(r))
+      stopifnot(is.null(r$stdout))
     } else if (stdout) {
       print(r)
       stopifnot(identical(r$stdout, truth))
