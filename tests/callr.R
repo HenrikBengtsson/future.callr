@@ -53,14 +53,14 @@ for (cores in 1:min(2L, availableCores())) {
 
     mprintf("*** callr(..., globals = %s) with globals and blocking", globals) #nolint
     x <- listenv()
-    for (ii in 1:4) {
+    for (ii in 1:3) {
       mprintf(" - Creating callr future #%d ...", ii)
       x[[ii]] <- callr({ ii }, globals = globals)
     }
     mprintf(" - Resolving %d callr futures", length(x))
     if (globals) {
       v <- sapply(x, FUN = value)
-      stopifnot(all(v == 1:4))
+      stopifnot(all(v == 1:3))
     } else {
       v <- lapply(x, FUN = function(f) tryCatch(value(f), error = identity))
       stopifnot(all(sapply(v, FUN = inherits, "error")))

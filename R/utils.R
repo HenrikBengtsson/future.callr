@@ -106,21 +106,6 @@ hexpr <- function(expr, trim = TRUE, collapse = "; ", maxHead = 6L, maxTail = 3L
   hpaste(code, collapse = collapse, maxHead = maxHead, maxTail = maxTail, ...)
 }
 
-import_from <- function(name, default = NULL, package) {
-  ns <- getNamespace(package)
-  if (exists(name, mode = "function", envir = ns, inherits = FALSE)) {
-    get(name, mode = "function", envir = ns, inherits = FALSE)
-  } else if (!is.null(default)) {
-    default
-  } else {
-    stop(sprintf("No such '%s' function: %s()", package, name))
-  }
-}
-
-import_future <- function(name, default = NULL) {
-  import_from(name, default = default, package = "future")
-}
-
 ## Tests if the current OS is of a certain type
 is_os <- function(name) {
   if (name == "windows") {

@@ -80,7 +80,13 @@ print.CallrFuture <- function(x, ...) {
   NextMethod()
 
   ## Ask for status once
-  status <- status(x)
+  process <- x$process
+  if (inherits(process, "r_process")) {
+    status <- if (process$is_alive()) "running" else "finished"
+    x$state <- status
+  } else {
+    status <- NA_character_
+  }
   printf("callr status: %s\n", paste(sQuote(status), collapse = ", "))
 
   process <- x$process
@@ -98,36 +104,6 @@ print.CallrFuture <- function(x, ...) {
 #' @export
 getExpression.CallrFuture <- function(future, mc.cores = 1L, ...) {
   NextMethod(mc.cores = mc.cores)
-}
-
-status <- function(...) UseMethod("status")
-
-finished <- function(...) UseMethod("finished")
-
-#' Status of callr future
-#'
-#' @param future The future.
-#' 
-#' @param \ldots Not used.
-#'
-#' @return A character vector or a logical scalar.
-#'
-#' @aliases status finished
-#' 
-#' @keywords internal
-status.CallrFuture <- function(future, ...) {
-  process <- future$process
-  if (!inherits(process, "r_process")) return(NA_character_)
-  state <- if (process$is_alive()) "running" else "finished"
-  future$state <- state
-  state
-}
-
-#' @keywords internal
-finished.CallrFuture <- function(future, ...) {
-  status <- status(future)
-  if (is_na(status)) return(NA)
-  any(c("finished", "error") %in% status)
 }
 
 
@@ -178,61 +154,71 @@ result.CallrFuture <- function(future, ...) {
 #' @keywords internal
 #' @S3method run CallrFuture
 #' @export
-run.CallrFuture <- function(future, ...) {
+run.CallrFuture <- local({
   FutureRegistry <- import_future("FutureRegistry")
-  
-  if (future$state != "created") {
-    label <- future$label
-    if (is.null(label)) label <- "<none>"
-    msg <- sprintf("A future ('%s') can only be launched once.", label)
-    stop(FutureError(msg, future = future))
-  }
-
   mdebug <- import_future("mdebug")
-
-  ## Assert that the process that created the future is
-  ## also the one that evaluates/resolves/queries it.
   assertOwner <- import_future("assertOwner")
-  assertOwner(future)
 
-  ## Temporarily disable callr output?
-  ## (i.e. messages and progress bars)
-  debug <- getOption("future.debug", FALSE)
-
-  ## Get future expression
-  stdout <- if (isTRUE(future$stdout)) TRUE else NA
-  expr <- getExpression(future, stdout = stdout)
-
-  ## Get globals
-  globals <- future$globals
+  ## MEMOIZATION
+  cmdargs <- eval(formals(r_bg)$cmdargs)
   
-  ## Make a callr::r_bg()-compatible function
-  func <- eval(bquote(function(...) {
-    local({
-      fasten <- base::attach ## To please R CMD check
-      fasten(list(...), pos = 2L, name = "r_bg_arguments")
-    })
-    .(expr)
-  }), enclos = baseenv())
-
-  ## 1. Wait for an available worker
-  waitForWorker(type = "callr", workers = future$workers)
-
-  ## 2. Allocate future now worker
-  FutureRegistry("workers-callr", action = "add", future = future, earlySignal = FALSE)
-
-  ## Discard standard output? (as soon as possible)
-  stdout <- if (isTRUE(stdout)) "|" else NULL
+  function(future, ...) {
+    if (future$state != "created") {
+      label <- future$label
+      if (is.null(label)) label <- "<none>"
+      msg <- sprintf("A future ('%s') can only be launched once.", label)
+      stop(FutureError(msg, future = future))
+    }
   
-  ## Launch
-  future$process <- r_bg(func, args = globals, stdout = stdout)
-  mdebug("Launched future #%d", future$process$get_pid())
-
-  ## 3. Running
-  future$state <- "running"
-
-  invisible(future)
-} ## run()
+    ## Assert that the process that created the future is
+    ## also the one that evaluates/resolves/queries it.
+    assertOwner(future)
+  
+    ## Temporarily disable callr output?
+    ## (i.e. messages and progress bars)
+    debug <- getOption("future.debug", FALSE)
+  
+    ## Get future expression
+    stdout <- if (isTRUE(future$stdout)) TRUE else NA
+    expr <- getExpression(future, stdout = stdout)
+  
+    ## Get globals
+    globals <- future$globals
+    
+    ## Make a callr::r_bg()-compatible function
+    func <- eval(bquote(function(...) {
+      local({
+        fasten <- base::attach ## To please R CMD check
+        fasten(list(...), pos = 2L, name = "r_bg_arguments")
+      })
+      .(expr)
+    }), enclos = baseenv())
+  
+    ## 1. Wait for an available worker
+    waitForWorker(type = "callr", workers = future$workers)
+  
+    ## 2. Allocate future now worker
+    FutureRegistry("workers-callr", action = "add", future = future, earlySignal = FALSE)
+  
+    ## Discard standard output? (as soon as possible)
+    stdout <- if (isTRUE(stdout)) "|" else NULL
+    
+    ## Launch
+    if (!is.null(future$label)) {
+      ## Ideally this comes after a '--args' argument to R, but that is
+      ## not possible with the current r_bg() because it will *append*
+      ## '-f a-file.R' after these. /HB 2018-11-10
+      cmdargs <- c(cmdargs, sprintf("--future-label=%s", shQuote(future$label)))
+    }
+    future$process <- r_bg(func, args = globals, stdout = stdout, cmdargs = cmdargs)
+    if (debug) mdebug("Launched future #%d", future$process$get_pid())
+  
+    ## 3. Running
+    future$state <- "running"
+  
+    invisible(future)
+  } ## run()
+})
 
 
 await <- function(...) UseMethod("await")
@@ -263,122 +249,107 @@ await <- function(...) UseMethod("await")
 #' @importFrom utils tail
 #' @importFrom future FutureError FutureWarning
 #' @keywords internal
-await.CallrFuture <- function(future, 
-                                 timeout = getOption("future.wait.timeout",
-                                                     30 * 24 * 60 * 60),
-                                 delta = getOption("future.wait.interval", 1.0),
-                                 alpha = getOption("future.wait.alpha", 1.01),
-                                 ...) {
+await.CallrFuture <- local({
   FutureRegistry <- import_future("FutureRegistry")
-  
   mdebug <- import_future("mdebug")
-  stop_if_not(is.finite(timeout), timeout >= 0)
-  stop_if_not(is.finite(alpha), alpha > 0)
+
+  function(future, timeout = getOption("future.wait.timeout", 30*24*60*60),
+                   delta = getOption("future.wait.interval", 1.0),
+                   alpha = getOption("future.wait.alpha", 1.01),
+                   ...) {
+    stop_if_not(is.finite(timeout), timeout >= 0)
+    stop_if_not(is.finite(alpha), alpha > 0)
+    
+    debug <- getOption("future.debug", FALSE)
   
-  debug <- getOption("future.debug", FALSE)
-
-  expr <- future$expr
-  process <- future$process
-
-  if (debug) mdebug("callr::wait() ...")
-
-  ## Control callr info output
-  oopts <- options(callr.verbose = debug)
-  on.exit(options(oopts))
-
-  ## Sleep function - increases geometrically as a function of iterations
-  sleep_fcn <- function(i) delta * alpha ^ (i - 1)
-
-  ## Poll process
-  t_timeout <- Sys.time() + timeout
-  ii <- 1L
-  while (process$is_alive()) {
-    ## Timed out?
-    if (Sys.time() > t_timeout) break
-    timeout_ii <- sleep_fcn(ii)
-    if (debug && ii %% 100 == 0)
-      mdebug("- iteration %d: callr::wait(timeout = %g)", ii, timeout_ii)
-    res <- process$wait(timeout = timeout_ii)
-    ii <- ii + 1L
-  }
-
-  if (process$is_alive()) {
-    mdebug("- callr process: running")
-    label <- future$label
-    if (is.null(label)) label <- "<none>"
-    msg <- sprintf("AsyncNotReadyError: Polled for results for %s seconds every %g seconds, but asynchronous evaluation for %s future (%s) is still running: %s", timeout, delta, class(future)[1], sQuote(label), process$get_pid()) #nolint
-    mdebug(msg)
-    stop(FutureError(msg, future = future))
-  }
-
-  if (debug) {
-    mdebug("- callr process: finished")
-    mdebug("callr::wait() ... done")
-  }
-
-  ## callr:::get_result() assert that "result" and "error" files exist
-  ## based on file.exist().  In case there is a delay in the file system
-  ## we might get a false-positive error:
-  ## "Error: callr failed, could not start R, or it has crashed or was killed"
-  ## If so, let's retry a few times before giving up.
-  ## NOTE: This was observed, somewhat randomly, on R-devel (2018-04-20 r74620)
-  ## on Linux (local and on Travis) with tests/demo.R /HB 2018-04-27
-  if (debug) mdebug("- callr:::get_result() ...")
-  for (ii in 1:5) {
-    result <- tryCatch({
-      process$get_result()
-    }, error = identity)
-    if (!inherits(result, "error")) break
-    if (debug) mdebug("- process$get_result() failed; will retry after 0.1s")
-    Sys.sleep(0.1)
-  }
-  if (inherits(result, "error")) result <- process$get_result()
-  if (debug) mdebug("- callr:::get_result() ... done (after %d attempts)", ii)
-
-  ## WORKAROUND: future 1.8.0 does not set the correct 'version' of the result
-  result$version <- future$version
+    expr <- future$expr
+    process <- future$process
   
-  if (debug) {
-    mdebug("Results:")
-    mstr(result)
-  }
+    if (debug) mdebug("callr::wait() ...")
+  
+    ## Control callr info output
+    oopts <- options(callr.verbose = debug)
+    on.exit(options(oopts))
 
-  ## Retrieve any logged standard output and standard error
-  process <- future$process
+    ## Sleep function - increases geometrically as a function of iterations
+    sleep_fcn <- function(i) delta * alpha ^ (i - 1)
 
-  ## Has 'stdout' already been collected (by the future package)?
-  if (is.null(result$stdout) && isTRUE(future$stdout)) {
-    result$stdout <- tryCatch({
-      process$read_all_output()
-    }, error = function(ex) {
+    ## Poll process
+    t_timeout <- Sys.time() + timeout
+    ii <- 1L
+    while (process$is_alive()) {
+      ## Timed out?
+      if (Sys.time() > t_timeout) break
+      timeout_ii <- sleep_fcn(ii)
+      if (debug && ii %% 100 == 0)
+        mdebug("- iteration %d: callr::wait(timeout = %g)", ii, timeout_ii)
+      res <- process$wait(timeout = timeout_ii)
+      ii <- ii + 1L
+    }
+  
+    if (process$is_alive()) {
+      if (debug) mdebug("- callr process: running")
       label <- future$label
       if (is.null(label)) label <- "<none>"
-      warning(FutureWarning(sprintf("Failed to retrieve standard output from %s (%s). The reason was: %s", class(future)[1], sQuote(label), conditionMessage(ex)), future = future))
-      NULL
-    })
-  }
+      msg <- sprintf("AsyncNotReadyError: Polled for results for %s seconds every %g seconds, but asynchronous evaluation for %s future (%s) is still running: %s", timeout, delta, class(future)[1], sQuote(label), process$get_pid()) #nolint
+      if (debug) mdebug(msg)
+      stop(FutureError(msg, future = future))
+    }
   
-  ## PROTOTYPE RESULTS BELOW:
-  prototype_fields <- NULL
+    if (debug) {
+      mdebug("- callr process: finished")
+      mdebug("callr::wait() ... done")
+    }
   
-  ## Has 'stderr' already been collected (by the future package)?
-  if (is.null(result$stderr)) {
-    prototype_fields <- c(prototype_fields, "stderr")
-    result$stderr <- tryCatch({
-      process$read_all_error()
-    }, error = function(ex) {
-      label <- future$label
-      if (is.null(label)) label <- "<none>"
-      warning(FutureWarning(sprintf("Failed to retrieve standard error from %s (%s). The reason was: %s", class(future)[1], sQuote(label), conditionMessage(ex)), future = future))
-      NULL
-    })
-  }
-
-  if (length(prototype_fields) > 0) {
-    result$PROTOTYPE_WARNING <- sprintf("WARNING: The fields %s should be considered internal and experimental for now, that is, until the Future API for these additional features has been settled. For more information, please see https://github.com/HenrikBengtsson/future/issues/172", hpaste(sQuote(prototype_fields), max_head = Inf, collapse = ", ", last_collapse  = " and "))
-  }
-
-  FutureRegistry("workers-callr", action = "remove", future = future)
+    ## callr:::get_result() assert that "result" and "error" files exist
+    ## based on file.exist().  In case there is a delay in the file system
+    ## we might get a false-positive error:
+    ## "Error: callr failed, could not start R, or it has crashed or was killed"
+    ## If so, let's retry a few times before giving up.
+    ## NOTE: This was observed, somewhat randomly, on R-devel (2018-04-20 r74620)
+    ## on Linux (local and on Travis) with tests/demo.R /HB 2018-04-27
+    if (debug) mdebug("- callr:::get_result() ...")
+    for (ii in 1:5) {
+      result <- tryCatch({
+        process$get_result()
+      }, error = identity)
+      if (!inherits(result, "error")) break
+      if (debug) mdebug("- process$get_result() failed; will retry after 0.1s")
+      Sys.sleep(0.1)
+    }
+    if (inherits(result, "error")) result <- process$get_result()
+    if (debug) mdebug("- callr:::get_result() ... done (after %d attempts)", ii)
   
-  result
-} # await()
+    if (debug) {
+      mdebug("Results:")
+      mstr(result)
+    }
+  
+    ## Retrieve any logged standard output and standard error
+    process <- future$process
+  
+    ## PROTOTYPE RESULTS BELOW:
+    prototype_fields <- NULL
+    
+    ## Has 'stderr' already been collected (by the future package)?
+    if (is.null(result$stderr)) {
+      prototype_fields <- c(prototype_fields, "stderr")
+      result$stderr <- tryCatch({
+        process$read_all_error()
+      }, error = function(ex) {
+        label <- future$label
+        if (is.null(label)) label <- "<none>"
+        warning(FutureWarning(sprintf("Failed to retrieve standard error from %s (%s). The reason was: %s", class(future)[1], sQuote(label), conditionMessage(ex)), future = future))
+        NULL
+      })
+    }
+  
+    if (length(prototype_fields) > 0) {
+      result$PROTOTYPE_WARNING <- sprintf("WARNING: The fields %s should be considered internal and experimental for now, that is, until the Future API for these additional features has been settled. For more information, please see https://github.com/HenrikBengtsson/future/issues/172", hpaste(sQuote(prototype_fields), max_head = Inf, collapse = ", ", last_collapse  = " and "))
+    }
+  
+    FutureRegistry("workers-callr", action = "remove", future = future)
+    
+    result
+  } # await()
+})

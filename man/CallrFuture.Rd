@@ -6,7 +6,8 @@
 \title{A callr future is a future whose value will be resolved via callr}
 \usage{
 CallrFuture(expr = NULL, envir = parent.frame(), substitute = TRUE,
-  globals = TRUE, packages = NULL, label = NULL, workers = NULL, ...)
+  globals = TRUE, packages = NULL, label = NULL, workers = NULL,
+  ...)
 }
 \arguments{
 \item{expr}{The \R expression to be evaluated.}
