@@ -1,6 +1,7 @@
 #----------------------------------------------------------------
 # Travis-CI Configuration for R Packages
 # https://docs.travis-ci.com/user/languages/r
+# YAML validated using http://www.yamllint.com/
 #----------------------------------------------------------------
 language: r
 sudo: false
@@ -25,6 +26,9 @@ matrix:
       - R_KEEP_PKG_SOURCE=yes
       - _R_S3_METHOD_LOOKUP_BASEENV_AFTER_GLOBALENV_=true
       - _R_S3_METHOD_LOOKUP_USE_TOPENV_AS_DEFENV_=true
+      - _R_CHECK_CONNECTIONS_LEFT_OPEN_=true
+      - _R_CHECK_LENGTH_1_CONDITION_=true
+      - _R_CHECK_LENGTH_1_LOGIC2_=true
     - os: osx
       r: oldrel
       before_install:

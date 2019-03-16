@@ -40,6 +40,14 @@ capture_output <- function(expr, envir = parent.frame(), ...) {
 
 printf <- function(...) cat(sprintf(...))
 
+mdebug <- function(..., debug = getOption("future.debug", FALSE)) {
+  if (debug) message(...)
+}
+
+mdebugf <- function(..., appendLF = TRUE, debug = getOption("future.debug", FALSE)) {
+  if (debug) message(sprintf(...), appendLF = appendLF)
+}
+
 mcat <- function(...) message(..., appendLF = FALSE)
 
 mprintf <- function(...) message(sprintf(...), appendLF = FALSE)

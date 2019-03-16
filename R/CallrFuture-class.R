@@ -156,7 +156,6 @@ result.CallrFuture <- function(future, ...) {
 #' @export
 run.CallrFuture <- local({
   FutureRegistry <- import_future("FutureRegistry")
-  mdebug <- import_future("mdebug")
   assertOwner <- import_future("assertOwner")
 
   ## MEMOIZATION
@@ -211,7 +210,7 @@ run.CallrFuture <- local({
       cmdargs <- c(cmdargs, sprintf("--future-label=%s", shQuote(future$label)))
     }
     future$process <- r_bg(func, args = globals, stdout = stdout, cmdargs = cmdargs)
-    if (debug) mdebug("Launched future #%d", future$process$get_pid())
+    if (debug) mdebugf("Launched future #%d", future$process$get_pid())
   
     ## 3. Running
     future$state <- "running"
@@ -251,7 +250,6 @@ await <- function(...) UseMethod("await")
 #' @keywords internal
 await.CallrFuture <- local({
   FutureRegistry <- import_future("FutureRegistry")
-  mdebug <- import_future("mdebug")
 
   function(future, timeout = getOption("future.wait.timeout", 30*24*60*60),
                    delta = getOption("future.wait.interval", 1.0),
@@ -282,7 +280,7 @@ await.CallrFuture <- local({
       if (Sys.time() > t_timeout) break
       timeout_ii <- sleep_fcn(ii)
       if (debug && ii %% 100 == 0)
-        mdebug("- iteration %d: callr::wait(timeout = %g)", ii, timeout_ii)
+        mdebugf("- iteration %d: callr::wait(timeout = %g)", ii, timeout_ii)
       res <- process$wait(timeout = timeout_ii)
       ii <- ii + 1L
     }
@@ -318,7 +316,7 @@ await.CallrFuture <- local({
       Sys.sleep(0.1)
     }
     if (inherits(result, "error")) result <- process$get_result()
-    if (debug) mdebug("- callr:::get_result() ... done (after %d attempts)", ii)
+    if (debug) mdebugf("- callr:::get_result() ... done (after %d attempts)", ii)
   
     if (debug) {
       mdebug("Results:")
