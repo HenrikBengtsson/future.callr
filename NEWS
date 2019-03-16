@@ -1,9 +1,11 @@
 Package: future.callr
 =====================
 
-Version: 0.4.0-9000 [2019-01-07]
+Version: 0.4.0-9000 [2019-03-15]
 
- * ...
+NEW FEATURES:
+
+ * Debug messages are now prepended with a timestamp.
 
 
 Version: 0.4.0 [2019-01-05]

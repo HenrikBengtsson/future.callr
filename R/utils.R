@@ -40,28 +40,36 @@ capture_output <- function(expr, envir = parent.frame(), ...) {
 
 printf <- function(...) cat(sprintf(...))
 
-mdebug <- function(..., debug = getOption("future.debug", FALSE)) {
-  if (debug) message(...)
+now <- function(x = Sys.time(), format = "[%H:%M:%OS3] ") {
+  ## format(x, format = format) ## slower
+  format(as.POSIXlt(x, tz = ""), format = format)
 }
 
-mdebugf <- function(..., appendLF = TRUE, debug = getOption("future.debug", FALSE)) {
-  if (debug) message(sprintf(...), appendLF = appendLF)
+mdebug <- function(..., debug = getOption("doFuture.debug", FALSE)) {
+  if (!debug) return()
+  message(now(), ...)
 }
 
-mcat <- function(...) message(..., appendLF = FALSE)
+mdebugf <- function(..., appendLF = TRUE,
+                    debug = getOption("doFuture.debug", FALSE)) {
+  if (!debug) return()
+  message(now(), sprintf(...), appendLF = appendLF)
+}
 
-mprintf <- function(...) message(sprintf(...), appendLF = FALSE)
+mcat <- function(...) message(now(), ..., appendLF = FALSE)
+
+mprintf <- function(...) message(now(), sprintf(...), appendLF = FALSE)
 
 mprint <- function(...) {
   bfr <- capture_output(print(...))
-  bfr <- paste(c(bfr, ""), collapse = "\n")
+  bfr <- paste(now(), c(bfr, ""), sep = "", collapse = "\n")
   message(bfr, appendLF = FALSE)
 }
 
 #' @importFrom utils str
 mstr <- function(...) {
   bfr <- capture_output(str(...))
-  bfr <- paste(c(bfr, ""), collapse = "\n")
+  bfr <- paste(now(), c(bfr, ""), sep = "", collapse = "\n")
   message(bfr, appendLF = FALSE)
 }
 
