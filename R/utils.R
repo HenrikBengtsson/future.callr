@@ -45,13 +45,13 @@ now <- function(x = Sys.time(), format = "[%H:%M:%OS3] ") {
   format(as.POSIXlt(x, tz = ""), format = format)
 }
 
-mdebug <- function(..., debug = getOption("doFuture.debug", FALSE)) {
+mdebug <- function(..., debug = getOption("future.debug", FALSE)) {
   if (!debug) return()
   message(now(), ...)
 }
 
 mdebugf <- function(..., appendLF = TRUE,
-                    debug = getOption("doFuture.debug", FALSE)) {
+                    debug = getOption("future.debug", FALSE)) {
   if (!debug) return()
   message(now(), sprintf(...), appendLF = appendLF)
 }

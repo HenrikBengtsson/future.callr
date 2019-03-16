@@ -210,7 +210,7 @@ run.CallrFuture <- local({
       cmdargs <- c(cmdargs, sprintf("--future-label=%s", shQuote(future$label)))
     }
     future$process <- r_bg(func, args = globals, stdout = stdout, cmdargs = cmdargs)
-    if (debug) mdebugf("Launched future #%d", future$process$get_pid())
+    if (debug) mdebugf("Launched future (PID=%d)", future$process$get_pid())
   
     ## 3. Running
     future$state <- "running"
