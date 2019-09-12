@@ -1,8 +1,12 @@
 Package: future.callr
 =====================
 
-Version: 0.4.0-9000 [2019-03-15]
+Version: 0.4.0-9000 [2019-09-12]
 
+SIGNIFICANT CHANGES:
+
+ * resolved() for CallrFuture will now launch lazy futures.
+ 
 NEW FEATURES:
 
  * Debug messages are now prepended with a timestamp.

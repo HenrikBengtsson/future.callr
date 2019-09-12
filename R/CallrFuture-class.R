@@ -114,7 +114,9 @@ getExpression.CallrFuture <- function(future, mc.cores = 1L, ...) {
 #' @keywords internal
 #' @export
 resolved.CallrFuture <- function(x, ...) {
-  if (inherits(x$result, "FutureResult")) return(TRUE)
+  resolved <- NextMethod()
+  if (resolved) return(TRUE)
+  
   process <- x$process
   if (!inherits(process, "r_process")) return(FALSE)
   !process$is_alive()
