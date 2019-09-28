@@ -1,7 +1,6 @@
 #' @importFrom future FutureError
 waitForWorker <- local({
   FutureRegistry <- import_future("FutureRegistry")
-  mdebug <- import_future("mdebug")
   
   function(type,
            workers,
@@ -42,7 +41,7 @@ waitForWorker <- local({
       finished <- (used < workers)
       if (finished) break
   
-      if (debug) mdebug("Poll #%d (%s): usedWorkers() = %d, workers = %d", iter, format(round(dt, digits = 2L)), used, workers)
+      if (debug) mdebugf("Poll #%d (%s): usedWorkers() = %d, workers = %d", iter, format(round(dt, digits = 2L)), used, workers)
   
       ## Wait
       Sys.sleep(interval)

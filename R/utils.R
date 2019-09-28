@@ -40,20 +40,36 @@ capture_output <- function(expr, envir = parent.frame(), ...) {
 
 printf <- function(...) cat(sprintf(...))
 
-mcat <- function(...) message(..., appendLF = FALSE)
+now <- function(x = Sys.time(), format = "[%H:%M:%OS3] ") {
+  ## format(x, format = format) ## slower
+  format(as.POSIXlt(x, tz = ""), format = format)
+}
 
-mprintf <- function(...) message(sprintf(...), appendLF = FALSE)
+mdebug <- function(..., debug = getOption("future.debug", FALSE)) {
+  if (!debug) return()
+  message(now(), ...)
+}
+
+mdebugf <- function(..., appendLF = TRUE,
+                    debug = getOption("future.debug", FALSE)) {
+  if (!debug) return()
+  message(now(), sprintf(...), appendLF = appendLF)
+}
+
+mcat <- function(...) message(now(), ..., appendLF = FALSE)
+
+mprintf <- function(...) message(now(), sprintf(...), appendLF = FALSE)
 
 mprint <- function(...) {
   bfr <- capture_output(print(...))
-  bfr <- paste(c(bfr, ""), collapse = "\n")
+  bfr <- paste(now(), c(bfr, ""), sep = "", collapse = "\n")
   message(bfr, appendLF = FALSE)
 }
 
 #' @importFrom utils str
 mstr <- function(...) {
   bfr <- capture_output(str(...))
-  bfr <- paste(c(bfr, ""), collapse = "\n")
+  bfr <- paste(now(), c(bfr, ""), sep = "", collapse = "\n")
   message(bfr, appendLF = FALSE)
 }
 
