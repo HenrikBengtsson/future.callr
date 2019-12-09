@@ -4,10 +4,13 @@
 \alias{await.CallrFuture}
 \title{Awaits the result of a callr future}
 \usage{
-\method{await}{CallrFuture}(future,
+\method{await}{CallrFuture}(
+  future,
   timeout = getOption("future.wait.timeout", 30 * 24 * 60 * 60),
   delta = getOption("future.wait.interval", 1),
-  alpha = getOption("future.wait.alpha", 1.01), ...)
+  alpha = getOption("future.wait.alpha", 1.01),
+  ...
+)
 }
 \arguments{
 \item{future}{The future.}

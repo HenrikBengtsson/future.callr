@@ -14,5 +14,8 @@
 #' }
 #'
 #' @docType package
+#' @aliases future.callr-package
 #' @name future.callr
 NULL
+
+
