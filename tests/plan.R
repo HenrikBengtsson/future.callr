@@ -16,7 +16,7 @@ for (type in c("callr")) {
   mprintf("*** plan('%s') ...", type)
 
   plan(type)
-  stopifnot(inherits(plan(), "callr"))
+  stopifnot(inherits(plan("next"), "callr"))
 
   a <- 0
   f <- future({
