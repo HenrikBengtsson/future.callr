@@ -34,17 +34,27 @@ matrix:
       r: oldrel
       before_install:
         - Rscript -e 'c(physical = parallel::detectCores(logical = FALSE), logical = parallel::detectCores())'
-        - Rscript -e 'install.packages("future", type = "source")'
     - os: osx
       r: release
       before_install:
         - Rscript -e 'c(physical = parallel::detectCores(logical = FALSE), logical = parallel::detectCores())'
-        - Rscript -e 'install.packages("future", type = "source")'
+    - os: linux
+      r: release
+      r_github_packages:
+        - HenrikBengtsson/future.tests
+      script:
+        - R CMD build --no-build-vignettes --no-manual .
+        - R CMD INSTALL *.tar.gz
+      after_success:
+        - Rscript -e future.tests::check --args --test-plan=future.callr::callr
+      env: NB='w/ future.tests' ## Just a label
     - os: linux
       r: release
       r_packages:
         - covr
       r_check_args: --no-codoc --no-examples --no-tests --ignore-vignettes
+      script:
+        - R CMD build --no-build-vignettes --no-manual .
       after_success:
         - Rscript -e 'covr::codecov(quiet=FALSE)'
       env: NB='w/ covr' ## Just a label
