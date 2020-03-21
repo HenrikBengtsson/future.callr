@@ -6,6 +6,8 @@
 .check
 .devel
 .test
+.local
+.make/
 *.o
 *.dll
 *.Rout
