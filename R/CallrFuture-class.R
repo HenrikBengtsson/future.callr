@@ -37,8 +37,22 @@ CallrFuture <- function(expr = NULL, envir = parent.frame(),
                         ...) {
   if (substitute) expr <- substitute(expr)
 
-  if (!is.null(label)) label <- as.character(label)
+  ## Record globals
+  gp <- getGlobalsAndPackages(expr, envir = envir, globals = globals)
 
+  future <- MultiprocessFuture(expr = gp$expr, envir = envir,
+                               substitute = FALSE,
+                               globals = gp$globals,
+                               packages = unique(c(packages, gp$packages)),
+                               label = label, ...)
+
+  future <- as_CallrFuture(future, workers = workers)
+  
+  future
+}
+
+
+as_CallrFuture <- function(future, workers = NULL, ...) {
   if (is.function(workers)) workers <- workers()
   if (!is.null(workers)) {
     stop_if_not(length(workers) >= 1)
@@ -48,26 +62,14 @@ CallrFuture <- function(expr = NULL, envir = parent.frame(),
       stop("Argument 'workers' should be numeric: ", mode(workers))
     }
   }
-
-  ## Record globals
-  gp <- getGlobalsAndPackages(expr, envir = envir, globals = globals)
-
-  ## Create CallrFuture object
-  future <- MultiprocessFuture(expr = gp$expr, envir = envir,
-                               substitute = FALSE, workers = workers,
-                               label = label, version = "1.8", ...)
-  future$.callResult <- TRUE
-
-  future$globals <- gp$globals
-  future$packages <- unique(c(packages, gp$packages))
-  future$state <- "created"
+  future$workers <- workers
 
   future <- structure(future, class = c("CallrFuture", class(future)))
 
   future
 }
 
-
+                                
 #' Prints a callr future
 #'
 #' @param x An CallrFuture object
