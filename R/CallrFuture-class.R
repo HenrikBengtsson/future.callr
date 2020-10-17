@@ -189,6 +189,7 @@ run.CallrFuture <- local({
     globals <- future$globals
     
     ## Make a callr::r_bg()-compatible function
+    fasten <- NULL ## To please R CMD check
     func <- eval(bquote(function(...) {
       local({
         fasten <- base::attach ## To please R CMD check
