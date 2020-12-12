@@ -1,9 +1,11 @@
 Package: future.callr
 =====================
 
-Version: 0.5.0-9000 [2020-01-02]
+Version: 0.5.0-9000 [2020-12-11]
 
- * ...
+NEW FEATURES:
+
+ * Add nbrOfFreeWorkers().
 
 
 Version: 0.5.0 [2019-09-27]
