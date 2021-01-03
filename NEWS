@@ -3,9 +3,17 @@ Package: future.callr
 
 Version: 0.6.0 [2021-01-02]
 
+SIGNIFICANT CHANGES:
+
+ * Removed S3 generic function await(), which was used for internal purposes.
+
 NEW FEATURES:
 
  * Add nbrOfFreeWorkers().
+
+DEPRECATED AND DEFUNCT:
+
+ * Removed S3 generic function await(), which was used for internal purposes.
 
 
 Version: 0.5.0 [2019-09-27]

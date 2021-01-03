@@ -1,50 +1,25 @@
-# CRAN submission future.callr 0.5.0
+# CRAN submission future.callr 0.6.0
 
-on 2019-09-27
+on 2021-01-04
 
-I've verified that this submission causes no issues for the 1 reverse package dependency available on CRAN.
+I've verified this submission have no negative impact on any of the 5 reverse package dependencies available on CRAN.
 
-Thanks in advance.
+Thank you
 
 
 ## Notes not sent to CRAN
 
-### R CMD check --as-cran validation
+### R CMD check validation
 
 The package has been verified using `R CMD check --as-cran` on:
 
-* Platform x86_64-apple-darwin15.6.0 (64-bit) [Travis CI]:
-  - R version 3.5.3 (2017-01-27)
-  - R version 3.6.1 (2019-07-05)
+| R version | GitHub Actions | Travis | AppVeyor | R-hub | win-builder |
+| --------- | -------------- | ------ | ---------| ----- | ----------- |
+| 3.3.x     | L              |        |          |       |             |
+| 3.4.x     | L              |        |          |       |             |
+| 3.5.x     | L              |        |          |       |             |
+| 3.6.x     | L              | L M    |          | L     |             |
+| 4.0.x     | L M W          | L M    | W        |     S | W           |
+| devel     | L   W          | L      | W        | L W   | W           |
 
-* Platform x86_64-unknown-linux-gnu (64-bit) [Travis CI]:
-  - R version 3.5.3 (2017-01-27)
-  - R version 3.6.1 (2019-07-05)
-  - R Under development (unstable) (2019-09-27 r77229)
-
-* Platform x86_64-pc-linux-gnu (64-bit) [r-hub]:
-  - R version 3.6.1 (2019-07-05)
-  - R Under development (unstable) (2019-09-22 r77201)
-  
-* Platform x86_64-pc-linux-gnu (64-bit):
-  - R version 3.2.0 (2015-04-16)
-  - R version 3.4.0 (2017-04-21)
-  - R version 3.5.0 (2018-04-23)
-  - R version 3.6.1 Patched (2019-09-12 r77183)
-
-* Platform i386-pc-solaris2.10 (32-bit):
-  - R version 3.5.0 Patched (2018-04-30 r74674)
-
-* Platform i386-w64-mingw32 (32-bit) [Appveyor CI]:
-  - R Under development (unstable) (2019-09-26 r77224)
-
-* Platform x86_64-w64-mingw32 (64-bit) [r-hub]:
-  - R Under development (unstable) (2019-09-18 r77193)
-
-* Platform x86_64-w64-mingw32/x64 (64-bit) [Appveyor CI]:
-  - R version 3.6.1 (2019-07-05)
-  - R Under development (unstable) (2019-09-26 r77224)
-
-* Platform x86_64-w64-mingw32/x64 (64-bit) [win-builder]:
-  - R version 3.6.1 (2019-07-05)
-  - R Under development (unstable) (2019-09-27 r77229)
+*Legend: OS: L = Linux, S = Solaris, M = macOS, W = Windows*

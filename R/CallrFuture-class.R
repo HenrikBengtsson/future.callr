@@ -225,35 +225,9 @@ run.CallrFuture <- local({
 })
 
 
-await <- function(...) UseMethod("await")
-
-#' Awaits the result of a callr future
-#'
-#' @param future The future.
-#' 
-#' @param timeout Total time (in seconds) waiting before generating an error.
-#' 
-#' @param delta The number of seconds to wait between each poll.
-#' 
-#' @param alpha A factor to scale up the waiting time in each iteration such
-#' that the waiting time in the k:th iteration is `alpha ^ k * delta`.
-#' 
-#' @param \ldots Not used.
-#'
-#' @return The FutureResult of the evaluated expression.
-#' If an error occurs, an informative Exception is thrown.
-#'
-#' @details
-#' Note that `await()` should only be called once, because
-#' after being called the actual asynchronous future may be removed
-#' and will no longer available in subsequent calls.  If called
-#' again, an error may be thrown.
-#'
-#' @export
 #' @importFrom utils tail
 #' @importFrom future FutureError FutureWarning
-#' @keywords internal
-await.CallrFuture <- local({
+await <- local({
   FutureRegistry <- import_future("FutureRegistry")
 
   function(future, timeout = getOption("future.wait.timeout", 30*24*60*60),
