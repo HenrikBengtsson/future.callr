@@ -1,24 +1,22 @@
-# SpaDES.core
+# iml
 
 <details>
 
-* Version: 0.2.7
-* Source code: https://github.com/cran/SpaDES.core
-* URL: https://spades-core.predictiveecology.org/, https://github.com/PredictiveEcology/SpaDES.core
-* BugReports: https://github.com/PredictiveEcology/SpaDES.core/issues
-* Date/Publication: 2019-11-25 17:00:06 UTC
-* Number of recursive dependencies: 170
+* Version: 0.10.1
+* GitHub: https://github.com/christophM/iml
+* Source code: https://github.com/cran/iml
+* Date/Publication: 2020-09-24 12:30:14 UTC
+* Number of recursive dependencies: 159
 
-Run `revdep_details(,"SpaDES.core")` for more info
+Run `revdep_details(, "iml")` for more info
 
 </details>
 
 ## In both
 
-*   checking whether package ‘SpaDES.core’ can be installed ... WARNING
+*   checking dependencies in R code ... NOTE
     ```
-    Found the following significant warnings:
-      Warning: no DISPLAY variable so Tk is not available
-    See ‘/home/hb/repositories/future.callr/revdep/checks/SpaDES.core/new/SpaDES.core.Rcheck/00install.out’ for details.
+    Namespace in Imports field not imported from: ‘keras’
+      All declared Imports should be used.
     ```
 
