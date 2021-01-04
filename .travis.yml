@@ -23,28 +23,36 @@ matrix:
     - os: linux
       r: devel
       env:
-      - R_KEEP_PKG_SOURCE=yes
-      - _R_S3_METHOD_LOOKUP_BASEENV_AFTER_GLOBALENV_=true
-      - _R_S3_METHOD_LOOKUP_USE_TOPENV_AS_DEFENV_=true
-      - _R_CHECK_CONNECTIONS_LEFT_OPEN_=true
-      - _R_CHECK_LENGTH_1_CONDITION_=true
-      - _R_CHECK_LENGTH_1_LOGIC2_=true
+        - R_KEEP_PKG_SOURCE=yes
+        - _R_S3_METHOD_LOOKUP_BASEENV_AFTER_GLOBALENV_=true
+        - _R_S3_METHOD_LOOKUP_USE_TOPENV_AS_DEFENV_=true
+        - _R_CHECK_CONNECTIONS_LEFT_OPEN_=true
+        - _R_CHECK_LENGTH_1_CONDITION_=true
+        - _R_CHECK_LENGTH_1_LOGIC2_=true
+        - _R_CLASS_MATRIX_ARRAY_=true
     - os: osx
       r: oldrel
       before_install:
         - Rscript -e 'c(physical = parallel::detectCores(logical = FALSE), logical = parallel::detectCores())'
-        - Rscript -e 'install.packages("future", type = "source")'
     - os: osx
       r: release
       before_install:
         - Rscript -e 'c(physical = parallel::detectCores(logical = FALSE), logical = parallel::detectCores())'
-        - Rscript -e 'install.packages("future", type = "source")'
+    - os: linux
+      r: release
+      r_packages:
+        - future.tests
+      script:
+        - R CMD build --no-build-vignettes --no-manual .
+        - R CMD INSTALL *.tar.gz
+        - Rscript -e future.tests::check --args --test-plan=future.callr::callr
+      env: NB='w/ future.tests' ## Just a label
     - os: linux
       r: release
       r_packages:
         - covr
-      r_check_args: --no-codoc --no-examples --no-tests --ignore-vignettes
-      after_success:
+      script:
+        - R CMD build --no-build-vignettes --no-manual .
         - Rscript -e 'covr::codecov(quiet=FALSE)'
       env: NB='w/ covr' ## Just a label
     - os: linux

@@ -1,8 +1,8 @@
 Package: future.callr
-Version: 0.5.0
+Version: 0.6.0
 Depends:
     R (>= 3.2.0),
-    future (>= 1.14.0)
+    future (>= 1.21.0)
 Imports:
     callr
 Suggests:
@@ -20,5 +20,5 @@ License: LGPL (>= 2.1)
 LazyLoad: TRUE
 URL: https://github.com/HenrikBengtsson/future.callr
 BugReports: https://github.com/HenrikBengtsson/future.callr/issues
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)

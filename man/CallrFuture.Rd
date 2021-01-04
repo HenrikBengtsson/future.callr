@@ -5,9 +5,16 @@
 \alias{run.CallrFuture}
 \title{A callr future is a future whose value will be resolved via callr}
 \usage{
-CallrFuture(expr = NULL, envir = parent.frame(), substitute = TRUE,
-  globals = TRUE, packages = NULL, label = NULL, workers = NULL,
-  ...)
+CallrFuture(
+  expr = NULL,
+  envir = parent.frame(),
+  substitute = TRUE,
+  globals = TRUE,
+  packages = NULL,
+  label = NULL,
+  workers = NULL,
+  ...
+)
 }
 \arguments{
 \item{expr}{The \R expression to be evaluated.}
@@ -31,7 +38,7 @@ globals are used as is.}
 \item{workers}{(optional) The maximum number of workers the callr
 backend may use at any time.}
 
-\item{\ldots}{Additional arguments passed to \code{\link[future:MultiprocessFuture]{future::MultiprocessFuture()}}.}
+\item{\ldots}{Additional arguments passed to \code{\link[future:MultiprocessFuture-class]{future::MultiprocessFuture()}}.}
 }
 \value{
 A CallrFuture object

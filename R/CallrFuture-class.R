@@ -37,8 +37,22 @@ CallrFuture <- function(expr = NULL, envir = parent.frame(),
                         ...) {
   if (substitute) expr <- substitute(expr)
 
-  if (!is.null(label)) label <- as.character(label)
+  ## Record globals
+  gp <- getGlobalsAndPackages(expr, envir = envir, globals = globals)
 
+  future <- MultiprocessFuture(expr = gp$expr, envir = envir,
+                               substitute = FALSE,
+                               globals = gp$globals,
+                               packages = unique(c(packages, gp$packages)),
+                               label = label, ...)
+
+  future <- as_CallrFuture(future, workers = workers)
+  
+  future
+}
+
+
+as_CallrFuture <- function(future, workers = NULL, ...) {
   if (is.function(workers)) workers <- workers()
   if (!is.null(workers)) {
     stop_if_not(length(workers) >= 1)
@@ -48,26 +62,14 @@ CallrFuture <- function(expr = NULL, envir = parent.frame(),
       stop("Argument 'workers' should be numeric: ", mode(workers))
     }
   }
-
-  ## Record globals
-  gp <- getGlobalsAndPackages(expr, envir = envir, globals = globals)
-
-  ## Create CallrFuture object
-  future <- MultiprocessFuture(expr = gp$expr, envir = envir,
-                               substitute = FALSE, workers = workers,
-                               label = label, version = "1.8", ...)
-  future$.callResult <- TRUE
-
-  future$globals <- gp$globals
-  future$packages <- unique(c(packages, gp$packages))
-  future$state <- "created"
+  future$workers <- workers
 
   future <- structure(future, class = c("CallrFuture", class(future)))
 
   future
 }
 
-
+                                
 #' Prints a callr future
 #'
 #' @param x An CallrFuture object
@@ -187,6 +189,7 @@ run.CallrFuture <- local({
     globals <- future$globals
     
     ## Make a callr::r_bg()-compatible function
+    fasten <- NULL ## To please R CMD check
     func <- eval(bquote(function(...) {
       local({
         fasten <- base::attach ## To please R CMD check
@@ -222,35 +225,9 @@ run.CallrFuture <- local({
 })
 
 
-await <- function(...) UseMethod("await")
-
-#' Awaits the result of a callr future
-#'
-#' @param future The future.
-#' 
-#' @param timeout Total time (in seconds) waiting before generating an error.
-#' 
-#' @param delta The number of seconds to wait between each poll.
-#' 
-#' @param alpha A factor to scale up the waiting time in each iteration such
-#' that the waiting time in the k:th iteration is `alpha ^ k * delta`.
-#' 
-#' @param \ldots Not used.
-#'
-#' @return The FutureResult of the evaluated expression.
-#' If an error occurs, an informative Exception is thrown.
-#'
-#' @details
-#' Note that `await()` should only be called once, because
-#' after being called the actual asynchronous future may be removed
-#' and will no longer available in subsequent calls.  If called
-#' again, an error may be thrown.
-#'
-#' @export
 #' @importFrom utils tail
 #' @importFrom future FutureError FutureWarning
-#' @keywords internal
-await.CallrFuture <- local({
+await <- local({
   FutureRegistry <- import_future("FutureRegistry")
 
   function(future, timeout = getOption("future.wait.timeout", 30*24*60*60),
