@@ -95,6 +95,3 @@ demo("mandelbrot", package = "future", ask = FALSE)
 [future.callr]: https://cran.r-project.org/package=future.callr
 [future.apply]: https://cran.r-project.org/package=future.apply
 [doFuture]: https://cran.r-project.org/package=doFuture
-
----
-Copyright Henrik Bengtsson, 2017-2019
