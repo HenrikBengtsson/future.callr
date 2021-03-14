@@ -164,7 +164,16 @@ run.CallrFuture <- local({
 
   ## MEMOIZATION
   cmdargs <- eval(formals(r_bg)$cmdargs)
-  
+
+  fasten <- NULL ## To please R CMD check
+  tmpl_expr <- bquote_compile(function(...) {
+    local({
+      fasten <- base::attach ## To please R CMD check
+      fasten(list(...), pos = 2L, name = "r_bg_arguments")
+    })
+    .(expr)
+  })
+
   function(future, ...) {
     if (future$state != "created") {
       label <- future$label
@@ -189,14 +198,8 @@ run.CallrFuture <- local({
     globals <- future$globals
     
     ## Make a callr::r_bg()-compatible function
-    fasten <- NULL ## To please R CMD check
-    func <- eval(bquote(function(...) {
-      local({
-        fasten <- base::attach ## To please R CMD check
-        fasten(list(...), pos = 2L, name = "r_bg_arguments")
-      })
-      .(expr)
-    }), enclos = baseenv())
+    expr <- bquote_apply(tmpl_expr)
+    func <- eval(expr, enclos = baseenv())
   
     ## 1. Wait for an available worker
     waitForWorker(type = "callr", workers = future$workers)
