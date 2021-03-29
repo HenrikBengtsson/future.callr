@@ -9,8 +9,7 @@
 
 </div>
 
-
-# future.callr: A Future API for Parallel Processing using 'callr'
+# future.callr: A Future API for Parallel Processing using 'callr' 
 
 ## Introduction
 
