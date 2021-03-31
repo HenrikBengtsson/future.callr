@@ -134,6 +134,51 @@ The Future API is defined by the future package." />
      
   </a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Packages
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="https://BiocParallel.FutureParam.futureverse.org">BiocParallel.FutureParam</a>
+    </li>
+    <li>
+      <a href="https://doFuture.futureverse.org">doFuture</a>
+    </li>
+    <li>
+      <a href="https://davisvaughan.github.io/furrr">furrr</a>
+    </li>
+    <li>
+      <a href="https://future.futureverse.org">future</a>
+    </li>
+    <li>
+      <a href="https://future.apply.futureverse.org">future.apply</a>
+    </li>
+    <li>
+      <a href="https://future.batchtools.futureverse.org">future.batchtools</a>
+    </li>
+    <li>
+      <a href="https://future.callr.futureverse.org">future.callr</a>
+    </li>
+    <li>
+      <a href="https://future.tests.futureverse.org">future.tests</a>
+    </li>
+    <li>
+      <a href="https://globals.futureverse.org">globals</a>
+    </li>
+    <li>
+      <a href="https://listenv.futureverse.org">listenv</a>
+    </li>
+    <li>
+      <a href="https://parallelly.futureverse.org">parallelly</a>
+    </li>
+    <li>
+      <a href="https://progressr.futureverse.org">progressr</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="https://github.com/HenrikBengtsson/future.callr/">
     <span class="fab fa-github fa-lg"></span>
@@ -269,7 +314,7 @@ select the type of future you wish to use, e.g. <code>plan(callr)</code>.</p>
 #&gt; &gt; repeat {
 #&gt; +   counts &lt;- plot_what_is_done(counts)
 #&gt; +   if (!any(sapply(counts, FUN = inherits, "Future"))) break
-#&gt; + }</div><div class='output co'>#&gt; <span class='message'>Plotting tile #1 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #1 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #2 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #2 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #3 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #3 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #4 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #4 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #7 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #7 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #5 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #5 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #8 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #8 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #6 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #6 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #9 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #9 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; 
+#&gt; + }</div><div class='output co'>#&gt; <span class='message'>Plotting tile #1 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #1 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #2 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #2 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #3 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #3 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #4 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #4 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #5 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #5 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #7 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #7 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #8 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #8 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #6 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #6 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; <span class='message'>Plotting tile #9 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'>Calculating tile #9 of 9 ...</span></div><div class='output co'>#&gt; <span class='message'> done</span></div><div class='output co'>#&gt; 
 #&gt; &gt; close.screen()
 #&gt; [1] 1 2 3 4 5 6 7 8 9
 #&gt; 
