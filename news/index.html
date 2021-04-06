@@ -207,6 +207,13 @@
 <h1 class="page-header" data-toc-text="0.6.0-9000">
 <a href="#future-callr-0-6-0-9000" class="anchor"></a>future.callr 0.6.0-9000<small> Unreleased </small>
 </h1>
+<div id="bug-fixes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h3>
+<ul>
+<li>A ‘callr’ future that produces a large amount of standard error (stderr) could stall forever when collecting its results. The exact reason is unknown but the symptom is currently that the underlying ‘processx’ process never terminates, resulting in a never-ending wait for the results. Since futures don’t capture stderr in other backends, the workaround for now is to discard all stderr output. Note that messages, warnings, etc. are still captured and relayed.</li>
+</ul>
+</div>
 </div>
     <div id="future-callr-0-6-0" class="section level1">
 <h1 class="page-header" data-toc-text="0.6.0">
@@ -264,9 +271,9 @@
 <li>Now the future label is exposed in the process information (e.g. top) via a dummy –future-label=“&lt;label&gt;” argument in the callr system call.</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level3">
+<div id="bug-fixes-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h3>
+<a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h3>
 <ul>
 <li>plan(callr, workers) where ‘workers’ being a function would result in an error when a future was created.</li>
 </ul>
@@ -283,9 +290,9 @@
 <li>The callr backend supports the handling of the standard output as implemented in future (&gt;= 1.9.0).</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level3">
+<div id="bug-fixes-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h3>
+<a href="#bug-fixes-2" class="anchor"></a>Bug Fixes</h3>
 <ul>
 <li>Callr futures did not protect against recursive parallelism, e.g. with plan(list(callr, callr)) the second layer of futures would use the same number of workers as the first layer.</li>
 </ul>
@@ -310,9 +317,9 @@
 <li>Prepared code to gather a richer set of results from futures.</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level3">
+<div id="bug-fixes-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug Fixes</h3>
+<a href="#bug-fixes-3" class="anchor"></a>Bug Fixes</h3>
 <ul>
 <li>Callr futures did not acknowledge timeout option ‘future.wait.timeout’.</li>
 </ul>
@@ -341,9 +348,9 @@
 <h1 class="page-header" data-toc-text="0.1.1">
 <a href="#future-callr-0-1-1" class="anchor"></a>future.callr 0.1.1<small> Unreleased </small>
 </h1>
-<div id="bug-fixes-3" class="section level3">
+<div id="bug-fixes-4" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug Fixes</h3>
+<a href="#bug-fixes-4" class="anchor"></a>Bug Fixes</h3>
 <ul>
 <li>Number of workers in plan(callr, workers = n) was not respected.</li>
 </ul>
