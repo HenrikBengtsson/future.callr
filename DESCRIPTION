@@ -6,6 +6,7 @@ Depends:
 Imports:
     callr
 Suggests:
+    globals,
     future.apply,
     listenv,
     markdown,
