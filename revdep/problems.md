@@ -20,3 +20,24 @@ Run `revdep_details(, "iml")` for more info
       All declared Imports should be used.
     ```
 
+# targets
+
+<details>
+
+* Version: 0.4.2
+* GitHub: https://github.com/ropensci/targets
+* Source code: https://github.com/cran/targets
+* Date/Publication: 2021-04-30 08:50:02 UTC
+* Number of recursive dependencies: 135
+
+Run `revdep_details(, "targets")` for more info
+
+</details>
+
+## In both
+
+*   checking package dependencies ... NOTE
+    ```
+    Package suggested but not available for checking: ‘arrow’
+    ```
+
