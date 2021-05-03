@@ -45,7 +45,7 @@ for (strategy in c("callr")) {
       sum_fcn(1:2, 3)
     }, error = identity)
     print(y)
-    if (name %in% c("D")) {
+    if (name %in% c("D") && packageVersion("future") <= "1.21.0") {
       stopifnot(inherits(y, "error"))
     } else {
       stopifnot(y == 6)
