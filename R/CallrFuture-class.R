@@ -166,11 +166,14 @@ run.CallrFuture <- local({
   cmdargs <- eval(formals(r_bg)$cmdargs)
 
   fasten <- NULL ## To please R CMD check
-  tmpl_expr <- bquote_compile(function(...) {
-    local({
-      fasten <- base::attach ## To please R CMD check
-      fasten(list(...), pos = 2L, name = "r_bg_arguments")
-    })
+  tmpl_expr <- bquote_compile(function(globals) {
+    if (length(globals) > 0) {
+      local({
+        fasten <- base::attach ## To please R CMD check
+        fasten(globals, pos = 2L, name = "r_bg_arguments")
+      })
+    }
+    rm(list = "globals")
     .(expr)
   })
 
@@ -225,7 +228,7 @@ run.CallrFuture <- local({
       ## '-f a-file.R' after these. /HB 2018-11-10
       cmdargs <- c(cmdargs, sprintf("--future-label=%s", shQuote(future$label)))
     }
-    future$process <- r_bg(func, args = globals, stdout = stdout, stderr = stderr, cmdargs = cmdargs)
+    future$process <- r_bg(func, args = list(globals = globals), stdout = stdout, stderr = stderr, cmdargs = cmdargs)
     if (debug) mdebugf("Launched future (PID=%d)", future$process$get_pid())
   
     ## 3. Running
