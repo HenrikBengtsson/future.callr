@@ -30,14 +30,14 @@ matrix:
         - _R_CHECK_LENGTH_1_CONDITION_=true
         - _R_CHECK_LENGTH_1_LOGIC2_=true
         - _R_CLASS_MATRIX_ARRAY_=true
-    - os: osx
-      r: oldrel
-      before_install:
-        - Rscript -e 'c(physical = parallel::detectCores(logical = FALSE), logical = parallel::detectCores())'
-    - os: osx
-      r: release
-      before_install:
-        - Rscript -e 'c(physical = parallel::detectCores(logical = FALSE), logical = parallel::detectCores())'
+#    - os: osx
+#      r: oldrel
+#      before_install:
+#        - Rscript -e 'c(physical = parallel::detectCores(logical = FALSE), logical = parallel::detectCores())'
+#    - os: osx
+#      r: release
+#      before_install:
+#        - Rscript -e 'c(physical = parallel::detectCores(logical = FALSE), logical = parallel::detectCores())'
     - os: linux
       r: release
       r_packages:

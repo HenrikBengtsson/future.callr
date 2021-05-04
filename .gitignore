@@ -19,3 +19,4 @@
 revdep/data.sqlite
 revdep/checks/*
 revdep/library/*
+docs/

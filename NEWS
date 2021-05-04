@@ -1,6 +1,19 @@
 Package: future.callr
 =====================
 
+Version: 0.6.1 [2021-05-03]
+
+BUG FIXES:
+
+ * A 'callr' future that produces a large amount of standard error (stderr)
+   could stall forever when collecting its results.  The exact reason is
+   unknown but the symptom is currently that the underlying 'processx' process
+   never terminates, resulting in a never-ending wait for the results.  Since
+   futures don't capture stderr in other backends, the workaround for now is
+   to discard all stderr output.  Note that messages, warnings, etc. are still
+   captured and relayed.
+ 
+
 Version: 0.6.0 [2021-01-02]
 
 SIGNIFICANT CHANGES:

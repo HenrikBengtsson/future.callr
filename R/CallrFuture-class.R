@@ -164,7 +164,19 @@ run.CallrFuture <- local({
 
   ## MEMOIZATION
   cmdargs <- eval(formals(r_bg)$cmdargs)
-  
+
+  fasten <- NULL ## To please R CMD check
+  tmpl_expr <- bquote_compile(function(globals) {
+    if (length(globals) > 0) {
+      local({
+        fasten <- base::attach ## To please R CMD check
+        fasten(globals, pos = 2L, name = "r_bg_arguments")
+      })
+    }
+    rm(list = "globals")
+    .(expr)
+  })
+
   function(future, ...) {
     if (future$state != "created") {
       label <- future$label
@@ -189,14 +201,8 @@ run.CallrFuture <- local({
     globals <- future$globals
     
     ## Make a callr::r_bg()-compatible function
-    fasten <- NULL ## To please R CMD check
-    func <- eval(bquote(function(...) {
-      local({
-        fasten <- base::attach ## To please R CMD check
-        fasten(list(...), pos = 2L, name = "r_bg_arguments")
-      })
-      .(expr)
-    }), enclos = baseenv())
+    expr <- bquote_apply(tmpl_expr)
+    func <- eval(expr, enclos = baseenv())
   
     ## 1. Wait for an available worker
     waitForWorker(type = "callr", workers = future$workers)
@@ -206,7 +212,15 @@ run.CallrFuture <- local({
   
     ## Discard standard output? (as soon as possible)
     stdout <- if (isTRUE(stdout)) "|" else NULL
-    
+
+    ## Discard standard error
+    ## WORKAROUND: https://github.com/HenrikBengtsson/future.callr/issues/14
+    ## For unknown reasons, process$is_alive() will always return TRUE if
+    ## we capture stderr, which means that await() will never return.
+    ## Since we don't capture and relay stderr in other backends, it's safe
+    ## to discard all standard error output. /HB 2021-04-05
+    stderr <- NULL
+
     ## Launch
     if (!is.null(future$label)) {
       ## Ideally this comes after a '--args' argument to R, but that is
@@ -214,7 +228,7 @@ run.CallrFuture <- local({
       ## '-f a-file.R' after these. /HB 2018-11-10
       cmdargs <- c(cmdargs, sprintf("--future-label=%s", shQuote(future$label)))
     }
-    future$process <- r_bg(func, args = globals, stdout = stdout, cmdargs = cmdargs)
+    future$process <- r_bg(func, args = list(globals = globals), stdout = stdout, stderr = stderr, cmdargs = cmdargs)
     if (debug) mdebugf("Launched future (PID=%d)", future$process$get_pid())
   
     ## 3. Running
@@ -309,10 +323,15 @@ await <- local({
     prototype_fields <- NULL
     
     ## Has 'stderr' already been collected (by the future package)?
-    if (is.null(result$stderr)) {
+    ## Comment: This is unlikely to ever happen because you cannot
+    ## capture stderr reliably in R, cf.
+    ## https://github.com/HenrikBengtsson/Wishlist-for-R/issues/55
+    ## /2021-04-05
+    if (is.null(result$stderr) && FALSE) {
       prototype_fields <- c(prototype_fields, "stderr")
       result$stderr <- tryCatch({
-        process$read_all_error()
+        res <- process$read_all_error()
+        res
       }, error = function(ex) {
         label <- future$label
         if (is.null(label)) label <- "<none>"
