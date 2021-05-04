@@ -1,9 +1,9 @@
 pandoc: 1.19.2.4
 pkgdown: 1.6.1.9001
-pkgdown_sha: c6bd498aa2e0ae2e15e267891aaa69c6c15ab79f
+pkgdown_sha: 8e0838e273462cec420dfa20f240c684a33425d9
 articles:
   future.callr: future.callr.html
-last_built: 2021-04-07T18:36Z
+last_built: 2021-05-04T04:56Z
 urls:
   reference: https://future.callr.futureverse.org/reference
   article: https://future.callr.futureverse.org/articles
