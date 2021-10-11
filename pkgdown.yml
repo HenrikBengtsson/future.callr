@@ -3,7 +3,7 @@ pkgdown: 1.9000.9000.9000
 pkgdown_sha: 31939caeb87846bc75e0cb5eccc0d610405c4580
 articles:
   future.callr: future.callr.html
-last_built: 2021-10-11T02:28Z
+last_built: 2021-10-11T20:30Z
 urls:
   reference: https://future.callr.futureverse.org/reference
   article: https://future.callr.futureverse.org/articles
