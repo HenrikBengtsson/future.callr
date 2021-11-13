@@ -163,7 +163,7 @@ run.CallrFuture <- local({
   assertOwner <- import_future("assertOwner")
 
   ## MEMOIZATION
-  cmdargs <- eval(formals(r_bg)$cmdargs)
+  cmdargs <- NULL
 
   fasten <- NULL ## To please R CMD check
   tmpl_expr <- bquote_compile(function(globals) {
@@ -178,6 +178,11 @@ run.CallrFuture <- local({
   })
 
   function(future, ...) {
+    ## Memoization
+    if (identical(cmdargs, NULL)) {
+      cmdargs <- eval(formals(r_bg)$cmdargs)
+    }
+
     if (future$state != "created") {
       label <- future$label
       if (is.null(label)) label <- "<none>"
@@ -300,15 +305,22 @@ await <- local({
     ## NOTE: This was observed, somewhat randomly, on R-devel (2018-04-20 r74620)
     ## on Linux (local and on Travis) with tests/demo.R /HB 2018-04-27
     if (debug) mdebug("- callr:::get_result() ...")
-    for (ii in 1:5) {
+    for (ii in 4:0) {
       result <- tryCatch({
         process$get_result()
       }, error = identity)
       if (!inherits(result, "error")) break
-      if (debug) mdebug("- process$get_result() failed; will retry after 0.1s")
-      Sys.sleep(0.1)
+      if (ii > 0L) {
+        if (debug) mdebug("- process$get_result() failed; will retry after 0.1s")
+        Sys.sleep(0.1)
+      }
     }
-    if (inherits(result, "error")) result <- process$get_result()
+    
+    ## Failed?
+    if (inherits(result, "error")) {
+      stop(CallrFutureError(result, future = future))
+    }
+    
     if (debug) mdebugf("- callr:::get_result() ... done (after %d attempts)", ii)
   
     if (debug) {
