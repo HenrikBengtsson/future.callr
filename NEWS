@@ -1,9 +1,12 @@
 Package: future.callr
 =====================
 
-Version: 0.6.1-9001 [2021-11-13]
+Version: 0.6.1-9002 [2021-11-13]
 
 NEW FEATURES:
+
+ * Add option to configure 'callr' futures to be "supervised" by the 'callr'
+   package when setting up the plan, i.e. plan(callr, supervise = TRUE).
 
  * Now callr-specific orchestration errors are of class CallrFutureError,
    which provides information also on the future that failed.

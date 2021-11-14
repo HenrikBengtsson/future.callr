@@ -36,3 +36,4 @@ callr <- function(expr, envir = parent.frame(), substitute = TRUE,
   future
 }
 class(callr) <- c("callr", "multiprocess", "future", "function")
+attr(callr, "tweakable") <- "supervise"

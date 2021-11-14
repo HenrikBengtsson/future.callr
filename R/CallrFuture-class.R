@@ -21,6 +21,8 @@
 #' @param workers (optional) The maximum number of workers the callr
 #' backend may use at any time.
 #'
+#' @param supervise (optional) Argument passed to [callr::r_bg()].
+#'
 #' @param \ldots Additional arguments passed to [future::MultiprocessFuture()].
 #'
 #' @return A CallrFuture object
@@ -34,6 +36,7 @@ CallrFuture <- function(expr = NULL, envir = parent.frame(),
                         globals = TRUE, packages = NULL,
                         label = NULL,
                         workers = NULL,
+                        supervise = FALSE,
                         ...) {
   if (substitute) expr <- substitute(expr)
 
@@ -46,13 +49,17 @@ CallrFuture <- function(expr = NULL, envir = parent.frame(),
                                packages = unique(c(packages, gp$packages)),
                                label = label, ...)
 
-  future <- as_CallrFuture(future, workers = workers)
+  future <- as_CallrFuture(future, workers = workers, supervise = supervise)
   
   future
 }
 
 
 as_CallrFuture <- function(future, workers = NULL, ...) {
+  args <- list(...)
+  names <- names(args)
+  stopifnot(is.character(names), all(nzchar(names)))
+  
   if (is.function(workers)) workers <- workers()
   if (!is.null(workers)) {
     stop_if_not(length(workers) >= 1)
@@ -63,7 +70,8 @@ as_CallrFuture <- function(future, workers = NULL, ...) {
     }
   }
   future$workers <- workers
-
+  for (name in names) future[[name]] <- args[[name]]
+  
   future <- structure(future, class = c("CallrFuture", class(future)))
 
   future
@@ -226,14 +234,19 @@ run.CallrFuture <- local({
     ## to discard all standard error output. /HB 2021-04-05
     stderr <- NULL
 
-    ## Launch
+    ## Add future label to process call?
     if (!is.null(future$label)) {
       ## Ideally this comes after a '--args' argument to R, but that is
       ## not possible with the current r_bg() because it will *append*
       ## '-f a-file.R' after these. /HB 2018-11-10
       cmdargs <- c(cmdargs, sprintf("--future-label=%s", shQuote(future$label)))
     }
-    future$process <- r_bg(func, args = list(globals = globals), stdout = stdout, stderr = stderr, cmdargs = cmdargs)
+
+    ## Have callr "supervise" the subprocess?
+    supervise <- future$supervise
+
+    ## Launch
+    future$process <- r_bg(func, args = list(globals = globals), stdout = stdout, stderr = stderr, cmdargs = cmdargs, supervise = supervise)
     if (debug) mdebugf("Launched future (PID=%d)", future$process$get_pid())
   
     ## 3. Running
