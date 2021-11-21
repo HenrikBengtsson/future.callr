@@ -13,6 +13,7 @@ CallrFuture(
   packages = NULL,
   label = NULL,
   workers = NULL,
+  supervise = FALSE,
   ...
 )
 }
@@ -37,6 +38,8 @@ globals are used as is.}
 
 \item{workers}{(optional) The maximum number of workers the callr
 backend may use at any time.}
+
+\item{supervise}{(optional) Argument passed to \code{\link[callr:r_bg]{callr::r_bg()}}.}
 
 \item{\ldots}{Additional arguments passed to \code{\link[future:MultiprocessFuture-class]{future::MultiprocessFuture()}}.}
 }

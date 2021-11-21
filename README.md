@@ -1,12 +1,7 @@
 
 
 <div id="badges"><!-- pkgdown markup -->
-<a href="https://CRAN.R-project.org/web/checks/check_results_future.callr.html"><img border="0" src="https://www.r-pkg.org/badges/version/future.callr" alt="CRAN check status"></a></a>
-<a href="https://github.com/HenrikBengtsson/future.callr/actions?query=workflow%3AR-CMD-check"><img border="0" src="https://github.com/HenrikBengtsson/future.callr/workflows/R-CMD-check/badge.svg?branch=develop" alt="Build status"></a></a>
-<a href="https://travis-ci.org/HenrikBengtsson/future.callr"><img border="0" src="https://travis-ci.org/HenrikBengtsson/future.callr.svg" alt="Build status"></a></a>
-<a href="https://ci.appveyor.com/project/HenrikBengtsson/future-callr"><img border="0" src="https://ci.appveyor.com/api/projects/status/github/HenrikBengtsson/future.callr?svg=true" alt="Build status"></a></a>
-<a href="https://codecov.io/gh/HenrikBengtsson/future.callr"><img border="0" src="https://codecov.io/gh/HenrikBengtsson/future.callr/branch/develop/graph/badge.svg" alt="Coverage Status"></a></a>
-
+<a href="https://CRAN.R-project.org/web/checks/check_results_future.callr.html"><img border="0" src="https://www.r-pkg.org/badges/version/future.callr" alt="CRAN check status"/></a> <a href="https://github.com/HenrikBengtsson/future.callr/actions?query=workflow%3AR-CMD-check"><img border="0" src="https://github.com/HenrikBengtsson/future.callr/actions/workflows/R-CMD-check.yaml/badge.svg?branch=develop" alt="R CMD check status"/></a>  <a href="https://github.com/HenrikBengtsson/future.callr/actions?query=workflow%3Afuture_tests"><img border="0" src="https://github.com/HenrikBengtsson/future.callr/actions/workflows/future_tests.yaml/badge.svg?branch=develop" alt="future.tests checks status"/></a>   <a href="https://app.codecov.io/gh/HenrikBengtsson/future.callr"><img border="0" src="https://codecov.io/gh/HenrikBengtsson/future.callr/branch/develop/graph/badge.svg" alt="Coverage Status"/></a> 
 </div>
 
 # future.callr: A Future API for Parallel Processing using 'callr' 
