@@ -1,8 +1,8 @@
 Package: future.callr
-Version: 0.7.0-9000
+Version: 0.7.0-9001
 Depends:
     R (>= 3.2.0),
-    future (>= 1.22.1)
+    future (>= 1.23.0)
 Imports:
     callr (>= 2.0.3)
 Suggests:

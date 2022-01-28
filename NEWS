@@ -1,9 +1,12 @@
 Package: future.callr
 =====================
 
-Version: 0.7.0-9000 [2021-11-20]
+Version: 0.7.0-9001 [2022-01-28]
 
- * ...
+NEW FEATURES:
+
+ * Now result() and value() gives a slight more informative error message
+   in case the callr process failed with a non-zero exit code.
  
 
 Version: 0.7.0 [2021-11-20]

@@ -331,7 +331,19 @@ await <- local({
     
     ## Failed?
     if (inherits(result, "error")) {
-      stop(CallrFutureError(result, future = future))
+      ex <- result
+      reason <- conditionMessage(ex)
+      
+      if (debug) mdebugf("- callr's process$get_result() produced an error: %s", reason)
+      label <- future$label
+      if (is.null(label)) label <- "<none>"
+      
+      pid <- tryCatch(process$get_pid(), error = function(e) NA_integer_)
+      exit_code <- tryCatch(process$get_exit_status(), error = function(e) NA_integer_)
+
+      msg <- sprintf("Failed to get results for %s (%s), because %s (PID %.0f) failed with exit code %d. Reason: %s", class(future)[1], label, class(process)[1], pid, exit_code, reason)
+
+      stop(CallrFutureError(msg, future = future))
     }
     
     if (debug) mdebugf("- callr:::get_result() ... done (after %d attempts)", ii)
