@@ -123,13 +123,20 @@ getExpression.CallrFuture <- function(future, mc.cores = 1L, ...) {
 #' @importFrom future resolved
 #' @keywords internal
 #' @export
-resolved.CallrFuture <- function(x, ...) {
+resolved.CallrFuture <- function(x, .signalEarly = TRUE, ...) {
   resolved <- NextMethod()
   if (resolved) return(TRUE)
   
   process <- x$process
   if (!inherits(process, "r_process")) return(FALSE)
-  !process$is_alive()
+  resolved <- !process$is_alive()
+
+  ## Signal errors early?
+  if (.signalEarly && resolved) {
+    ## Trigger a FutureError already here, if exit code != 0
+    if (process$get_exit_status() != 0L) result(x)
+  }
+  resolved
 }
 
 #' @importFrom future result UnexpectedFutureResultError
@@ -167,9 +174,6 @@ result.CallrFuture <- function(future, ...) {
 #' @S3method run CallrFuture
 #' @export
 run.CallrFuture <- local({
-  FutureRegistry <- import_future("FutureRegistry")
-  assertOwner <- import_future("assertOwner")
-
   ## MEMOIZATION
   cmdargs <- NULL
 
@@ -260,8 +264,6 @@ run.CallrFuture <- local({
 #' @importFrom utils tail
 #' @importFrom future FutureError FutureWarning
 await <- local({
-  FutureRegistry <- import_future("FutureRegistry")
-
   function(future, timeout = getOption("future.wait.timeout", 30*24*60*60),
                    delta = getOption("future.wait.interval", 1.0),
                    alpha = getOption("future.wait.alpha", 1.01),
@@ -378,20 +380,19 @@ await <- local({
 
 
 
-post_mortem_failure <- function(ex, future) {
+post_mortem_failure <- function(reason, future) {
   assert_no_references <- import_future("assert_no_references")
   summarize_size_of_globals <- import_future("summarize_size_of_globals")
 
-  stop_if_not(inherits(ex, "error"))
   stop_if_not(inherits(future, "Future"))
   
-  ## (1) Information on the future
+  ## (1) Trimmed error message
+  if (inherits(reason, "error")) reason <- conditionMessage(reason)
+
+  ## (2) Information on the future
   label <- future$label
   if (is.null(label)) label <- "<none>"
   stop_if_not(length(label) == 1L)
-
-  ## (2) Trimmed error message
-  reason <- conditionMessage(ex)
 
   ## (3) POST-MORTEM ANALYSIS:
   postmortem <- list()
