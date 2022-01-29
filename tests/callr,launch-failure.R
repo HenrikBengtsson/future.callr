@@ -7,12 +7,17 @@ message("*** callr() ...")
 
 message("- Error in ./.Rprofile causes callr process to fail")
 
-plan(callr)
+plan(callr, workers = 2L)
 
-## Create broken .Rprofile file
-tf <- file.path(tempdir(), ".Rprofile")
-cat("stop('boom')\n", file = tf)
-f <- local({ opwd <- setwd(dirname(tf)); on.exit(setwd(opwd)); future(42L) })
+## STRICTER TEST: Assert that FutureRegistry won't trigger errors
+if (packageVersion("future") >= "1.23.0-9006") {
+  for (kk in seq_len(nbrOfWorkers())) {
+    ## Create broken .Rprofile file
+    tf <- file.path(tempdir(), ".Rprofile")
+    cat("stop('boom')\n", file = tf)
+    f <- local({ opwd <- setwd(dirname(tf)); on.exit(setwd(opwd)); future(42L) })
+  }
+}
 
 tf <- file.path(tempdir(), ".Rprofile")
 cat("stop('boom')\n", file = tf)
