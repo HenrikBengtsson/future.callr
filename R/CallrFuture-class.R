@@ -331,18 +331,7 @@ await <- local({
     
     ## Failed?
     if (inherits(result, "error")) {
-      ex <- result
-      reason <- conditionMessage(ex)
-      
-      if (debug) mdebugf("- callr's process$get_result() produced an error: %s", reason)
-      label <- future$label
-      if (is.null(label)) label <- "<none>"
-      
-      pid <- tryCatch(process$get_pid(), error = function(e) NA_integer_)
-      exit_code <- tryCatch(process$get_exit_status(), error = function(e) NA_integer_)
-
-      msg <- sprintf("Failed to get results for %s (%s), because %s (PID %.0f) failed with exit code %d. Reason: %s", class(future)[1], label, class(process)[1], pid, exit_code, reason)
-
+      msg <- post_mortem_failure(result, future = future)
       stop(CallrFutureError(msg, future = future))
     }
     
@@ -386,3 +375,56 @@ await <- local({
     result
   } # await()
 })
+
+
+
+post_mortem_failure <- function(ex, future) {
+  assert_no_references <- import_future("assert_no_references")
+  summarize_size_of_globals <- import_future("summarize_size_of_globals")
+
+  stop_if_not(inherits(ex, "error"))
+  stop_if_not(inherits(future, "Future"))
+  
+  ## (1) Information on the future
+  label <- future$label
+  if (is.null(label)) label <- "<none>"
+  stop_if_not(length(label) == 1L)
+
+  ## (2) Trimmed error message
+  reason <- conditionMessage(ex)
+
+  ## (3) POST-MORTEM ANALYSIS:
+  postmortem <- list()
+                 
+  process <- future$process
+  pid <- tryCatch(process$get_pid(), error = function(e) NA_integer_)
+  start_time <- tryCatch(format(process$get_start_time(), format = "%Y-%m-%dT%H:%M:%S%z"), error = function(e) NA_character_)
+  msg2 <- sprintf("The parallel worker (PID %.0f) started at %s", pid, start_time)
+  if (process$is_alive()) {
+    msg2 <- sprintf("%s is still running", msg2)
+  } else {
+    exit_code <- tryCatch(process$get_exit_status(), error = function(e) NA_integer_)
+    msg2 <- sprintf("%s finished with exit code %.0f", msg2, exit_code)
+  }
+  postmortem$alive <- msg2
+
+  ## (c) Any non-exportable globals?
+  globals <- future[["globals"]]
+  postmortem$non_exportable <- assert_no_references(globals, action = "string")
+
+  ## (d) Size of globals
+  postmortem$global_sizes <- summarize_size_of_globals(globals)
+
+  ## (4) The final error message
+  msg <- sprintf("%s (%s) failed. The reason reported was %s",
+                 class(future)[1], label, sQuote(reason))
+  stop_if_not(length(msg) == 1L)
+  if (length(postmortem) > 0) {
+    postmortem <- unlist(postmortem, use.names = FALSE)
+    msg <- sprintf("%s. Post-mortem diagnostic: %s",
+                   msg, paste(postmortem, collapse = ". "))
+    stop_if_not(length(msg) == 1L)
+  }
+
+  msg
+} # post_mortem_failure()
