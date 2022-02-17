@@ -33,6 +33,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -45,23 +47,14 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">future.callr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0-9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0-9002</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
-</li>
-<li>
-  <a href="news/index.html">Changelog</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -75,10 +68,13 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://www.futureverse.org/">
+  <a href="https://www.futureverse.org/" class="external-link">
     <span class="fas fa-fast-backward"></span>
      
   </a>
@@ -91,57 +87,57 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="https://BiocParallel.FutureParam.futureverse.org">BiocParallel.FutureParam</a>
+      <a href="https://BiocParallel.FutureParam.futureverse.org" class="external-link">BiocParallel.FutureParam</a>
     </li>
     <li>
-      <a href="https://doFuture.futureverse.org">doFuture</a>
+      <a href="https://doFuture.futureverse.org" class="external-link">doFuture</a>
     </li>
     <li>
-      <a href="https://furrr.futureverse.org">furrr</a>
+      <a href="https://furrr.futureverse.org" class="external-link">furrr</a>
     </li>
     <li>
-      <a href="https://future.futureverse.org">future</a>
+      <a href="https://future.futureverse.org" class="external-link">future</a>
     </li>
     <li>
-      <a href="https://future.apply.futureverse.org">future.apply</a>
+      <a href="https://future.apply.futureverse.org" class="external-link">future.apply</a>
     </li>
     <li>
-      <a href="https://future.batchtools.futureverse.org">future.batchtools</a>
+      <a href="https://future.batchtools.futureverse.org" class="external-link">future.batchtools</a>
     </li>
     <li>
       <a href="https://future.callr.futureverse.org">future.callr</a>
     </li>
     <li>
-      <a href="https://future.tests.futureverse.org">future.tests</a>
+      <a href="https://future.tests.futureverse.org" class="external-link">future.tests</a>
     </li>
     <li>
-      <a href="https://globals.futureverse.org">globals</a>
+      <a href="https://globals.futureverse.org" class="external-link">globals</a>
     </li>
     <li>
-      <a href="https://listenv.futureverse.org">listenv</a>
+      <a href="https://listenv.futureverse.org" class="external-link">listenv</a>
     </li>
     <li>
-      <a href="https://parallelly.futureverse.org">parallelly</a>
+      <a href="https://parallelly.futureverse.org" class="external-link">parallelly</a>
     </li>
     <li>
-      <a href="https://progressr.futureverse.org">progressr</a>
+      <a href="https://progressr.futureverse.org" class="external-link">progressr</a>
     </li>
     <li>
-      <a href="https://future.mapreduce.futureverse.org">future.mapreduce (experimental)</a>
+      <a href="https://future.mapreduce.futureverse.org" class="external-link">future.mapreduce (experimental)</a>
     </li>
     <li>
-      <a href="https://marshal.futureverse.org">marshal (experimental)</a>
+      <a href="https://marshal.futureverse.org" class="external-link">marshal (experimental)</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="https://cloud.r-project.org/package=future.callr">
+  <a href="https://cloud.r-project.org/package=future.callr" class="external-link">
     <span class="fab fa-r-project"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://github.com/HenrikBengtsson/future.callr/">
+  <a href="https://github.com/HenrikBengtsson/future.callr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -166,32 +162,32 @@
   <div class="contents col-md-9">
 
 
-<div id="future-callr-a-future-api-for-parallel-processing-using-callr" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#future-callr-a-future-api-for-parallel-processing-using-callr" class="anchor"></a>future.callr: A Future API for Parallel Processing using ‘callr’</h1></div>
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>The <a href="https://cran.r-project.org/package=future">future</a> package provides a generic API for using futures in R. A future is a simple yet powerful mechanism to evaluate an R expression and retrieve its value at some point in time. Futures can be resolved in many different ways depending on which strategy is used. There are various types of synchronous and asynchronous futures to choose from in the <a href="https://cran.r-project.org/package=future">future</a> package.</p>
-<p>This package, <a href="https://cran.r-project.org/package=future.callr">future.callr</a>, provides a type of futures that utilizes the <a href="https://cran.r-project.org/package=callr">callr</a> package.</p>
+<div class="section level1">
+<div class="page-header"><h1 id="futurecallr-a-future-api-for-parallel-processing-using-callr">future.callr: A Future API for Parallel Processing using ‘callr’<a class="anchor" aria-label="anchor" href="#futurecallr-a-future-api-for-parallel-processing-using-callr"></a>
+</h1></div>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>The <a href="https://cran.r-project.org/package=future" class="external-link">future</a> package provides a generic API for using futures in R. A future is a simple yet powerful mechanism to evaluate an R expression and retrieve its value at some point in time. Futures can be resolved in many different ways depending on which strategy is used. There are various types of synchronous and asynchronous futures to choose from in the <a href="https://cran.r-project.org/package=future" class="external-link">future</a> package.</p>
+<p>This package, <a href="https://cran.r-project.org/package=future.callr" class="external-link">future.callr</a>, provides a type of futures that utilizes the <a href="https://cran.r-project.org/package=callr" class="external-link">callr</a> package.</p>
 <p>For example,</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(<span class="st">"future.callr"</span>)
-<span class="op">&gt;</span><span class="st"> </span><span class="kw">plan</span>(callr)
-<span class="op">&gt;</span>
-<span class="er">&gt;</span><span class="st"> </span>x <span class="op">%&lt;-%</span><span class="st"> </span>{ <span class="kw">Sys.sleep</span>(<span class="dv">5</span>); <span class="fl">3.14</span> }
-<span class="op">&gt;</span><span class="st"> </span>y <span class="op">%&lt;-%</span><span class="st"> </span>{ <span class="kw">Sys.sleep</span>(<span class="dv">5</span>); <span class="fl">2.71</span> }
-<span class="op">&gt;</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>y
-[<span class="dv">1</span>] <span class="fl">5.85</span></code></pre></div>
-<p>This is obviously a toy example to illustrate what futures look like and how to work with them. For further examples on how to use futures, see the vignettes of the <a href="https://cran.r-project.org/package=future">future</a> package as well as those of <a href="https://cran.r-project.org/package=future.apply">future.apply</a> and <a href="https://cran.r-project.org/package=doFuture">doFuture</a>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">library</span>(<span class="st">"future.callr"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">plan</span>(callr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> x <span class="sc">%&lt;-%</span> { <span class="fu">Sys.sleep</span>(<span class="dv">5</span>); <span class="fl">3.14</span> }</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> y <span class="sc">%&lt;-%</span> { <span class="fu">Sys.sleep</span>(<span class="dv">5</span>); <span class="fl">2.71</span> }</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> x <span class="sc">+</span> y</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">5.85</span></span></code></pre></div>
+<p>This is obviously a toy example to illustrate what futures look like and how to work with them. For further examples on how to use futures, see the vignettes of the <a href="https://cran.r-project.org/package=future" class="external-link">future</a> package as well as those of <a href="https://cran.r-project.org/package=future.apply" class="external-link">future.apply</a> and <a href="https://cran.r-project.org/package=doFuture" class="external-link">doFuture</a>.</p>
 </div>
-<div id="using-the-callr-backend" class="section level2">
-<h2 class="hasAnchor">
-<a href="#using-the-callr-backend" class="anchor"></a>Using the callr backend</h2>
+<div class="section level2">
+<h2 id="using-the-callr-backend">Using the callr backend<a class="anchor" aria-label="anchor" href="#using-the-callr-backend"></a>
+</h2>
 <p>The future.callr package implements a future wrapper for callr.</p>
 <table class="table">
 <colgroup>
-<col width="9%">
-<col width="61%">
+<col width="8%">
+<col width="62%">
 <col width="29%">
 </colgroup>
 <thead><tr class="header">
@@ -205,44 +201,44 @@
 <td align="left"><code>plan(multisession)</code></td>
 </tr></tbody>
 </table>
-<div id="each-callr-future-uses-a-fresh-r-session" class="section level3">
-<h3 class="hasAnchor">
-<a href="#each-callr-future-uses-a-fresh-r-session" class="anchor"></a>Each callr future uses a fresh R session</h3>
+<div class="section level3">
+<h3 id="each-callr-future-uses-a-fresh-r-session">Each callr future uses a fresh R session<a class="anchor" aria-label="anchor" href="#each-callr-future-uses-a-fresh-r-session"></a>
+</h3>
 <p>When using <code>callr</code> futures, each future is resolved in a fresh background R session which ends as soon as the value of the future has been collected. In contrast, <code>multisession</code> futures are resolved in background R worker sessions that serve multiple futures over their life spans. The advantage with using a new R process for each future is that it is that the R environment is guaranteed not to be contaminated by previous futures, e.g. memory allocations, finalizers, modified options, and loaded and attached packages. The disadvantage, is an added overhead of launching a new R process. (At the moment, I am neither aware of formal benchmarking of this extra overhead nor of performance comparisons of <code>callr</code> to alternative future backends.)</p>
 </div>
-<div id="more-than-125-parallel-callr-futures" class="section level3">
-<h3 class="hasAnchor">
-<a href="#more-than-125-parallel-callr-futures" class="anchor"></a>More than 125 parallel callr futures</h3>
-<p>Another advantage with <code>callr</code> futures compared to <code>multisession</code> futures is that they do not communicate via R (socket) connections. This avoids the limitation in the number of parallel futures that can be active at any time that <code>multisession</code> futures and <code>cluster</code> futures in general have, which they inherit from <code>SOCKcluster</code> clusters as defined by the parallel package. The number of parallel futures these can serve is limited by the <a href="https://github.com/HenrikBengtsson/Wishlist-for-R/issues/28">maximum number of open connections in R</a>, which currently is 125 (excluding the three reserved by R itself). Note that these 125 slots have to be shared with file connections etc. To increase this limit, R has to be rebuilt from source. However, since <code>callr</code> futures rely on <a href="https://github.com/r-lib/processx/issues/91">the callr package which does not make use of R-specific connections</a>, there is no limit in the number of background R processes that can be used simultaneously.</p>
+<div class="section level3">
+<h3 id="more-than-125-parallel-callr-futures">More than 125 parallel callr futures<a class="anchor" aria-label="anchor" href="#more-than-125-parallel-callr-futures"></a>
+</h3>
+<p>Another advantage with <code>callr</code> futures compared to <code>multisession</code> futures is that they do not communicate via R (socket) connections. This avoids the limitation in the number of parallel futures that can be active at any time that <code>multisession</code> futures and <code>cluster</code> futures in general have, which they inherit from <code>SOCKcluster</code> clusters as defined by the parallel package. The number of parallel futures these can serve is limited by the <a href="https://github.com/HenrikBengtsson/Wishlist-for-R/issues/28" class="external-link">maximum number of open connections in R</a>, which currently is 125 (excluding the three reserved by R itself). Note that these 125 slots have to be shared with file connections etc. To increase this limit, R has to be rebuilt from source. However, since <code>callr</code> futures rely on <a href="https://github.com/r-lib/processx/issues/91" class="external-link">the callr package which does not make use of R-specific connections</a>, there is no limit in the number of background R processes that can be used simultaneously.</p>
 </div>
-<div id="no-ports-are-used---no-port-clashes-or-firewall-issues" class="section level3">
-<h3 class="hasAnchor">
-<a href="#no-ports-are-used---no-port-clashes-or-firewall-issues" class="anchor"></a>No ports are used - no port clashes or firewall issues</h3>
-<p>A third advantage with <code>callr</code> futures, is that there is not risk for port-clashing with other processes on the system when clusters are set up (**), because callr does not rely on ports. Furthermore, on Windows, the firewall triggers an alert that the user needs to approve whenever a not-previously-approved port is requested by R - <a href="https://stackoverflow.com/questions/47353848/localhost-connection-without-firewall-popup/47542866">which happens also for local, non-public ports</a> that are used by <code>SOCKcluster</code>:s. When using <code>callr</code> futures, no sockets and therefore no ports are involved.</p>
+<div class="section level3">
+<h3 id="no-ports-are-used---no-port-clashes-or-firewall-issues">No ports are used - no port clashes or firewall issues<a class="anchor" aria-label="anchor" href="#no-ports-are-used---no-port-clashes-or-firewall-issues"></a>
+</h3>
+<p>A third advantage with <code>callr</code> futures, is that there is not risk for port-clashing with other processes on the system when clusters are set up (**), because callr does not rely on ports. Furthermore, on Windows, the firewall triggers an alert that the user needs to approve whenever a not-previously-approved port is requested by R - <a href="https://stackoverflow.com/questions/47353848/localhost-connection-without-firewall-popup/47542866" class="external-link">which happens also for local, non-public ports</a> that are used by <code>SOCKcluster</code>:s. When using <code>callr</code> futures, no sockets and therefore no ports are involved.</p>
 <p>(**) To lower the risk for such clashes <code>SOCKcluster</code>:s (of the parallel package) request random ports, but clashes still occur at times.</p>
 </div>
 </div>
-<div id="demos" class="section level2">
-<h2 class="hasAnchor">
-<a href="#demos" class="anchor"></a>Demos</h2>
-<p>The <a href="https://cran.r-project.org/package=future">future</a> package provides a demo using futures for calculating a set of Mandelbrot planes. The demo does not assume anything about what type of futures are used. <em>The user has full control of how futures are evaluated</em>. For instance, to use callr futures, run the demo as:</p>
-<div class="sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://future.callr.futureverse.org">"future.callr"</a></span><span class="op">)</span>
-<span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="va">callr</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/demo.html">demo</a></span><span class="op">(</span><span class="st">"mandelbrot"</span>, package <span class="op">=</span> <span class="st">"future"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<div class="section level2">
+<h2 id="demos">Demos<a class="anchor" aria-label="anchor" href="#demos"></a>
+</h2>
+<p>The <a href="https://cran.r-project.org/package=future" class="external-link">future</a> package provides a demo using futures for calculating a set of Mandelbrot planes. The demo does not assume anything about what type of futures are used. <em>The user has full control of how futures are evaluated</em>. For instance, to use callr futures, run the demo as:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://future.callr.futureverse.org">"future.callr"</a></span><span class="op">)</span>
+<span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">callr</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/demo.html" class="external-link">demo</a></span><span class="op">(</span><span class="st">"mandelbrot"</span>, package <span class="op">=</span> <span class="st">"future"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>R package future.callr is available on <a href="https://cran.r-project.org/package=future.callr">CRAN</a> and can be installed in R as:</p>
-<div class="sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"future.callr"</span><span class="op">)</span></code></pre></div>
-<div id="pre-release-version" class="section level3">
-<h3 class="hasAnchor">
-<a href="#pre-release-version" class="anchor"></a>Pre-release version</h3>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>R package future.callr is available on <a href="https://cran.r-project.org/package=future.callr" class="external-link">CRAN</a> and can be installed in R as:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"future.callr"</span><span class="op">)</span></code></pre></div>
+<div class="section level3">
+<h3 id="pre-release-version">Pre-release version<a class="anchor" aria-label="anchor" href="#pre-release-version"></a>
+</h3>
 <p>To install the pre-release version that is available in Git branch <code>develop</code> on GitHub, use:</p>
-<div class="sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"HenrikBengtsson/future.callr"</span>, ref<span class="op">=</span><span class="st">"develop"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"HenrikBengtsson/future.callr"</span>, ref<span class="op">=</span><span class="st">"develop"</span><span class="op">)</span></code></pre></div>
 <p>This will install the package from source.</p>
 </div>
 </div>
@@ -252,66 +248,67 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=future.callr">https://​cloud.r-project.org/​package=future.callr</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/HenrikBengtsson/future.callr/">https://​github.com/​HenrikBengtsson/​future.callr/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/HenrikBengtsson/future.callr/issues">https://​github.com/​HenrikBengtsson/​future.callr/​issues</a>
-</li>
-<li>Roadmap/Milestones at <br><a href="https://github.com/HenrikBengtsson/future.callr/milestones">https://​github.com/​HenrikBengtsson/​future.callr/​milestones</a>
-</li>
-<li>The Futureverse Project at <br><a href="https://www.futureverse.org/">https://​www.futureverse.org/​</a>
-</li>
-<li>Futureverse User Forum (new!) at <br><a href="https://github.com/HenrikBengtsson/future/discussions">https://​github.com/​HenrikBengtsson/​future/​discussions</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=future.callr" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/HenrikBengtsson/future.callr/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/HenrikBengtsson/future.callr/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/HenrikBengtsson/future.callr/milestones" class="external-link">Roadmap/Milestones</a></li>
+<li><a href="https://www.futureverse.org/" class="external-link">The Futureverse Project</a></li>
+<li><a href="https://github.com/HenrikBengtsson/future/discussions" class="external-link">Futureverse User Forum (new!)</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>LGPL (&gt;= 2.1)</li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 </ul>
 </div>
+
 <div class="citation">
-<h2>Citation</h2>
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html">Citing future.callr</a></li>
+<li><a href="authors.html#citation">Citing future.callr</a></li>
 </ul>
 </div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Henrik Bengtsson <br><small class="roles"> Author, maintainer, copyright holder </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://CRAN.R-project.org/web/checks/check_results_future.callr.html"><img border="0" src="https://www.r-pkg.org/badges/version/future.callr" alt="CRAN check status"></a></li>
-<li><a href="https://github.com/HenrikBengtsson/future.callr/actions?query=workflow%3AR-CMD-check"><img border="0" src="https://github.com/HenrikBengtsson/future.callr/actions/workflows/R-CMD-check.yaml/badge.svg?branch=develop" alt="R CMD check status"></a></li>
-<li><a href="https://github.com/HenrikBengtsson/future.callr/actions?query=workflow%3Afuture_tests"><img border="0" src="https://github.com/HenrikBengtsson/future.callr/actions/workflows/future_tests.yaml/badge.svg?branch=develop" alt="future.tests checks status"></a></li>
-<li><a href="https://app.codecov.io/gh/HenrikBengtsson/future.callr"><img border="0" src="https://codecov.io/gh/HenrikBengtsson/future.callr/branch/develop/graph/badge.svg" alt="Coverage Status"></a></li>
+<li><a href="https://CRAN.R-project.org/web/checks/check_results_future.callr.html" class="external-link"><img border="0" src="https://www.r-pkg.org/badges/version/future.callr" alt="CRAN check status"></a></li>
+<li><a href="https://github.com/HenrikBengtsson/future.callr/actions?query=workflow%3AR-CMD-check" class="external-link"><img border="0" src="https://github.com/HenrikBengtsson/future.callr/actions/workflows/R-CMD-check.yaml/badge.svg?branch=develop" alt="R CMD check status"></a></li>
+<li><a href="https://github.com/HenrikBengtsson/future.callr/actions?query=workflow%3Afuture_tests" class="external-link"><img border="0" src="https://github.com/HenrikBengtsson/future.callr/actions/workflows/future_tests.yaml/badge.svg?branch=develop" alt="future.tests checks status"></a></li>
+<li><a href="https://app.codecov.io/gh/HenrikBengtsson/future.callr" class="external-link"><img border="0" src="https://codecov.io/gh/HenrikBengtsson/future.callr/branch/develop/graph/badge.svg" alt="Coverage Status"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Henrik Bengtsson.</p>
+  <p></p>
+<p>Developed by Henrik Bengtsson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1 and <a href="https://github.com/HenrikBengtsson/pkgdown.extras/">pkgdown.extras</a> 0.0.0.9003.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2 and <a href="https://github.com/HenrikBengtsson/pkgdown.extras/">pkgdown.extras</a> 0.0.0.9003.</p>
 </div>
 
       </footer>
