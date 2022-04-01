@@ -8,7 +8,7 @@ NEW FEATURES:
  * Now result() and value() gives a slightly more informative error message
    in case the callr process failed with a non-zero exit code.
 
- * Now resolved() supports early signalling.
+ * Now resolved() supports early signaling.
 
 
 Version: 0.7.0 [2021-11-20]
