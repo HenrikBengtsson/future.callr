@@ -15,3 +15,10 @@ pre
 Pre
 th
 md
+FutureError
+availableCores
+CallrFutureError
+halfCores
+nbrOfFreeWorkers
+processx
+stderr
