@@ -1,14 +1,14 @@
 Package: future.callr
 =====================
 
-Version: 0.7.0-9002 [2022-01-29]
+Version: 0.7.0-9002 [2022-04-01]
 
 NEW FEATURES:
 
+ * Now resolved() supports early signaling.
+
  * Now result() and value() gives a slightly more informative error message
    in case the callr process failed with a non-zero exit code.
-
- * Now resolved() supports early signaling.
 
 
 Version: 0.7.0 [2021-11-20]
