@@ -162,7 +162,8 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>A Future for callr</h1>
-                        <h4 data-toc-skip class="author">Henrik Bengtsson</h4>
+                        <h4 data-toc-skip class="author">Henrik
+Bengtsson</h4>
             
       
       <small class="dont-index">Source: <a href="https://github.com/HenrikBengtsson/future.callr/blob/HEAD/vignettes/future.callr.md.rsp" class="external-link"><code>vignettes/future.callr.md.rsp</code></a></small>
@@ -175,8 +176,14 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>The <a href="https://cran.r-project.org/package=future" class="external-link">future</a> package provides a generic API for using futures in R. A future is a simple yet powerful mechanism to evaluate an R expression and retrieve its value at some point in time. Futures can be resolved in many different ways depending on which strategy is used. There are various types of synchronous and asynchronous futures to choose from in the <a href="https://cran.r-project.org/package=future" class="external-link">future</a> package.</p>
-<p>This package, <a href="https://cran.r-project.org/package=future.callr" class="external-link">future.callr</a>, provides a type of futures that utilizes the <a href="https://cran.r-project.org/package=callr" class="external-link">callr</a> package.</p>
+<p>The <a href="https://cran.r-project.org/package=future" class="external-link">future</a>
+package provides a generic API for using futures in R. A future is a
+simple yet powerful mechanism to evaluate an R expression and retrieve
+its value at some point in time. Futures can be resolved in many
+different ways depending on which strategy is used. There are various
+types of synchronous and asynchronous futures to choose from in the <a href="https://cran.r-project.org/package=future" class="external-link">future</a> package.</p>
+<p>This package, <a href="https://cran.r-project.org/package=future.callr" class="external-link">future.callr</a>,
+provides a type of futures that utilizes the <a href="https://cran.r-project.org/package=callr" class="external-link">callr</a> package.</p>
 <p>For example,</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">library</span>(<span class="st">"future.callr"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">plan</span>(callr)</span>
@@ -185,7 +192,11 @@
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> y <span class="sc">%&lt;-%</span> { <span class="fu">Sys.sleep</span>(<span class="dv">5</span>); <span class="fl">2.71</span> }</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> x <span class="sc">+</span> y</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">5.85</span></span></code></pre></div>
-<p>This is obviously a toy example to illustrate what futures look like and how to work with them. For further examples on how to use futures, see the vignettes of the <a href="https://cran.r-project.org/package=future" class="external-link">future</a> package as well as those of <a href="https://cran.r-project.org/package=future.apply" class="external-link">future.apply</a> and <a href="https://cran.r-project.org/package=doFuture" class="external-link">doFuture</a>.</p>
+<p>This is obviously a toy example to illustrate what futures look like
+and how to work with them. For further examples on how to use futures,
+see the vignettes of the <a href="https://cran.r-project.org/package=future" class="external-link">future</a> package as
+well as those of <a href="https://cran.r-project.org/package=future.apply" class="external-link">future.apply</a>
+and <a href="https://cran.r-project.org/package=doFuture" class="external-link">doFuture</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="using-the-callr-backend">Using the callr backend<a class="anchor" aria-label="anchor" href="#using-the-callr-backend"></a>
@@ -204,31 +215,72 @@
 </tr></thead>
 <tbody><tr class="odd">
 <td align="left"><code>callr</code></td>
-<td align="left">parallel evaluation in a separate R process (on current machine)</td>
+<td align="left">parallel evaluation in a separate R process (on current
+machine)</td>
 <td align="left"><code>plan(multisession)</code></td>
 </tr></tbody>
 </table>
 <div class="section level3">
 <h3 id="each-callr-future-uses-a-fresh-r-session">Each callr future uses a fresh R session<a class="anchor" aria-label="anchor" href="#each-callr-future-uses-a-fresh-r-session"></a>
 </h3>
-<p>When using <code>callr</code> futures, each future is resolved in a fresh background R session which ends as soon as the value of the future has been collected. In contrast, <code>multisession</code> futures are resolved in background R worker sessions that serve multiple futures over their life spans. The advantage with using a new R process for each future is that it is that the R environment is guaranteed not to be contaminated by previous futures, e.g. memory allocations, finalizers, modified options, and loaded and attached packages. The disadvantage, is an added overhead of launching a new R process. (At the moment, I am neither aware of formal benchmarking of this extra overhead nor of performance comparisons of <code>callr</code> to alternative future backends.)</p>
+<p>When using <code>callr</code> futures, each future is resolved in a
+fresh background R session which ends as soon as the value of the future
+has been collected. In contrast, <code>multisession</code> futures are
+resolved in background R worker sessions that serve multiple futures
+over their life spans. The advantage with using a new R process for each
+future is that it is that the R environment is guaranteed not to be
+contaminated by previous futures, e.g. memory allocations, finalizers,
+modified options, and loaded and attached packages. The disadvantage, is
+an added overhead of launching a new R process. (At the moment, I am
+neither aware of formal benchmarking of this extra overhead nor of
+performance comparisons of <code>callr</code> to alternative future
+backends.)</p>
 </div>
 <div class="section level3">
 <h3 id="more-than-125-parallel-callr-futures">More than 125 parallel callr futures<a class="anchor" aria-label="anchor" href="#more-than-125-parallel-callr-futures"></a>
 </h3>
-<p>Another advantage with <code>callr</code> futures compared to <code>multisession</code> futures is that they do not communicate via R (socket) connections. This avoids the limitation in the number of parallel futures that can be active at any time that <code>multisession</code> futures and <code>cluster</code> futures in general have, which they inherit from <code>SOCKcluster</code> clusters as defined by the parallel package. The number of parallel futures these can serve is limited by the <a href="https://github.com/HenrikBengtsson/Wishlist-for-R/issues/28" class="external-link">maximum number of open connections in R</a>, which currently is 125 (excluding the three reserved by R itself). Note that these 125 slots have to be shared with file connections etc. To increase this limit, R has to be rebuilt from source. However, since <code>callr</code> futures rely on <a href="https://github.com/r-lib/processx/issues/91" class="external-link">the callr package which does not make use of R-specific connections</a>, there is no limit in the number of background R processes that can be used simultaneously.</p>
+<p>Another advantage with <code>callr</code> futures compared to
+<code>multisession</code> futures is that they do not communicate via R
+(socket) connections. This avoids the limitation in the number of
+parallel futures that can be active at any time that
+<code>multisession</code> futures and <code>cluster</code> futures in
+general have, which they inherit from <code>SOCKcluster</code> clusters
+as defined by the parallel package. The number of parallel futures these
+can serve is limited by the <a href="https://github.com/HenrikBengtsson/Wishlist-for-R/issues/28" class="external-link">maximum
+number of open connections in R</a>, which currently is 125 (excluding
+the three reserved by R itself). Note that these 125 slots have to be
+shared with file connections etc. To increase this limit, R has to be
+rebuilt from source. However, since <code>callr</code> futures rely on
+<a href="https://github.com/r-lib/processx/issues/91" class="external-link">the callr package
+which does not make use of R-specific connections</a>, there is no limit
+in the number of background R processes that can be used
+simultaneously.</p>
 </div>
 <div class="section level3">
 <h3 id="no-ports-are-used---no-port-clashes-or-firewall-issues">No ports are used - no port clashes or firewall issues<a class="anchor" aria-label="anchor" href="#no-ports-are-used---no-port-clashes-or-firewall-issues"></a>
 </h3>
-<p>A third advantage with <code>callr</code> futures, is that there is not risk for port-clashing with other processes on the system when clusters are set up (**), because callr does not rely on ports. Furthermore, on Windows, the firewall triggers an alert that the user needs to approve whenever a not-previously-approved port is requested by R - <a href="https://stackoverflow.com/questions/47353848/localhost-connection-without-firewall-popup/47542866" class="external-link">which happens also for local, non-public ports</a> that are used by <code>SOCKcluster</code>:s. When using <code>callr</code> futures, no sockets and therefore no ports are involved.</p>
-<p>(**) To lower the risk for such clashes <code>SOCKcluster</code>:s (of the parallel package) request random ports, but clashes still occur at times.</p>
+<p>A third advantage with <code>callr</code> futures, is that there is
+not risk for port-clashing with other processes on the system when
+clusters are set up (**), because callr does not rely on ports.
+Furthermore, on Windows, the firewall triggers an alert that the user
+needs to approve whenever a not-previously-approved port is requested by
+R - <a href="https://stackoverflow.com/questions/47353848/localhost-connection-without-firewall-popup/47542866" class="external-link">which
+happens also for local, non-public ports</a> that are used by
+<code>SOCKcluster</code>:s. When using <code>callr</code> futures, no
+sockets and therefore no ports are involved.</p>
+<p>(**) To lower the risk for such clashes <code>SOCKcluster</code>:s
+(of the parallel package) request random ports, but clashes still occur
+at times.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="demos">Demos<a class="anchor" aria-label="anchor" href="#demos"></a>
 </h2>
-<p>The <a href="https://cran.r-project.org/package=future" class="external-link">future</a> package provides a demo using futures for calculating a set of Mandelbrot planes. The demo does not assume anything about what type of futures are used. <em>The user has full control of how futures are evaluated</em>. For instance, to use callr futures, run the demo as:</p>
+<p>The <a href="https://cran.r-project.org/package=future" class="external-link">future</a>
+package provides a demo using futures for calculating a set of
+Mandelbrot planes. The demo does not assume anything about what type of
+futures are used. <em>The user has full control of how futures are
+evaluated</em>. For instance, to use callr futures, run the demo as:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://future.callr.futureverse.org">"future.callr"</a></span><span class="op">)</span>
 <span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">callr</span><span class="op">)</span>
@@ -253,7 +305,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2 and <a href="https://github.com/HenrikBengtsson/pkgdown.extras/">pkgdown.extras</a> 0.0.0.9003.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3</p> and <a href="https://github.com/HenrikBengtsson/pkgdown.extras/">pkgdown.extras</a> 0.0.0.9004.</p>
 </div>
 
       </footer>

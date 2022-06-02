@@ -126,122 +126,125 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href="https://github.com/HenrikBengtsson/future.callr/blob/HEAD/NEWS" class="external-link"><code>NEWS</code></a></small>
+      <small>Source: <a href="https://github.com/HenrikBengtsson/future.callr/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.8.0-9000" id="futurecallr-080-9000">future.callr 0.8.0-9000<a class="anchor" aria-label="anchor" href="#futurecallr-080-9000"></a></h2>
-</div>
-    <div class="section level2">
-<h2 class="page-header" data-toc-text="0.8.0" id="futurecallr-080">future.callr 0.8.0<a class="anchor" aria-label="anchor" href="#futurecallr-080"></a></h2>
-<div class="section level4">
-<h4 id="new-features-0-8-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-8-0"></a></h4>
-<ul><li><p>Now resolved() supports early signaling.</p></li>
-<li><p>Now result() and value() gives a slightly more informative error message in case the callr process failed with a non-zero exit code.</p></li>
+<h2 class="page-header" data-toc-text="0.8.0-9000" id="version-080-9000">Version 0.8.0-9000<a class="anchor" aria-label="anchor" href="#version-080-9000"></a></h2>
+<ul><li>…</li>
 </ul></div>
-</div>
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.7.0" id="futurecallr-070">future.callr 0.7.0<small>2021-11-21</small><a class="anchor" aria-label="anchor" href="#futurecallr-070"></a></h2>
-<div class="section level4">
-<h4 id="new-features-0-7-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-7-0"></a></h4>
-<ul><li><p>Add option to configure ‘callr’ futures to be “supervised” by the ‘callr’ package when setting up the plan, i.e. plan(callr, supervise = TRUE).</p></li>
-<li><p>Now callr-specific orchestration errors are of class CallrFutureError, which provides information also on the future that failed.</p></li>
+<h2 class="page-header" data-toc-text="0.8.0" id="version-080">Version 0.8.0<small>2022-04-01</small><a class="anchor" aria-label="anchor" href="#version-080"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-8-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-8-0"></a></h3>
+<ul><li><p>Now <code><a href="https://future.futureverse.org/reference/resolved.html" class="external-link">resolved()</a></code> supports early signaling.</p></li>
+<li><p>Now <code><a href="https://future.futureverse.org/reference/result.html" class="external-link">result()</a></code> and <code><a href="https://future.futureverse.org/reference/value.html" class="external-link">value()</a></code> gives a slightly more informative error message in case the <strong>callr</strong> process failed with a non-zero exit code.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.6.1" id="futurecallr-061">future.callr 0.6.1<small>2021-05-04</small><a class="anchor" aria-label="anchor" href="#futurecallr-061"></a></h2>
-<div class="section level4">
-<h4 id="bug-fixes-0-6-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-1"></a></h4>
-<ul><li>A ‘callr’ future that produces a large amount of standard error (stderr) could stall forever when collecting its results. The exact reason is unknown but the symptom is currently that the underlying ‘processx’ process never terminates, resulting in a never-ending wait for the results. Since futures don’t capture stderr in other backends, the workaround for now is to discard all stderr output. Note that messages, warnings, etc. are still captured and relayed.</li>
+<h2 class="page-header" data-toc-text="0.7.0" id="version-070">Version 0.7.0<small>2021-11-21</small><a class="anchor" aria-label="anchor" href="#version-070"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-7-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-7-0"></a></h3>
+<ul><li><p>Add option to configure <strong>callr</strong> futures to be “supervised” by the <strong>callr</strong> package when setting up the plan, i.e. <code>plan(callr,    supervise = TRUE)</code>.</p></li>
+<li><p>Now callr-specific orchestration errors are of class <code>CallrFutureError</code>, which provides information also on the future that failed.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.6.0" id="futurecallr-060">future.callr 0.6.0<small>2021-01-04</small><a class="anchor" aria-label="anchor" href="#futurecallr-060"></a></h2>
-<div class="section level4">
-<h4 id="significant-changes-0-6-0">Significant Changes<a class="anchor" aria-label="anchor" href="#significant-changes-0-6-0"></a></h4>
-<ul><li>Removed S3 generic function await(), which was used for internal purposes.</li>
-</ul></div>
-<div class="section level4">
-<h4 id="new-features-0-6-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-6-0"></a></h4>
-<ul><li>Add nbrOfFreeWorkers().</li>
-</ul></div>
-<div class="section level4">
-<h4 id="deprecated-and-defunct-0-6-0">Deprecated and Defunct<a class="anchor" aria-label="anchor" href="#deprecated-and-defunct-0-6-0"></a></h4>
-<ul><li>Removed S3 generic function await(), which was used for internal purposes.</li>
+<h2 class="page-header" data-toc-text="0.6.1" id="version-061">Version 0.6.1<small>2021-05-04</small><a class="anchor" aria-label="anchor" href="#version-061"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-0-6-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-1"></a></h3>
+<ul><li>A <strong>callr</strong> future that produces a large amount of standard error (stderr) could stall forever when collecting its results. The exact reason is unknown but the symptom is currently that the underlying <strong>processx</strong> process never terminates, resulting in a never-ending wait for the results. Since futures don’t capture stderr in other backends, the workaround for now is to discard all stderr output. Note that messages, warnings, etc. are still captured and relayed.</li>
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.5.0" id="futurecallr-050">future.callr 0.5.0<small>2019-09-28</small><a class="anchor" aria-label="anchor" href="#futurecallr-050"></a></h2>
-<div class="section level4">
-<h4 id="significant-changes-0-5-0">Significant Changes<a class="anchor" aria-label="anchor" href="#significant-changes-0-5-0"></a></h4>
-<ul><li>resolved() for CallrFuture will launch lazy futures [future (&gt;= 1.15.0)].</li>
+<h2 class="page-header" data-toc-text="0.6.0" id="version-060">Version 0.6.0<small>2021-01-04</small><a class="anchor" aria-label="anchor" href="#version-060"></a></h2>
+<div class="section level3">
+<h3 id="significant-changes-0-6-0">Significant Changes<a class="anchor" aria-label="anchor" href="#significant-changes-0-6-0"></a></h3>
+<ul><li>Removed S3 generic function <code>await()</code>, which was used for internal purposes.</li>
 </ul></div>
-<div class="section level4">
-<h4 id="new-features-0-5-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-5-0"></a></h4>
+<div class="section level3">
+<h3 id="new-features-0-6-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-6-0"></a></h3>
+<ul><li>Add <code><a href="https://future.futureverse.org/reference/nbrOfWorkers.html" class="external-link">nbrOfFreeWorkers()</a></code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="deprecated-and-defunct-0-6-0">Deprecated and Defunct<a class="anchor" aria-label="anchor" href="#deprecated-and-defunct-0-6-0"></a></h3>
+<ul><li>Removed S3 generic function <code>await()</code>, which was used for internal purposes.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.5.0" id="version-050">Version 0.5.0<small>2019-09-28</small><a class="anchor" aria-label="anchor" href="#version-050"></a></h2>
+<div class="section level3">
+<h3 id="significant-changes-0-5-0">Significant Changes<a class="anchor" aria-label="anchor" href="#significant-changes-0-5-0"></a></h3>
+<ul><li>
+<code><a href="https://future.futureverse.org/reference/resolved.html" class="external-link">resolved()</a></code> for <code>CallrFuture</code> will launch lazy futures [<strong>future</strong> (&gt;= 1.15.0)].</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-0-5-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-5-0"></a></h3>
 <ul><li>Debug messages are now prepended with a timestamp.</li>
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.4.0" id="futurecallr-040">future.callr 0.4.0<small>2019-01-07</small><a class="anchor" aria-label="anchor" href="#futurecallr-040"></a></h2>
-<div class="section level4">
-<h4 id="new-features-0-4-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-4-0"></a></h4>
-<ul><li>Now the future label is exposed in the process information (e.g. top) via a dummy –future-label=“&lt;label&gt;” argument in the callr system call.</li>
+<h2 class="page-header" data-toc-text="0.4.0" id="version-040">Version 0.4.0<small>2019-01-07</small><a class="anchor" aria-label="anchor" href="#version-040"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-4-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-4-0"></a></h3>
+<ul><li>Now the future label is exposed in the process information (e.g. <code>top</code>) via a dummy <code>--future-label="&lt;label&gt;"</code> argument in the <strong>callr</strong> system call.</li>
 </ul></div>
-<div class="section level4">
-<h4 id="bug-fixes-0-4-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-4-0"></a></h4>
-<ul><li>plan(callr, workers) where ‘workers’ being a function would result in an error when a future was created.</li>
-</ul></div>
-</div>
-    <div class="section level2">
-<h2 class="page-header" data-toc-text="0.3.1" id="futurecallr-031">future.callr 0.3.1<small>2018-07-18</small><a class="anchor" aria-label="anchor" href="#futurecallr-031"></a></h2>
-<div class="section level4">
-<h4 id="new-features-0-3-1">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-3-1"></a></h4>
-<ul><li>The callr backend supports the handling of the standard output as implemented in future (&gt;= 1.9.0).</li>
-</ul></div>
-<div class="section level4">
-<h4 id="bug-fixes-0-3-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-3-1"></a></h4>
-<ul><li>Callr futures did not protect against recursive parallelism, e.g. with plan(list(callr, callr)) the second layer of futures would use the same number of workers as the first layer.</li>
+<div class="section level3">
+<h3 id="bug-fixes-0-4-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-4-0"></a></h3>
+<ul><li>
+<code>plan(callr, workers)</code> where <code>workers</code> being a function would result in an error when a future was created.</li>
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.3.0" id="futurecallr-030">future.callr 0.3.0<small>2018-05-03</small><a class="anchor" aria-label="anchor" href="#futurecallr-030"></a></h2>
-<div class="section level4">
-<h4 id="new-features-0-3-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-3-0"></a></h4>
-<ul><li><p>Argument ‘workers’ of future strategies may now also be a function, which is called without argument when the future strategy is set up and used as is. For instance, plan(callr, workers = halfCores) where halfCores &lt;- function() { max(1, round(availableCores() / 2)) } will use half of the number of available cores. This is useful when using nested future strategies with remote machines.</p></li>
+<h2 class="page-header" data-toc-text="0.3.1" id="version-031">Version 0.3.1<small>2018-07-18</small><a class="anchor" aria-label="anchor" href="#version-031"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-3-1">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-3-1"></a></h3>
+<ul><li>The ‘callr’ backend supports the handling of the standard output as implemented in <strong>future</strong> (&gt;= 1.9.0).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-3-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-3-1"></a></h3>
+<ul><li>Callr futures did not protect against recursive parallelism, e.g. with <code>plan(list(callr, callr))</code> the second layer of futures would use the same number of workers as the first layer.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.3.0" id="version-030">Version 0.3.0<small>2018-05-03</small><a class="anchor" aria-label="anchor" href="#version-030"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-3-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-3-0"></a></h3>
+<ul><li><p>Argument <code>workers</code> of future strategies may now also be a function, which is called without argument when the future strategy is set up and used as is. For instance, <code>plan(callr, workers = halfCores)</code> where <code>halfCores &lt;- function() { max(1, round(availableCores() /    2)) }</code> will use half of the number of available cores. This is useful when using nested future strategies with remote machines.</p></li>
 <li><p>Gathering of results from background processes is made a little bit more robust against slow file systems by retrying a few times before accepting an error as an error.</p></li>
 </ul></div>
-<div class="section level4">
-<h4 id="code-refactoring-0-3-0">Code Refactoring<a class="anchor" aria-label="anchor" href="#code-refactoring-0-3-0"></a></h4>
+<div class="section level3">
+<h3 id="code-refactoring-0-3-0">Code Refactoring<a class="anchor" aria-label="anchor" href="#code-refactoring-0-3-0"></a></h3>
 <ul><li>Prepared code to gather a richer set of results from futures.</li>
 </ul></div>
-<div class="section level4">
-<h4 id="bug-fixes-0-3-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-3-0"></a></h4>
-<ul><li>Callr futures did not acknowledge timeout option ‘future.wait.timeout’.</li>
+<div class="section level3">
+<h3 id="bug-fixes-0-3-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-3-0"></a></h3>
+<ul><li>Callr futures did not acknowledge timeout option <code>future.wait.timeout</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.2.0" id="futurecallr-020">future.callr 0.2.0<small>2018-02-13</small><a class="anchor" aria-label="anchor" href="#futurecallr-020"></a></h2>
-<div class="section level4">
-<h4 id="new-features-0-2-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-2-0"></a></h4>
-<ul><li>Producing errors of class FutureError where applicable.</li>
+<h2 class="page-header" data-toc-text="0.2.0" id="version-020">Version 0.2.0<small>2018-02-13</small><a class="anchor" aria-label="anchor" href="#version-020"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-2-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-2-0"></a></h3>
+<ul><li>Producing errors of class <code>FutureError</code> where applicable.</li>
 </ul></div>
-<div class="section level4">
-<h4 id="documentation-0-2-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-2-0"></a></h4>
-<ul><li>Minor updates to the vignette related to the callr package.</li>
-</ul></div>
-</div>
-    <div class="section level2">
-<h2 class="page-header" data-toc-text="0.1.1" id="futurecallr-011">future.callr 0.1.1<a class="anchor" aria-label="anchor" href="#futurecallr-011"></a></h2>
-<div class="section level4">
-<h4 id="bug-fixes-0-1-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-1"></a></h4>
-<ul><li>Number of workers in plan(callr, workers = n) was not respected.</li>
+<div class="section level3">
+<h3 id="documentation-0-2-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-2-0"></a></h3>
+<ul><li>Minor updates to the vignette related to the <strong>callr</strong> package.</li>
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.1.0" id="futurecallr-010">future.callr 0.1.0<a class="anchor" aria-label="anchor" href="#futurecallr-010"></a></h2>
-<div class="section level4">
-<h4 id="new-features-0-1-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-1-0"></a></h4>
-<ul><li>Added callr futures. Use plan(callr) or plan(callr, workers = 4L).</li>
+<h2 class="page-header" data-toc-text="0.1.1" id="version-011">Version 0.1.1<a class="anchor" aria-label="anchor" href="#version-011"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-0-1-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-1"></a></h3>
+<ul><li>Number of workers in <code>plan(callr, workers = n)</code> was not respected.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.0" id="version-010">Version 0.1.0<a class="anchor" aria-label="anchor" href="#version-010"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-1-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-1-0"></a></h3>
+<ul><li>Added ‘callr’ futures. Use <code>plan(callr)</code> or <code>plan(callr, workers =    4L)</code>.</li>
 </ul></div>
 </div>
   </div>
@@ -258,7 +261,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2 and <a href="https://github.com/HenrikBengtsson/pkgdown.extras/">pkgdown.extras</a> 0.0.0.9003.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3</p> and <a href="https://github.com/HenrikBengtsson/pkgdown.extras/">pkgdown.extras</a> 0.0.0.9004.</p>
 </div>
 
       </footer></div>
