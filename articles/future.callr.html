@@ -265,16 +265,16 @@ simultaneously.</p>
 </h3>
 <p>A third advantage with <code>callr</code> futures, is that there is
 not risk for port-clashing with other processes on the system when
-clusters are set up (<strong>), because </strong>callr** does not rely
-on ports. Furthermore, on Windows, the firewall triggers an alert that
-the user needs to approve whenever a not-previously-approved port is
+clusters are set up (*), because <strong>callr</strong> does not rely on
+ports. Furthermore, on Windows, the firewall triggers an alert that the
+user needs to approve whenever a not-previously-approved port is
 requested by R - <a href="https://stackoverflow.com/questions/47353848/localhost-connection-without-firewall-popup/47542866" class="external-link">which
 happens also for local, non-public ports</a> that are used by
 <code>SOCKcluster</code>:s. When using <code>callr</code> futures, no
 sockets and therefore no ports are involved.</p>
-<p>(<strong>) To lower the risk for such clashes
-<code>SOCKcluster</code>:s (of the </strong>parallel** package) request
-random ports, but clashes still occur at times.</p>
+<p>(*) To lower the risk for such clashes <code>SOCKcluster</code>:s (of
+the <strong>parallel</strong> package) request random ports, but clashes
+still occur at times.</p>
 </div>
 </div>
 <div class="section level2">
