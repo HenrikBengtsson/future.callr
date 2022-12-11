@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">future.callr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.8.0-9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.8.0-9003</span>
       </span>
     </div>
 
@@ -131,8 +131,12 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.8.0-9001" id="version-080-9001">Version 0.8.0-9001<a class="anchor" aria-label="anchor" href="#version-080-9001"></a></h2>
-<ul><li>…</li>
+<div class="section level3">
+<h3 id="bug-fixes-0-8-0-9001">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-8-0-9001"></a></h3>
+<ul><li>
+<code><a href="https://future.futureverse.org/reference/run.html" class="external-link">run()</a></code> for <code>CallrFuture</code> would update the RNG state, because <code><a href="https://callr.r-lib.org/reference/r_bg.html" class="external-link">callr::r_bg()</a></code> used to launch the future does so. Now <code><a href="https://future.futureverse.org/reference/run.html" class="external-link">run()</a></code> launches the future in stealth RNG mode, i.e. gives <code>r_bg()</code> a semi-random initial seed to work with (by removing <code>.Random.seed</code>) and then undo the RNG state at the very end.</li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.8.0" id="version-080">Version 0.8.0<small>2022-04-01</small><a class="anchor" aria-label="anchor" href="#version-080"></a></h2>
 <div class="section level3">
