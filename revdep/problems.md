@@ -2,11 +2,11 @@
 
 <details>
 
-* Version: 0.2.0
+* Version: 0.2.5
 * GitHub: https://github.com/dipterix/dipsaus
 * Source code: https://github.com/cran/dipsaus
-* Date/Publication: 2022-01-27 17:30:02 UTC
-* Number of recursive dependencies: 76
+* Date/Publication: 2022-10-22 07:05:06 UTC
+* Number of recursive dependencies: 72
 
 Run `revdep_details(, "dipsaus")` for more info
 
@@ -16,31 +16,30 @@ Run `revdep_details(, "dipsaus")` for more info
 
 *   checking installed package size ... NOTE
     ```
-      installed size is  5.9Mb
+      installed size is  6.0Mb
       sub-directories of 1Mb or more:
-        doc    1.3Mb
-        libs   3.5Mb
+        doc    1.1Mb
+        libs   3.6Mb
     ```
 
-# iml
+# projpred
 
 <details>
 
-* Version: 0.10.1
-* GitHub: https://github.com/christophM/iml
-* Source code: https://github.com/cran/iml
-* Date/Publication: 2020-09-24 12:30:14 UTC
-* Number of recursive dependencies: 168
+* Version: 2.2.2
+* GitHub: https://github.com/stan-dev/projpred
+* Source code: https://github.com/cran/projpred
+* Date/Publication: 2022-11-09 11:10:02 UTC
+* Number of recursive dependencies: 143
 
-Run `revdep_details(, "iml")` for more info
+Run `revdep_details(, "projpred")` for more info
 
 </details>
 
 ## In both
 
-*   checking dependencies in R code ... NOTE
+*   checking package dependencies ... NOTE
     ```
-    Namespace in Imports field not imported from: ‘keras’
-      All declared Imports should be used.
+    Package suggested but not available for checking: ‘cmdstanr’
     ```
 
