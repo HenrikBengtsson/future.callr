@@ -1,12 +1,15 @@
-# Version 0.8.0-9001 [2022-06-14]
+# Version 0.8.0-9004 [2022-12-13]
 
 ## Bug Fixes
 
  * `run()` for `CallrFuture` would update the RNG state, because
-   `callr::r_bg()` used to launch the future does so.  Now `run()`
-   launches the future in stealth RNG mode, i.e. gives `r_bg()` a
-   semi-random initial seed to work with (by removing `.Random.seed`)
-   and then undo the RNG state at the very end.
+   `callr::r_bg()`, used to launch the future, does so.  This would
+   compromise numeric reproducibility, where the `callr` future
+   backend would not give the same random numbers as other future
+   backends.  Now `run()` launches the future in stealth RNG mode,
+   i.e. gives `r_bg()` a semi-random initial seed to work with (by
+   removing `.Random.seed`) and then undo the RNG state at the very
+   end.
  
 
 # Version 0.8.0 [2022-04-01]
