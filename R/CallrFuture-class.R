@@ -250,7 +250,10 @@ run.CallrFuture <- local({
     supervise <- future$supervise
 
     ## Launch
-    future$process <- r_bg(func, args = list(globals = globals), stdout = stdout, stderr = stderr, cmdargs = cmdargs, supervise = supervise)
+    ## WORKAROUND: callr::r_bg() updates the RNG state
+    with_stealth_rng({
+      future$process <- r_bg(func, args = list(globals = globals), stdout = stdout, stderr = stderr, cmdargs = cmdargs, supervise = supervise)
+    })
     if (debug) mdebugf("Launched future (PID=%d)", future$process$get_pid())
   
     ## 3. Running
