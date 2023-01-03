@@ -111,9 +111,29 @@ print.CallrFuture <- function(x, ...) {
   invisible(x)
 }
 
+
 #' @export
-getExpression.CallrFuture <- function(future, mc.cores = 1L, ...) {
-  NextMethod(mc.cores = mc.cores)
+getExpression.CallrFuture <- function(future, expr = future$expr, mc.cores = 1L, immediateConditions = TRUE, conditionClasses = future$conditions, resignalImmediateConditions = getOption("future.multicore.relay.immediate", immediateConditions), ...) {
+  if (is.list(tmpl_expr_send_immediateConditions_via_file)) {
+    ## Inject code for resignaling immediateCondition:s?
+    if (resignalImmediateConditions && immediateConditions) {
+      ## Preserve condition classes to be ignored
+      exclude <- attr(conditionClasses, "exclude", exact = TRUE)
+    
+      immediateConditionClasses <- getOption("future.relay.immediate", "immediateCondition")
+      conditionClasses <- unique(c(conditionClasses, immediateConditionClasses))
+  
+      if (length(conditionClasses) > 0L) {
+        ## Communicate via the file system
+        expr <- bquote_apply(tmpl_expr_send_immediateConditions_via_file)
+      } ## if (length(conditionClasses) > 0)
+      
+      ## Set condition classes to be ignored in case changed
+      attr(conditionClasses, "exclude") <- exclude
+    } ## if (resignalImmediateConditions && immediateConditions)
+  }
+
+  NextMethod(expr = expr, mc.cores = mc.cores, immediateConditions = immediateConditions, conditionClasses = conditionClasses)
 }
 
 
@@ -131,6 +151,12 @@ resolved.CallrFuture <- function(x, .signalEarly = TRUE, ...) {
   if (!inherits(process, "r_process")) return(FALSE)
   resolved <- !process$is_alive()
 
+  ## Collect and relay immediateCondition if they exists
+  conditions <- readImmediateConditions(signal = TRUE)
+  ## Record conditions as signaled
+  signaled <- c(x$.signaledConditions, conditions)
+  x$.signaledConditions <- signaled
+  
   ## Signal errors early?
   if (.signalEarly && resolved) {
     ## Trigger a FutureError already here, if exit code != 0
@@ -161,9 +187,23 @@ result.CallrFuture <- function(future, ...) {
     stop(ex)
   }
 
+  ## Collect and relay immediateCondition if they exists
+  conditions <- readImmediateConditions()
+  ## Record conditions as signaled
+  signaled <- c(future$.signaledConditions, conditions)
+  future$.signaledConditions <- signaled
+  
+  ## Record conditions
+  result$conditions <- c(result$conditions, signaled)
+  signaled <- NULL
+
   future$result <- result
   future$state <- "finished"
-  
+
+  ## Always signal immediateCondition:s and as soon as possible.
+  ## They will always be signaled if they exist.
+  signalImmediateConditions(future)
+
   result
 }
 
