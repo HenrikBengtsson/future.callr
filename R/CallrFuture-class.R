@@ -342,14 +342,8 @@ await <- local({
       ## Remove future from FutureRegistry?
       if (!process$is_alive()) {
         reg <- "workers-callr"
-        if (packageVersion("future") >= "1.32.0-9006") {
-          if (FutureRegistry(reg, action = "contains", future = future)) {
-            FutureRegistry(reg, action = "remove", future = future)
-          }
-        } else {
-          tryCatch({
-            FutureRegistry(reg, action = "remove", future = future)
-          }, error = identity)
+        if (FutureRegistry(reg, action = "contains", future = future)) {
+          FutureRegistry(reg, action = "remove", future = future)
         }
       }
       
