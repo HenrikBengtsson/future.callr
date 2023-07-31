@@ -2,7 +2,7 @@
 
 ## Bug Fixes
 
- * If a 'callr' future failed, because the parallel processed crashed,
+ * If a 'callr' future failed, because the parallel process crashed,
    the corresponding parallel-worker slot was never released.
  
 
