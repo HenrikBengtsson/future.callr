@@ -1,4 +1,4 @@
-# Version (development version)
+# Version 0.8.2 [2023-08-08]
 
 ## Bug Fixes
 
