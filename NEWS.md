@@ -1,3 +1,11 @@
+# Version 0.8.2 [2023-08-08]
+
+## Bug Fixes
+
+ * If a 'callr' future failed, because the parallel process crashed,
+   the corresponding parallel-worker slot was never released.
+ 
+
 # Version 0.8.1 [2022-12-13]
 
 ## Bug Fixes

@@ -337,7 +337,17 @@ await <- local({
     ## Failed?
     if (inherits(result, "error")) {
       msg <- post_mortem_failure(result, future = future)
-      stop(CallrFutureError(msg, future = future))
+      ex <- CallrFutureError(msg, future = future)
+
+      ## Remove future from FutureRegistry?
+      if (!process$is_alive()) {
+        reg <- "workers-callr"
+        if (FutureRegistry(reg, action = "contains", future = future)) {
+          FutureRegistry(reg, action = "remove", future = future)
+        }
+      }
+      
+      stop(ex)
     }
     
     if (debug) mdebugf("- callr:::get_result() ... done (after %d attempts)", ii)
