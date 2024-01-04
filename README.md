@@ -53,12 +53,12 @@ When using `callr` futures, each future is resolved in a fresh
 background R session which ends as soon as the value of the future has
 been collected.  In contrast, `multisession` futures are resolved in
 background R worker sessions that serve multiple futures over their
-life spans.  The advantage with using a new R process for each future
-is that it is that the R environment is guaranteed not to be
-contaminated by previous futures, e.g. memory allocations, finalizers,
-modified options, and loaded and attached packages.  The disadvantage,
-is an added overhead of launching a new R process.  (At the moment, I
-am neither aware of formal benchmarking of this extra overhead nor of
+life spans.  The advantage of using a new R process for each future is
+that the R environment is guaranteed not to be contaminated by
+previous futures, e.g. memory allocations, finalizers, modified
+options, and loaded and attached packages.  The disadvantage, is an
+added overhead of launching a new R process.  (At the moment, I am
+neither aware of formal benchmarking of this extra overhead nor of
 performance comparisons of `callr` to alternative future backends.)
 
 
